@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "library": "sky130_bmlabs_reram",
+  "process": "sky130",
+  "naming_convention": "<node>_<vendor>_<library>__<cell>",
+  "cells": {
+    "sky130_bmlabs_reram__cim32x32": {
+      "product": "Neuromorphic X2",
+      "function": "32x32 compute-in-memory ReRAM",
+      "capabilities": [
+        "program",
+        "read",
+        "compute-dot-product"
+      ],
+      "qualified_interface": "wishbone32-plus-analog-test",
+      "width_um": 1910,
+      "height_um": 2010.14,
+      "views": {
+        "gds": "gds/sky130_bmlabs_reram__cim32x32.gds",
+        "lef": "lef/sky130_bmlabs_reram__cim32x32.lef",
+        "liberty": "lib/sky130_bmlabs_reram__cim32x32.lib",
+        "verilog_blackbox": "verilog/sky130_bmlabs_reram__cim32x32.v",
+        "verilog_behavioral": "verilog/behavioral/sky130_bmlabs_reram__cim32x32.sv",
+        "testbench": "verilog/behavioral/sky130_bmlabs_reram__cim32x32_tb.sv"
+      }
+    }
+  },
+  "planned_cells": [
+    {
+      "name": "sky130_bmlabs_reram__nvm32x32",
+      "product": "Neuromorphic X1",
+      "status": "awaiting-verified-cross-view-release"
+    },
+    {
+      "name": "sky130_bmlabs_reram__cim32x32_fpga",
+      "product": "Neuromorphic X2",
+      "status": "awaiting-X2_FPGA_raw_compact.zip",
+      "expected_interface_wires": 156
+    }
+  ]
+}

@@ -1,3 +1,0 @@
-[submodule "ip/sky130_bmlabs_reram__cim"]
-	path = ip/sky130_bmlabs_reram__cim
-	url = https://github.com/BMsemi/dw_openframe_user_project_FABulous_X2.git
