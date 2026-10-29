@@ -9,18 +9,20 @@
 // Pure behavioral model of the X2 macro.
 //
 // This is a single customer-facing module.  It directly exposes the external
-// pins of the X1-style hard-macro shell together with the observable outputs of
+// pins of the released hard-macro shell together with the observable outputs of
 // the new top_module_wr.  No RTL hierarchy, wrapper module, or implementation
 // internals are required by the customer testbench.
 // -----------------------------------------------------------------------------
 
 module sky130_bmlabs_reram__cim32x32wb (
 `ifdef USE_PG_PIN
-  inout wire         VDDC1,
-  inout wire         VDDC2,
-  inout wire         VDDA1,
-  inout wire         VDDA2,
-  inout wire         VSS,
+  // Power pins. Keep the four supply domains separate in Caravel; VSS is the
+  // common digital and analog ground.
+  inout wire         VDDC1,  // 1.8 V digital supply; connect to vccd1
+  inout wire         VDDC2,  // 1.8 V digital supply; connect to vccd2
+  inout wire         VDDA1,  // 3.3 V analog supply; connect to vdda1
+  inout wire         VDDA2,  // 3.3 V analog supply; connect to vdda2
+  inout wire         VSS,    // common ground; connect to vssd1
 `endif
 
   // Clocks and resets retained from the macro interface.
