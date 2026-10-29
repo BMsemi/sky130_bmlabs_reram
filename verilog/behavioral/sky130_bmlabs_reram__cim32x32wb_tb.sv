@@ -1,7 +1,7 @@
 // Adapted only at the DUT boundary and RTL-internal diagnostic references.
 // The sixteen original Wishbone testcase transactions and expected results are
 // otherwise unchanged.  Customer-visible behavior is checked at the direct
-// sky130_bmlabs_reram__cim32x32 interface.
+// sky130_bmlabs_reram__cim32x32wb interface.
 
 
 //--------------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@
 
 `timescale 1ns/1ps
 
-module sky130_bmlabs_reram__cim32x32_tb;
+module sky130_bmlabs_reram__cim32x32wb_tb;
 
   //==============================================================================================
   // Parameters
@@ -202,7 +202,7 @@ module sky130_bmlabs_reram__cim32x32_tb;
   // DUT
   //==============================================================================================
 
-  sky130_bmlabs_reram__cim32x32 uut (
+  sky130_bmlabs_reram__cim32x32wb uut (
     .user_clk       (l_usr_clk       ),
     .user_rst       (reset           ),
     .Iref           (1'b0            ),

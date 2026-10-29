@@ -32,5 +32,10 @@ an installed LibreLane or Nix store.
 
 ## Cell identity
 
-The stream structure, LEF macro, Liberty cell and Verilog module are all named
-`sky130_bmlabs_reram__cim32x32`. Its boundary remains 1910 x 2010.14 um.
+The released stream structure, LEF macro, Liberty cell and Verilog module are
+all named `sky130_bmlabs_reram__cim32x32wb`. Its boundary remains
+1910 x 2010.14 um.
+
+`sky130_bmlabs_reram__cim32x32` is reserved for the raw signal interface and is
+not a released physical macro. See `POWER_PINS.md` before connecting the
+released macro's supply pins.

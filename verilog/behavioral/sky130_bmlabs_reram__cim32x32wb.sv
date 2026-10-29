@@ -14,7 +14,7 @@
 // internals are required by the customer testbench.
 // -----------------------------------------------------------------------------
 
-module sky130_bmlabs_reram__cim32x32 (
+module sky130_bmlabs_reram__cim32x32wb (
 `ifdef USE_PG_PIN
   inout wire         VDDC1,
   inout wire         VDDC2,

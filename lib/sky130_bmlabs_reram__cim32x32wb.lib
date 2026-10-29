@@ -1,4 +1,4 @@
-library (sky130_bmlabs_reram__cim32x32 ){
+library (sky130_bmlabs_reram__cim32x32wb ){
   delay_model : table_lookup;
   date : "Wed Aug 20 09:31:29 2025" ;
   revision : "1.0" ;
@@ -126,8 +126,8 @@ library (sky130_bmlabs_reram__cim32x32 ){
   
   /* end of header section */
   
-  /* Start Design sky130_bmlabs_reram__cim32x32 */
-  cell (sky130_bmlabs_reram__cim32x32 ) {
+  /* Start Design sky130_bmlabs_reram__cim32x32wb */
+  cell (sky130_bmlabs_reram__cim32x32wb ) {
     area :  722000 ;
     cell_leakage_power :  2.3025;
     dont_touch : true ;
@@ -4113,6 +4113,6 @@ pin (ScanOutCC) {
       
     } /* End of pin user_clk */
     
-  } /* End of Design sky130_bmlabs_reram__cim32x32 */
+  } /* End of Design sky130_bmlabs_reram__cim32x32wb */
   
 } /* End of Library */

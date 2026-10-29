@@ -1,10 +1,10 @@
 VERSION 5.7 ;
 BUSBITCHARS "[]" ;
 DIVIDERCHAR "/" ;
-MACRO sky130_bmlabs_reram__cim32x32
+MACRO sky130_bmlabs_reram__cim32x32wb
   CLASS BLOCK ;
   ORIGIN 0 0 ;
-  FOREIGN sky130_bmlabs_reram__cim32x32 0 0 ;
+  FOREIGN sky130_bmlabs_reram__cim32x32wb 0 0 ;
   SIZE 1910 BY 2010.14 ;
   PIN wbs_we_i
     DIRECTION INPUT ;
@@ -2564,6 +2564,6 @@ MACRO sky130_bmlabs_reram__cim32x32
     LAYER met4 ;
       RECT 491.305 1312.925 689.2 1405.225 ;
   END
-END sky130_bmlabs_reram__cim32x32
+END sky130_bmlabs_reram__cim32x32wb
 
 END LIBRARY

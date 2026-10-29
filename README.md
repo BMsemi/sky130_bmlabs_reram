@@ -6,19 +6,27 @@ This repository is the **IP source repository**. Chip projects consume a pinned
 revision of it as a Git submodule; project-specific wrappers, placement, PDN and
 routing constraints stay in the chip project repository.
 
-## Released cell
+## Cell catalog
 
-| Cell | Function | Physical size | Qualified interface |
-|---|---|---:|---|
-| `sky130_bmlabs_reram__cim32x32` | 32 x 32 ReRAM compute-in-memory accelerator (program, read and dot-product compute) | 1910 x 2010.14 um | 32-bit Wishbone wrapper plus analog/test pins |
+| Cell | Function | Interface | Release state |
+|---|---|---|---|
+| `sky130_bmlabs_reram__cim32x32` | 32 x 32 ReRAM compute-in-memory accelerator | Raw signals | Reserved name; verified views not yet available |
+| `sky130_bmlabs_reram__cim32x32wb` | 32 x 32 ReRAM compute-in-memory accelerator | 32-bit Wishbone plus analog/test pins | Released; 1910 x 2010.14 um |
+| `sky130_bmlabs_reram__nvm32x32wb` | 32 x 32 ReRAM non-volatile memory | 32-bit Wishbone plus analog/test pins | Planned; verified views not yet available |
 
-The cell name follows the open-PDK convention:
+Cell names follow the open-PDK convention:
 
 `<node>_<vendor>_<library>__<cell>`
 
-Therefore this X2 compute-in-memory macro is named `sky130_bmlabs_reram__cim32x32`.
-The X1 storage-only macro will use `sky130_bmlabs_reram__nvm32x32` when its
-verified cross-view release is added.
+The `cim` and `nvm` portions identify the macro capability. The `wb` suffix
+identifies the Wishbone interface. A cell name is not tied to the project that
+consumes the IP.
+
+Only `sky130_bmlabs_reram__cim32x32wb` currently has a complete, cross-checked
+GDS/LEF/Liberty/Verilog release in this repository. The reserved raw-interface
+and planned NVM names must not be used as physical macros until matching,
+verified view sets are published. See `doc/RAW_INTERFACE.md` and
+`doc/IP_CATALOG.md`.
 
 ## Repository layout
 
@@ -26,17 +34,17 @@ verified cross-view release is added.
 - `lef/`: abstract physical view
 - `lib/`: timing/library view
 - `verilog/`: black-box and behavioral simulation views
-- `doc/`: integration and interface notes
+- `doc/`: integration, interface and power-pin notes
 - `scripts/check_views.py`: cross-view consistency validation
 - `ip_manifest.json`: machine-readable IP catalog
 
-## FPGA compact interface
+## Power pins
 
-Leo approved an X2 raw compact interface of **156 wires**. The original
-`X2_FPGA_raw_compact.zip` is not present in the Git repositories, so this
-repository does not invent that pinout. The qualified physical release here
-retains the verified Wishbone/analog/test pin interface. See
-`doc/FPGA_COMPACT_INTERFACE.md` for the exact completion gate.
+The released macro requires four separate supply connections:
+`VDDC1 -> vccd1`, `VDDC2 -> vccd2`, `VDDA1 -> vdda1` and `VDDA2 -> vdda2`.
+Digital and analog circuitry share the macro's single `VSS` ground. Do not
+merge the four supply domains or split the ground in any IP view. See
+`doc/POWER_PINS.md` for the integration rules.
 
 ## Using from a chip project
 
@@ -57,13 +65,8 @@ Run:
 python3 scripts/check_views.py
 ```
 
-The check enforces cell-name consistency, the fixed 1910 x 2010.14 um boundary,
-required views, the expected LEF macro and the GDS structure name.
-
-## Status
-
-- X2/CIM Wishbone physical views: available
-- X2/CIM 156-wire FPGA raw compact view: awaiting the approved source archive
-- X1/NVM views: awaiting a separately verified X1 release
+The check enforces the released cell name, fixed 1910 x 2010.14 um boundary,
+required views, expected LEF macro and GDS structure name, and the documented
+planned-cell names.
 
 See `CHANGELOG.md` for repository changes.
