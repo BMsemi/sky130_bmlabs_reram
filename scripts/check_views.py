@@ -39,10 +39,19 @@ if not errors:
         "VDDC2": "vccd2",
         "VDDA1": "vdda1",
         "VDDA2": "vdda2",
-        "VSS": "common-ground",
+        "VSS": "vssd1",
     }
     if cells.get(NAME, {}).get("power_connections") != expected_power_connections:
         errors.append("released power connections do not match the required domains")
+    expected_power_voltage = {
+        "VDDC1": 1.8,
+        "VDDC2": 1.8,
+        "VDDA1": 3.3,
+        "VDDA2": 3.3,
+        "VSS": 0,
+    }
+    if cells.get(NAME, {}).get("power_voltage_v") != expected_power_voltage:
+        errors.append("released power voltages do not match the macro specification")
 
     planned = {cell.get("name") for cell in manifest.get("planned_cells", [])}
     if planned != {RAW_NAME, NVM_NAME}:
@@ -103,5 +112,7 @@ print(f"PASS: {NAME}")
 print(f"PASS: fixed boundary {WIDTH} x {HEIGHT} um")
 print("PASS: GDS/LEF/Liberty/Verilog naming is consistent")
 print("PASS: qualified Wishbone LEF contains 128 pins")
-print("PASS: separate vccd1/vccd2 and vdda1/vdda2 domains with common ground")
+print("PASS: VDDC1/VDDC2 use separate 1.8 V vccd1/vccd2 domains")
+print("PASS: VDDA1/VDDA2 use separate 3.3 V vdda1/vdda2 domains")
+print("PASS: digital and analog domains share vssd1 ground")
 print(f"PASS: planned names are {RAW_NAME} and {NVM_NAME}")

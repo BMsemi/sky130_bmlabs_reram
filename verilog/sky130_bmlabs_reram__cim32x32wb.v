@@ -1,11 +1,11 @@
 module sky130_bmlabs_reram__cim32x32wb (
  
  `ifdef USE_POWER_PINS
-   inout         VDDC1,            // digital domain 1; connect to vccd1
-   inout         VDDC2,            // digital domain 2; connect to vccd2
-   inout         VDDA1,            // analog domain 1; connect to vdda1
-   inout         VDDA2,            // analog domain 2; connect to vdda2
-   inout         VSS,              // common digital and analog ground
+   inout         VDDC1,            // 1.8 V digital supply; connect to vccd1
+   inout         VDDC2,            // 1.8 V digital supply; connect to vccd2
+   inout         VDDA1,            // 3.3 V analog supply; connect to vdda1
+   inout         VDDA2,            // 3.3 V analog supply; connect to vdda2
+   inout         VSS,              // common ground; connect to vssd1
  `endif
  
     // Clocks & resets

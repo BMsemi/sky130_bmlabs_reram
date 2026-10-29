@@ -40,10 +40,10 @@ verified view sets are published. See `doc/RAW_INTERFACE.md` and
 
 ## Power pins
 
-The released macro requires four separate supply connections:
-`VDDC1 -> vccd1`, `VDDC2 -> vccd2`, `VDDA1 -> vdda1` and `VDDA2 -> vdda2`.
-Digital and analog circuitry share the macro's single `VSS` ground. Do not
-merge the four supply domains or split the ground in any IP view. See
+The released macro uses separate 1.8 V digital connections and separate 3.3 V
+analog connections. For Caravel integration, connect `VDDC1 -> vccd1`,
+`VDDC2 -> vccd2`, `VDDA1 -> vdda1`, `VDDA2 -> vdda2`, and the common `VSS`
+pin to `vssd1`. Do not short either numbered supply pair. See
 `doc/POWER_PINS.md` for the integration rules.
 
 ## Using from a chip project

@@ -9,8 +9,9 @@
   cell is presented as a released physical view.
 - Removed project-specific interface naming from the reusable IP catalog and
   documentation.
-- Documented the required separate `vccd1`, `vccd2`, `vdda1` and `vdda2`
-  supply domains and the common digital/analog `VSS` ground.
+- Corrected the analog supply specification to 3.3 V and documented the final
+  Caravel mapping: `VDDC1 -> vccd1`, `VDDC2 -> vccd2`, `VDDA1 -> vdda1`,
+  `VDDA2 -> vdda2`, and the common digital/analog `VSS -> vssd1` ground.
 - Removed the reversed submodule dependency on the chip project.
 - Added a machine-readable catalog, integration guidance and automated
   cross-view validation.

@@ -20,7 +20,14 @@
         "VDDC2": "vccd2",
         "VDDA1": "vdda1",
         "VDDA2": "vdda2",
-        "VSS": "common-ground"
+        "VSS": "vssd1"
+      },
+      "power_voltage_v": {
+        "VDDC1": 1.8,
+        "VDDC2": 1.8,
+        "VDDA1": 3.3,
+        "VDDA2": 3.3,
+        "VSS": 0
       },
       "views": {
         "gds": "gds/sky130_bmlabs_reram__cim32x32wb.gds",
