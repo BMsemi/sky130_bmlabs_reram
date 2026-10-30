@@ -47,7 +47,6 @@ module sky130_bmlabs_reram__cim32x32wb (
   input  wire        ScanInDR,
   input  wire        TM,
   output wire        ScanOutCC,
-  output wire        TM_o,
 
   // Analog-array/TDC boundary.
   input  wire [31:0] stop_bit_i,
@@ -192,7 +191,6 @@ module sky130_bmlabs_reram__cim32x32wb (
   // Case equality keeps omitted or floating test/analog-facing inputs from
   // injecting X values into the digital behavioral interface.
   assign scan_test_mode = (TM === 1'b1);
-  assign TM_o           = scan_test_mode;
   assign ScanOutCC      = ScanInCC;
   assign tdc_stop_seen  = ((|(stop_bit_i & bl_addr_o)) === 1'b1);
 

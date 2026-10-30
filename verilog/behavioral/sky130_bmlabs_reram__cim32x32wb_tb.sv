@@ -55,8 +55,6 @@ module sky130_bmlabs_reram__cim32x32wb_tb;
   // Outputs from DUT
   //==============================================================================================
 
-  wire        TM_o;
-
   wire [31:0] bl_addr;
   wire [31:0] wl_addr;
   wire [31:0] sl_addr;
@@ -260,9 +258,7 @@ module sky130_bmlabs_reram__cim32x32wb_tb;
     .hold_o          (o_hold          ),
     .start_o         (o_start         ),
     .mux_sel_o       (o_mux_sel       ),
-    .wl_data_o       (o_wl_data       ),
-
-    .TM_o            (TM_o            )
+    .wl_data_o       (o_wl_data       )
   );
 
   // Result writes are counted by private behavioral-model diagnostic state.

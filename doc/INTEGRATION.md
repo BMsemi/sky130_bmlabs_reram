@@ -32,10 +32,21 @@ an installed LibreLane or Nix store.
 
 ## Cell identity
 
-The released stream structure, LEF macro, Liberty cell and Verilog module are
-all named `sky130_bmlabs_reram__cim32x32wb`. Its boundary remains
-1910 x 2010.14 um.
+The released stream structure, LEF macro, Liberty cell and Verilog module names
+are:
 
-`sky130_bmlabs_reram__cim32x32` is reserved for the raw signal interface and is
-not a released physical macro. See `POWER_PINS.md` before connecting the
-released macro's supply pins.
+- `sky130_bmlabs_reram__cim32x32wb` for the X2 compute-in-memory Wishbone macro;
+- `sky130_bmlabs_reram__nvm32x32wb` for the X1 non-volatile-memory Wishbone
+  macro.
+
+Both boundaries are 1910 x 2010.14 um.
+
+`sky130_bmlabs_reram__cim32x32` provides behavioral simulation and interface
+views for the raw signal interface. Its approximate GDS, LEF and Liberty files
+may be referenced only for early floorplanning and file-flow testing. They are
+synthetic, uncharacterized and unsuitable for LVS, signoff or tapeout. See
+`RAW_INTERFACE.md` for its release gate and `POWER_PINS.md` before connecting
+the supply pins. Its analog and scan/test boundary names match the released X2
+Wishbone reference, but the raw behavioral model does not simulate analog
+electrical behavior. See `NVM_BEHAVIORAL_MODEL.md` for the X1 command format
+and the limits of its functional simulation model.

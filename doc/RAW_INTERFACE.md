@@ -4,25 +4,61 @@
 raw signal interface. It is a reusable IP name and does not identify a
 particular consuming project.
 
-The repository does not currently contain a verified raw-interface source and
-matching physical views. The released Wishbone macro is
-`sky130_bmlabs_reram__cim32x32wb`; it must not be relabeled as the raw-interface
+The repository contains the supplied behavioral model, its testbench and a
+matching interface shell. Its external boundary uses the same scan/test names
+and ten analog pin names as the released X2 Wishbone macro. After expanding
+buses, the cell has 167 non-power wires and five optional supply ports under
+`USE_POWER_PINS` (`VDDC1`, `VDDC2`, `VDDA1`, `VDDA2` and `VSS`), for 49 port
+declarations and 172 physical pins in total.
+
+The shared scan/test boundary is `ScanInCC`, `ScanInDL`, `ScanInDR`, `TM` and
+`ScanOutCC`. The shared analog boundary is `Iref`, `Vcc_read`, `Vcomp`,
+`Bias_comp2`, `Vcc_wl_read`, `Vcc_wl_set`, `Vbias`, `Vcc_wl_reset`, `Vcc_set`
+and `dc_bias`. These analog inputs are interface-only in the digital behavioral
+model; their electrical effects are not simulated.
+
+Signoff physical views have not been supplied. The released Wishbone macro is
+`sky130_bmlabs_reram__cim32x32wb`; its 128-pin GDS, LEF and Liberty views have a
+different interface and were not copied or relabeled as this raw-interface
 cell.
+
+## Available simulation views
+
+- `verilog/sky130_bmlabs_reram__cim32x32.v`: integration/interface shell;
+- `verilog/behavioral/sky130_bmlabs_reram__cim32x32.sv`: behavioral model;
+- `verilog/behavioral/sky130_bmlabs_reram__cim32x32_tb.sv`: supplied
+  self-checking testbench.
+
+## Provisional physical placeholders
+
+Approximate GDS, LEF and Liberty files are provided to support early
+floorplanning and file-flow testing. They use the released X2 boundary of
+1910 x 2010.14 um, 167 non-power wires and the five reference-derived supply
+pins.
+
+- The GDS contains only a macro boundary and synthetic perimeter pin shapes and
+  labels. It does not contain the real internal device or routing geometry.
+- The LEF uses the same boundary and synthetic met2 pin locations. Those
+  locations are not approved physical pin coordinates.
+- The Liberty file is an uncharacterized interface shell with no timing arcs
+  and `dont_use : true`.
+
+All three files are marked provisional. They must not be used for LVS, timing
+signoff, fabrication or tapeout. Regenerate them deterministically with
+`python3 scripts/generate_provisional_raw_views.py`.
 
 ## Required work before release
 
-1. Preserve the approved raw module and testbench without changing port
-   meaning.
-2. Record every port, direction and width in a machine-readable interface
-   description.
-3. Confirm the approved aggregate signal count with the same counting rule used
-   during interface review.
-4. Generate or obtain matching GDS, LEF, Liberty and Verilog black-box views.
-5. Confirm that the module/cell name and every digital, analog, test and supply
-   pin match across all views.
-6. Add behavioral tests for the raw-interface protocol.
-7. Run the repository validator and chip-level DRC/LVS integration.
+1. Provide the physical raw-interface implementation and its approved power-pin
+   specification.
+2. Generate GDS and LEF from that implementation with approved pin placement.
+3. Characterize a matching Liberty view rather than copying the Wishbone view.
+4. Confirm that the module/cell name and every signal, test and supply pin match
+   across all views.
+5. Run timing checks, repository validation and chip-level DRC/LVS integration.
 
-Until those checks pass, consumers must use the qualified
-`sky130_bmlabs_reram__cim32x32wb` release. No guessed raw pin mapping should be
-committed.
+Until those checks pass, the physical placeholders are for early integration
+only. Consumers that require a qualified physical macro must use the
+`sky130_bmlabs_reram__cim32x32wb` release. The provisional files must be
+replaced, not promoted, when extracted and characterized raw-interface views
+become available.

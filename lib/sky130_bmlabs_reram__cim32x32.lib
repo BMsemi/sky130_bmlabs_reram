@@ -1,0 +1,853 @@
+library (sky130_bmlabs_reram__cim32x32) {
+  delay_model : table_lookup;
+  time_unit : "1ns";
+  voltage_unit : "1V";
+  current_unit : "1mA";
+  capacitive_load_unit (1, pf);
+  leakage_power_unit : "1nW";
+  bus_naming_style : "%s[%d]";
+  comment : "PROVISIONAL - NOT FOR LVS, TIMING SIGNOFF, FABRICATION OR TAPEOUT; no characterized timing arcs";
+  nom_process : 1.0;
+  nom_temperature : 25.0;
+  nom_voltage : 1.8;
+  cell (sky130_bmlabs_reram__cim32x32) {
+    area : 3839367.4000;
+    dont_use : true;
+    pin (clk_i) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (rst_i) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_cmd_valid) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (o_cmd_ready) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (i_mode[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_mode[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_row_index[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_row_index[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_row_index[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_row_index[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_row_index[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_col_index[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_col_index[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_col_index[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_col_index[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_col_index[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_pwm_data[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_pwm_data[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_pwm_data[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_pwm_data[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_pwm_data[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_pwm_data[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_pwm_data[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_pwm_data[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_compute_last) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_compute_all_columns) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[15]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[14]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[13]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[12]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[11]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[10]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set1[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[15]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[14]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[13]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[12]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[11]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[10]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_set2[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[15]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[14]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[13]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[12]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[11]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[10]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset1[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[15]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[14]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[13]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[12]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[11]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[10]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_target_reset2[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_no_of_clk_cycles[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_counter_value[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_time_out[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_time_out[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_time_out[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_time_out[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_time_out[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_time_out[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_time_out[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_dead_time[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_tdc_dead_time[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (o_busy) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_command_accepted) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_compute_pending) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_error[2]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_error[1]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_error[0]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_error_valid) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_operation_done) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_program_readback_active) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_valid) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (i_result_ready) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (o_result_data[20]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[19]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[18]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[17]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[16]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[15]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[14]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[13]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[12]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[11]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[10]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[9]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[8]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[7]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[6]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[5]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[4]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[3]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[2]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[1]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_data[0]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (o_result_last) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (ScanInCC) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (ScanInDL) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (ScanInDR) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (TM) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Iref) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Vcc_read) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Vcomp) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Bias_comp2) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Vcc_wl_read) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Vcc_wl_set) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Vbias) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Vcc_wl_reset) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (Vcc_set) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (dc_bias) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (VDDC1) {
+      direction : inout;
+      signal_type : POWER;
+    }
+    pg_pin (VDDC1) {
+      pg_type : primary_power;
+    }
+    pin (VDDC2) {
+      direction : inout;
+      signal_type : POWER;
+    }
+    pg_pin (VDDC2) {
+      pg_type : primary_power;
+    }
+    pin (VDDA1) {
+      direction : inout;
+      signal_type : POWER;
+    }
+    pg_pin (VDDA1) {
+      pg_type : primary_power;
+    }
+    pin (VDDA2) {
+      direction : inout;
+      signal_type : POWER;
+    }
+    pg_pin (VDDA2) {
+      pg_type : primary_power;
+    }
+    pin (VSS) {
+      direction : inout;
+      signal_type : GROUND;
+    }
+    pg_pin (VSS) {
+      pg_type : primary_ground;
+    }
+    pin (ScanOutCC) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+  }
+}

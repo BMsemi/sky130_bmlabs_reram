@@ -2,9 +2,8 @@
 
 ## Required connections
 
-With `USE_POWER_PINS` enabled, `sky130_bmlabs_reram__cim32x32wb` exposes the
-following macro pins. The lowercase names are the required top-level supply
-nets:
+With `USE_POWER_PINS` enabled, both released Wishbone macros expose the
+following pins. The lowercase names are the required top-level supply nets:
 
 | Macro pin | Top-level net | Role |
 |---|---|---|

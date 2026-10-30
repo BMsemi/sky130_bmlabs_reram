@@ -1,0 +1,1395 @@
+# PROVISIONAL - NOT FOR LVS, TIMING SIGNOFF, FABRICATION OR TAPEOUT
+# Synthetic met2 pin placement derived from the behavioral interface.
+VERSION 5.7 ;
+BUSBITCHARS "[]" ;
+DIVIDERCHAR "/" ;
+MACRO sky130_bmlabs_reram__cim32x32
+  CLASS BLOCK ;
+  ORIGIN 0 0 ;
+  FOREIGN sky130_bmlabs_reram__cim32x32 0 0 ;
+  SIZE 1910 BY 2010.14 ;
+  PIN clk_i
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 62.35 0 62.65 2.91 ;
+    END
+  END clk_i
+  PIN rst_i
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 64.626 1910 64.926 ;
+    END
+  END rst_i
+  PIN i_cmd_valid
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 62.35 2007.23 62.65 2010.14 ;
+    END
+  END i_cmd_valid
+  PIN o_cmd_ready
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 64.626 2.91 64.926 ;
+    END
+  END o_cmd_ready
+  PIN i_mode[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 104.85 0 105.15 2.91 ;
+    END
+  END i_mode[1]
+  PIN i_mode[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 109.402 1910 109.702 ;
+    END
+  END i_mode[0]
+  PIN i_row_index[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 104.85 2007.23 105.15 2010.14 ;
+    END
+  END i_row_index[4]
+  PIN i_row_index[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 109.402 2.91 109.702 ;
+    END
+  END i_row_index[3]
+  PIN i_row_index[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 147.35 0 147.65 2.91 ;
+    END
+  END i_row_index[2]
+  PIN i_row_index[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 154.178 1910 154.478 ;
+    END
+  END i_row_index[1]
+  PIN i_row_index[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 147.35 2007.23 147.65 2010.14 ;
+    END
+  END i_row_index[0]
+  PIN i_col_index[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 154.178 2.91 154.478 ;
+    END
+  END i_col_index[4]
+  PIN i_col_index[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 189.85 0 190.15 2.91 ;
+    END
+  END i_col_index[3]
+  PIN i_col_index[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 198.954 1910 199.254 ;
+    END
+  END i_col_index[2]
+  PIN i_col_index[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 189.85 2007.23 190.15 2010.14 ;
+    END
+  END i_col_index[1]
+  PIN i_col_index[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 198.954 2.91 199.254 ;
+    END
+  END i_col_index[0]
+  PIN i_pwm_data[7]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 232.35 0 232.65 2.91 ;
+    END
+  END i_pwm_data[7]
+  PIN i_pwm_data[6]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 243.73 1910 244.03 ;
+    END
+  END i_pwm_data[6]
+  PIN i_pwm_data[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 232.35 2007.23 232.65 2010.14 ;
+    END
+  END i_pwm_data[5]
+  PIN i_pwm_data[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 243.73 2.91 244.03 ;
+    END
+  END i_pwm_data[4]
+  PIN i_pwm_data[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 274.85 0 275.15 2.91 ;
+    END
+  END i_pwm_data[3]
+  PIN i_pwm_data[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 288.505 1910 288.805 ;
+    END
+  END i_pwm_data[2]
+  PIN i_pwm_data[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 274.85 2007.23 275.15 2010.14 ;
+    END
+  END i_pwm_data[1]
+  PIN i_pwm_data[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 288.505 2.91 288.805 ;
+    END
+  END i_pwm_data[0]
+  PIN i_compute_last
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 317.35 0 317.65 2.91 ;
+    END
+  END i_compute_last
+  PIN i_compute_all_columns
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 333.281 1910 333.581 ;
+    END
+  END i_compute_all_columns
+  PIN i_target_set1[15]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 317.35 2007.23 317.65 2010.14 ;
+    END
+  END i_target_set1[15]
+  PIN i_target_set1[14]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 333.281 2.91 333.581 ;
+    END
+  END i_target_set1[14]
+  PIN i_target_set1[13]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 359.85 0 360.15 2.91 ;
+    END
+  END i_target_set1[13]
+  PIN i_target_set1[12]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 378.057 1910 378.357 ;
+    END
+  END i_target_set1[12]
+  PIN i_target_set1[11]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 359.85 2007.23 360.15 2010.14 ;
+    END
+  END i_target_set1[11]
+  PIN i_target_set1[10]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 378.057 2.91 378.357 ;
+    END
+  END i_target_set1[10]
+  PIN i_target_set1[9]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 402.35 0 402.65 2.91 ;
+    END
+  END i_target_set1[9]
+  PIN i_target_set1[8]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 422.833 1910 423.133 ;
+    END
+  END i_target_set1[8]
+  PIN i_target_set1[7]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 402.35 2007.23 402.65 2010.14 ;
+    END
+  END i_target_set1[7]
+  PIN i_target_set1[6]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 422.833 2.91 423.133 ;
+    END
+  END i_target_set1[6]
+  PIN i_target_set1[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 444.85 0 445.15 2.91 ;
+    END
+  END i_target_set1[5]
+  PIN i_target_set1[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 467.609 1910 467.909 ;
+    END
+  END i_target_set1[4]
+  PIN i_target_set1[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 444.85 2007.23 445.15 2010.14 ;
+    END
+  END i_target_set1[3]
+  PIN i_target_set1[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 467.609 2.91 467.909 ;
+    END
+  END i_target_set1[2]
+  PIN i_target_set1[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 487.35 0 487.65 2.91 ;
+    END
+  END i_target_set1[1]
+  PIN i_target_set1[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 512.385 1910 512.685 ;
+    END
+  END i_target_set1[0]
+  PIN i_target_set2[15]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 487.35 2007.23 487.65 2010.14 ;
+    END
+  END i_target_set2[15]
+  PIN i_target_set2[14]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 512.385 2.91 512.685 ;
+    END
+  END i_target_set2[14]
+  PIN i_target_set2[13]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 529.85 0 530.15 2.91 ;
+    END
+  END i_target_set2[13]
+  PIN i_target_set2[12]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 557.161 1910 557.461 ;
+    END
+  END i_target_set2[12]
+  PIN i_target_set2[11]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 529.85 2007.23 530.15 2010.14 ;
+    END
+  END i_target_set2[11]
+  PIN i_target_set2[10]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 557.161 2.91 557.461 ;
+    END
+  END i_target_set2[10]
+  PIN i_target_set2[9]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 572.35 0 572.65 2.91 ;
+    END
+  END i_target_set2[9]
+  PIN i_target_set2[8]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 601.937 1910 602.237 ;
+    END
+  END i_target_set2[8]
+  PIN i_target_set2[7]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 572.35 2007.23 572.65 2010.14 ;
+    END
+  END i_target_set2[7]
+  PIN i_target_set2[6]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 601.937 2.91 602.237 ;
+    END
+  END i_target_set2[6]
+  PIN i_target_set2[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 614.85 0 615.15 2.91 ;
+    END
+  END i_target_set2[5]
+  PIN i_target_set2[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 646.713 1910 647.013 ;
+    END
+  END i_target_set2[4]
+  PIN i_target_set2[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 614.85 2007.23 615.15 2010.14 ;
+    END
+  END i_target_set2[3]
+  PIN i_target_set2[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 646.713 2.91 647.013 ;
+    END
+  END i_target_set2[2]
+  PIN i_target_set2[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 657.35 0 657.65 2.91 ;
+    END
+  END i_target_set2[1]
+  PIN i_target_set2[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 691.489 1910 691.789 ;
+    END
+  END i_target_set2[0]
+  PIN i_target_reset1[15]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 657.35 2007.23 657.65 2010.14 ;
+    END
+  END i_target_reset1[15]
+  PIN i_target_reset1[14]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 691.489 2.91 691.789 ;
+    END
+  END i_target_reset1[14]
+  PIN i_target_reset1[13]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 699.85 0 700.15 2.91 ;
+    END
+  END i_target_reset1[13]
+  PIN i_target_reset1[12]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 736.265 1910 736.565 ;
+    END
+  END i_target_reset1[12]
+  PIN i_target_reset1[11]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 699.85 2007.23 700.15 2010.14 ;
+    END
+  END i_target_reset1[11]
+  PIN i_target_reset1[10]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 736.265 2.91 736.565 ;
+    END
+  END i_target_reset1[10]
+  PIN i_target_reset1[9]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 742.35 0 742.65 2.91 ;
+    END
+  END i_target_reset1[9]
+  PIN i_target_reset1[8]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 781.04 1910 781.34 ;
+    END
+  END i_target_reset1[8]
+  PIN i_target_reset1[7]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 742.35 2007.23 742.65 2010.14 ;
+    END
+  END i_target_reset1[7]
+  PIN i_target_reset1[6]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 781.04 2.91 781.34 ;
+    END
+  END i_target_reset1[6]
+  PIN i_target_reset1[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 784.85 0 785.15 2.91 ;
+    END
+  END i_target_reset1[5]
+  PIN i_target_reset1[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 825.816 1910 826.116 ;
+    END
+  END i_target_reset1[4]
+  PIN i_target_reset1[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 784.85 2007.23 785.15 2010.14 ;
+    END
+  END i_target_reset1[3]
+  PIN i_target_reset1[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 825.816 2.91 826.116 ;
+    END
+  END i_target_reset1[2]
+  PIN i_target_reset1[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 827.35 0 827.65 2.91 ;
+    END
+  END i_target_reset1[1]
+  PIN i_target_reset1[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 870.592 1910 870.892 ;
+    END
+  END i_target_reset1[0]
+  PIN i_target_reset2[15]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 827.35 2007.23 827.65 2010.14 ;
+    END
+  END i_target_reset2[15]
+  PIN i_target_reset2[14]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 870.592 2.91 870.892 ;
+    END
+  END i_target_reset2[14]
+  PIN i_target_reset2[13]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 869.85 0 870.15 2.91 ;
+    END
+  END i_target_reset2[13]
+  PIN i_target_reset2[12]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 915.368 1910 915.668 ;
+    END
+  END i_target_reset2[12]
+  PIN i_target_reset2[11]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 869.85 2007.23 870.15 2010.14 ;
+    END
+  END i_target_reset2[11]
+  PIN i_target_reset2[10]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 915.368 2.91 915.668 ;
+    END
+  END i_target_reset2[10]
+  PIN i_target_reset2[9]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 912.35 0 912.65 2.91 ;
+    END
+  END i_target_reset2[9]
+  PIN i_target_reset2[8]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 960.144 1910 960.444 ;
+    END
+  END i_target_reset2[8]
+  PIN i_target_reset2[7]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 912.35 2007.23 912.65 2010.14 ;
+    END
+  END i_target_reset2[7]
+  PIN i_target_reset2[6]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 960.144 2.91 960.444 ;
+    END
+  END i_target_reset2[6]
+  PIN i_target_reset2[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 954.85 0 955.15 2.91 ;
+    END
+  END i_target_reset2[5]
+  PIN i_target_reset2[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1004.92 1910 1005.22 ;
+    END
+  END i_target_reset2[4]
+  PIN i_target_reset2[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 954.85 2007.23 955.15 2010.14 ;
+    END
+  END i_target_reset2[3]
+  PIN i_target_reset2[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1004.92 2.91 1005.22 ;
+    END
+  END i_target_reset2[2]
+  PIN i_target_reset2[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 997.35 0 997.65 2.91 ;
+    END
+  END i_target_reset2[1]
+  PIN i_target_reset2[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1049.696 1910 1049.996 ;
+    END
+  END i_target_reset2[0]
+  PIN i_no_of_clk_cycles[9]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 997.35 2007.23 997.65 2010.14 ;
+    END
+  END i_no_of_clk_cycles[9]
+  PIN i_no_of_clk_cycles[8]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1049.696 2.91 1049.996 ;
+    END
+  END i_no_of_clk_cycles[8]
+  PIN i_no_of_clk_cycles[7]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1039.85 0 1040.15 2.91 ;
+    END
+  END i_no_of_clk_cycles[7]
+  PIN i_no_of_clk_cycles[6]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1094.472 1910 1094.772 ;
+    END
+  END i_no_of_clk_cycles[6]
+  PIN i_no_of_clk_cycles[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1039.85 2007.23 1040.15 2010.14 ;
+    END
+  END i_no_of_clk_cycles[5]
+  PIN i_no_of_clk_cycles[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1094.472 2.91 1094.772 ;
+    END
+  END i_no_of_clk_cycles[4]
+  PIN i_no_of_clk_cycles[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1082.35 0 1082.65 2.91 ;
+    END
+  END i_no_of_clk_cycles[3]
+  PIN i_no_of_clk_cycles[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1139.248 1910 1139.548 ;
+    END
+  END i_no_of_clk_cycles[2]
+  PIN i_no_of_clk_cycles[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1082.35 2007.23 1082.65 2010.14 ;
+    END
+  END i_no_of_clk_cycles[1]
+  PIN i_no_of_clk_cycles[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1139.248 2.91 1139.548 ;
+    END
+  END i_no_of_clk_cycles[0]
+  PIN i_counter_value[9]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1124.85 0 1125.15 2.91 ;
+    END
+  END i_counter_value[9]
+  PIN i_counter_value[8]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1184.024 1910 1184.324 ;
+    END
+  END i_counter_value[8]
+  PIN i_counter_value[7]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1124.85 2007.23 1125.15 2010.14 ;
+    END
+  END i_counter_value[7]
+  PIN i_counter_value[6]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1184.024 2.91 1184.324 ;
+    END
+  END i_counter_value[6]
+  PIN i_counter_value[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1167.35 0 1167.65 2.91 ;
+    END
+  END i_counter_value[5]
+  PIN i_counter_value[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1228.8 1910 1229.1 ;
+    END
+  END i_counter_value[4]
+  PIN i_counter_value[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1167.35 2007.23 1167.65 2010.14 ;
+    END
+  END i_counter_value[3]
+  PIN i_counter_value[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1228.8 2.91 1229.1 ;
+    END
+  END i_counter_value[2]
+  PIN i_counter_value[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1209.85 0 1210.15 2.91 ;
+    END
+  END i_counter_value[1]
+  PIN i_counter_value[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1273.575 1910 1273.875 ;
+    END
+  END i_counter_value[0]
+  PIN i_tdc_time_out[6]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1209.85 2007.23 1210.15 2010.14 ;
+    END
+  END i_tdc_time_out[6]
+  PIN i_tdc_time_out[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1273.575 2.91 1273.875 ;
+    END
+  END i_tdc_time_out[5]
+  PIN i_tdc_time_out[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1252.35 0 1252.65 2.91 ;
+    END
+  END i_tdc_time_out[4]
+  PIN i_tdc_time_out[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1318.351 1910 1318.651 ;
+    END
+  END i_tdc_time_out[3]
+  PIN i_tdc_time_out[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1252.35 2007.23 1252.65 2010.14 ;
+    END
+  END i_tdc_time_out[2]
+  PIN i_tdc_time_out[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1318.351 2.91 1318.651 ;
+    END
+  END i_tdc_time_out[1]
+  PIN i_tdc_time_out[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1294.85 0 1295.15 2.91 ;
+    END
+  END i_tdc_time_out[0]
+  PIN i_tdc_dead_time[1]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1363.127 1910 1363.427 ;
+    END
+  END i_tdc_dead_time[1]
+  PIN i_tdc_dead_time[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1294.85 2007.23 1295.15 2010.14 ;
+    END
+  END i_tdc_dead_time[0]
+  PIN o_busy
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1363.127 2.91 1363.427 ;
+    END
+  END o_busy
+  PIN o_command_accepted
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1337.35 0 1337.65 2.91 ;
+    END
+  END o_command_accepted
+  PIN o_compute_pending
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1407.903 1910 1408.203 ;
+    END
+  END o_compute_pending
+  PIN o_error[2]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1337.35 2007.23 1337.65 2010.14 ;
+    END
+  END o_error[2]
+  PIN o_error[1]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1407.903 2.91 1408.203 ;
+    END
+  END o_error[1]
+  PIN o_error[0]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1379.85 0 1380.15 2.91 ;
+    END
+  END o_error[0]
+  PIN o_error_valid
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1452.679 1910 1452.979 ;
+    END
+  END o_error_valid
+  PIN o_operation_done
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1379.85 2007.23 1380.15 2010.14 ;
+    END
+  END o_operation_done
+  PIN o_program_readback_active
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1452.679 2.91 1452.979 ;
+    END
+  END o_program_readback_active
+  PIN o_result_valid
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1422.35 0 1422.65 2.91 ;
+    END
+  END o_result_valid
+  PIN i_result_ready
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1497.455 1910 1497.755 ;
+    END
+  END i_result_ready
+  PIN o_result_data[20]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1422.35 2007.23 1422.65 2010.14 ;
+    END
+  END o_result_data[20]
+  PIN o_result_data[19]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1497.455 2.91 1497.755 ;
+    END
+  END o_result_data[19]
+  PIN o_result_data[18]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1464.85 0 1465.15 2.91 ;
+    END
+  END o_result_data[18]
+  PIN o_result_data[17]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1542.231 1910 1542.531 ;
+    END
+  END o_result_data[17]
+  PIN o_result_data[16]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1464.85 2007.23 1465.15 2010.14 ;
+    END
+  END o_result_data[16]
+  PIN o_result_data[15]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1542.231 2.91 1542.531 ;
+    END
+  END o_result_data[15]
+  PIN o_result_data[14]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1507.35 0 1507.65 2.91 ;
+    END
+  END o_result_data[14]
+  PIN o_result_data[13]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1587.007 1910 1587.307 ;
+    END
+  END o_result_data[13]
+  PIN o_result_data[12]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1507.35 2007.23 1507.65 2010.14 ;
+    END
+  END o_result_data[12]
+  PIN o_result_data[11]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1587.007 2.91 1587.307 ;
+    END
+  END o_result_data[11]
+  PIN o_result_data[10]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1549.85 0 1550.15 2.91 ;
+    END
+  END o_result_data[10]
+  PIN o_result_data[9]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1631.783 1910 1632.083 ;
+    END
+  END o_result_data[9]
+  PIN o_result_data[8]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1549.85 2007.23 1550.15 2010.14 ;
+    END
+  END o_result_data[8]
+  PIN o_result_data[7]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1631.783 2.91 1632.083 ;
+    END
+  END o_result_data[7]
+  PIN o_result_data[6]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1592.35 0 1592.65 2.91 ;
+    END
+  END o_result_data[6]
+  PIN o_result_data[5]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1676.559 1910 1676.859 ;
+    END
+  END o_result_data[5]
+  PIN o_result_data[4]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1592.35 2007.23 1592.65 2010.14 ;
+    END
+  END o_result_data[4]
+  PIN o_result_data[3]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1676.559 2.91 1676.859 ;
+    END
+  END o_result_data[3]
+  PIN o_result_data[2]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1634.85 0 1635.15 2.91 ;
+    END
+  END o_result_data[2]
+  PIN o_result_data[1]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1721.335 1910 1721.635 ;
+    END
+  END o_result_data[1]
+  PIN o_result_data[0]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1634.85 2007.23 1635.15 2010.14 ;
+    END
+  END o_result_data[0]
+  PIN o_result_last
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1721.335 2.91 1721.635 ;
+    END
+  END o_result_last
+  PIN ScanInCC
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1677.35 0 1677.65 2.91 ;
+    END
+  END ScanInCC
+  PIN ScanInDL
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1766.11 1910 1766.41 ;
+    END
+  END ScanInDL
+  PIN ScanInDR
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1677.35 2007.23 1677.65 2010.14 ;
+    END
+  END ScanInDR
+  PIN TM
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1766.11 2.91 1766.41 ;
+    END
+  END TM
+  PIN Iref
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1719.85 0 1720.15 2.91 ;
+    END
+  END Iref
+  PIN Vcc_read
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1810.886 1910 1811.186 ;
+    END
+  END Vcc_read
+  PIN Vcomp
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1719.85 2007.23 1720.15 2010.14 ;
+    END
+  END Vcomp
+  PIN Bias_comp2
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1810.886 2.91 1811.186 ;
+    END
+  END Bias_comp2
+  PIN Vcc_wl_read
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1762.35 0 1762.65 2.91 ;
+    END
+  END Vcc_wl_read
+  PIN Vcc_wl_set
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1855.662 1910 1855.962 ;
+    END
+  END Vcc_wl_set
+  PIN Vbias
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1762.35 2007.23 1762.65 2010.14 ;
+    END
+  END Vbias
+  PIN Vcc_wl_reset
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1855.662 2.91 1855.962 ;
+    END
+  END Vcc_wl_reset
+  PIN Vcc_set
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1804.85 0 1805.15 2.91 ;
+    END
+  END Vcc_set
+  PIN dc_bias
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1900.438 1910 1900.738 ;
+    END
+  END dc_bias
+  PIN VDDC1
+    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER met2 ;
+        RECT 1804.85 2007.23 1805.15 2010.14 ;
+    END
+  END VDDC1
+  PIN VDDC2
+    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1900.438 2.91 1900.738 ;
+    END
+  END VDDC2
+  PIN VDDA1
+    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER met2 ;
+        RECT 1847.35 0 1847.65 2.91 ;
+    END
+  END VDDA1
+  PIN VDDA2
+    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER met2 ;
+        RECT 1907.09 1945.214 1910 1945.514 ;
+    END
+  END VDDA2
+  PIN VSS
+    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER met2 ;
+        RECT 1847.35 2007.23 1847.65 2010.14 ;
+    END
+  END VSS
+  PIN ScanOutCC
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER met2 ;
+        RECT 0 1945.214 2.91 1945.514 ;
+    END
+  END ScanOutCC
+  OBS
+    LAYER li1 ;
+      RECT 0 0 1910 2010.14 ;
+    LAYER met1 ;
+      RECT 0 0 1910 2010.14 ;
+  END
+END sky130_bmlabs_reram__cim32x32
+
+END LIBRARY

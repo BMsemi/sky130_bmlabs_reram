@@ -37,6 +37,39 @@
         "verilog_behavioral": "verilog/behavioral/sky130_bmlabs_reram__cim32x32wb.sv",
         "testbench": "verilog/behavioral/sky130_bmlabs_reram__cim32x32wb_tb.sv"
       }
+    },
+    "sky130_bmlabs_reram__nvm32x32wb": {
+      "product": "Neuromorphic X1",
+      "function": "32x32 non-volatile ReRAM",
+      "capabilities": [
+        "program",
+        "read"
+      ],
+      "qualified_interface": "wishbone32-plus-analog-test",
+      "width_um": 1910,
+      "height_um": 2010.14,
+      "power_connections": {
+        "VDDC1": "vccd1",
+        "VDDC2": "vccd2",
+        "VDDA1": "vdda1",
+        "VDDA2": "vdda2",
+        "VSS": "vssd1"
+      },
+      "power_voltage_v": {
+        "VDDC1": 1.8,
+        "VDDC2": 1.8,
+        "VDDA1": 3.3,
+        "VDDA2": 3.3,
+        "VSS": 0
+      },
+      "views": {
+        "gds": "gds/sky130_bmlabs_reram__nvm32x32wb.gds",
+        "lef": "lef/sky130_bmlabs_reram__nvm32x32wb.lef",
+        "liberty": "lib/sky130_bmlabs_reram__nvm32x32wb.lib",
+        "verilog_blackbox": "verilog/sky130_bmlabs_reram__nvm32x32wb.v",
+        "verilog_behavioral": "verilog/behavioral/sky130_bmlabs_reram__nvm32x32wb.sv",
+        "testbench": "verilog/behavioral/sky130_bmlabs_reram__nvm32x32wb_tb.sv"
+      }
     }
   },
   "planned_cells": [
@@ -44,13 +77,38 @@
       "name": "sky130_bmlabs_reram__cim32x32",
       "product": "Neuromorphic X2",
       "interface": "raw-signals",
-      "status": "awaiting-verified-cross-view-release"
-    },
-    {
-      "name": "sky130_bmlabs_reram__nvm32x32wb",
-      "product": "Neuromorphic X1",
-      "interface": "wishbone32-plus-analog-test",
-      "status": "awaiting-verified-cross-view-release"
+      "status": "provisional-integration-only-awaiting-signoff-views",
+      "interface_ports": 49,
+      "interface_wires": 172,
+      "functional_ports": 44,
+      "functional_wires": 167,
+      "reference_scan_ports": 5,
+      "reference_analog_ports": 10,
+      "optional_power_ports": 5,
+      "power_connections": {
+        "VDDC1": "vccd1",
+        "VDDC2": "vccd2",
+        "VDDA1": "vdda1",
+        "VDDA2": "vdda2",
+        "VSS": "vssd1"
+      },
+      "power_voltage_v": {
+        "VDDC1": 1.8,
+        "VDDC2": 1.8,
+        "VDDA1": 3.3,
+        "VDDA2": 3.3,
+        "VSS": 0
+      },
+      "simulation_views": {
+        "verilog_blackbox": "verilog/sky130_bmlabs_reram__cim32x32.v",
+        "verilog_behavioral": "verilog/behavioral/sky130_bmlabs_reram__cim32x32.sv",
+        "testbench": "verilog/behavioral/sky130_bmlabs_reram__cim32x32_tb.sv"
+      },
+      "provisional_physical_views": {
+        "gds": "gds/sky130_bmlabs_reram__cim32x32.gds",
+        "lef": "lef/sky130_bmlabs_reram__cim32x32.lef",
+        "liberty": "lib/sky130_bmlabs_reram__cim32x32.lib"
+      }
     }
   ]
 }
