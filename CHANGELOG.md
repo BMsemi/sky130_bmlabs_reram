@@ -2,9 +2,24 @@
 
 ## Unreleased
 
+- Replaced minimum-width raw-interface analog pins with 1.30 um-wide,
+  routing-grid-aligned met3 access and added separate full-width 1.80 um met3
+  straps for all five supply pins in the provisional LEF/GDS.
+- Documented that every analog bias pin connects to an analog pad or approved
+  external source and requires a matching-or-wider NDR, including guidance for
+  shared trunks when multiple macro instances are used.
+- Moved the three LibreLane interface-only Verilog views into `verilog/vh/`
+  and changed their extension from `.v` to `.vh`.
+- Updated the raw-interface Verilog header and behavioral model with power pins
+  first, section comments, aligned scan-pin ordering and bidirectional analog
+  pins; removed header-only behavioral parameters and the obsolete missing-view
+  comment.
+- Regenerated the provisional raw-interface LEF and GDS so north/south pins use
+  met2 and west/east pins use met3, with pin centers snapped to the SKY130
+  routing grids.
 - Removed the behavioral-only `TM_o` output from
   `sky130_bmlabs_reram__cim32x32wb`; it is absent from the released physical
-  and black-box interfaces. The common scan/test interface retains `TM` and
+  and Verilog-header interfaces. The common scan/test interface retains `TM` and
   `ScanOutCC`.
 - Added the supplied `sky130_bmlabs_reram__cim32x32` raw-interface behavioral
   model, self-checking testbench and matching integration shell.
@@ -19,7 +34,7 @@
   Wishbone GDS/LEF/Liberty has a different 128-pin interface and must not be
   copied or relabeled.
 - Added the complete `sky130_bmlabs_reram__nvm32x32wb` X1 release: GDS, LEF,
-  Liberty, black-box Verilog, behavioral model and self-checking testbench.
+  Liberty, Verilog header, behavioral model and self-checking testbench.
 - Aligned the X1 behavioral interface to the 128 verified physical pins; the
   source-only `Vcc_reset`, `Vcc_L` and `Vcc_Body` ports were omitted because
   they are absent from the supplied GDS, LEF and Liberty views.

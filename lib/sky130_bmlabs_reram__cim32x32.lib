@@ -13,6 +13,41 @@ library (sky130_bmlabs_reram__cim32x32) {
   cell (sky130_bmlabs_reram__cim32x32) {
     area : 3839367.4000;
     dont_use : true;
+    pin (VDDC1) {
+      direction : inout;
+      signal_type : POWER;
+    }
+    pg_pin (VDDC1) {
+      pg_type : primary_power;
+    }
+    pin (VDDC2) {
+      direction : inout;
+      signal_type : POWER;
+    }
+    pg_pin (VDDC2) {
+      pg_type : primary_power;
+    }
+    pin (VDDA1) {
+      direction : inout;
+      signal_type : POWER;
+    }
+    pg_pin (VDDA1) {
+      pg_type : primary_power;
+    }
+    pin (VDDA2) {
+      direction : inout;
+      signal_type : POWER;
+    }
+    pg_pin (VDDA2) {
+      pg_type : primary_power;
+    }
+    pin (VSS) {
+      direction : inout;
+      signal_type : GROUND;
+    }
+    pg_pin (VSS) {
+      pg_type : primary_ground;
+    }
     pin (clk_i) {
       direction : input;
       capacitance : 0.01;
@@ -755,99 +790,44 @@ library (sky130_bmlabs_reram__cim32x32) {
       capacitance : 0.01;
       max_transition : 0.50;
     }
+    pin (ScanOutCC) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
     pin (TM) {
       direction : input;
       capacitance : 0.01;
       max_transition : 0.50;
     }
     pin (Iref) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (Vcc_read) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (Vcomp) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (Bias_comp2) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (Vcc_wl_read) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (Vcc_wl_set) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (Vbias) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (Vcc_wl_reset) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (Vcc_set) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
+      direction : inout;
     }
     pin (dc_bias) {
-      direction : input;
-      capacitance : 0.01;
-      max_transition : 0.50;
-    }
-    pin (VDDC1) {
       direction : inout;
-      signal_type : POWER;
-    }
-    pg_pin (VDDC1) {
-      pg_type : primary_power;
-    }
-    pin (VDDC2) {
-      direction : inout;
-      signal_type : POWER;
-    }
-    pg_pin (VDDC2) {
-      pg_type : primary_power;
-    }
-    pin (VDDA1) {
-      direction : inout;
-      signal_type : POWER;
-    }
-    pg_pin (VDDA1) {
-      pg_type : primary_power;
-    }
-    pin (VDDA2) {
-      direction : inout;
-      signal_type : POWER;
-    }
-    pg_pin (VDDA2) {
-      pg_type : primary_power;
-    }
-    pin (VSS) {
-      direction : inout;
-      signal_type : GROUND;
-    }
-    pg_pin (VSS) {
-      pg_type : primary_ground;
-    }
-    pin (ScanOutCC) {
-      direction : output;
-      max_capacitance : 0.10;
     }
   }
 }

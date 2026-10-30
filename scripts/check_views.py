@@ -40,6 +40,15 @@ RAW_ANALOG_PINS = {
     "dc_bias",
 }
 RAW_STATUS = "provisional-integration-only-awaiting-signoff-views"
+MET2_GDS_LAYER = 69
+MET3_GDS_LAYER = 70
+PIN_GDS_DATATYPE = 20
+MET2_TRACK_ORIGIN = 0.23
+MET2_TRACK_PITCH = 0.46
+MET3_TRACK_ORIGIN = 0.34
+MET3_TRACK_PITCH = 0.68
+RAW_ANALOG_PIN_WIDTH = 1.30
+RAW_POWER_STRAP_WIDTH = 1.80
 
 EXPECTED_POWER_CONNECTIONS = {
     "VDDC1": "vccd1",
@@ -55,6 +64,13 @@ EXPECTED_POWER_VOLTAGE = {
     "VDDA2": 3.3,
     "VSS": 0,
 }
+EXPECTED_RAW_ROUTING_CONSTRAINTS = {
+    "analog_pad_connection_required": True,
+    "analog_layer": "met3",
+    "analog_min_width_um": RAW_ANALOG_PIN_WIDTH,
+    "supply_layer": "met3",
+    "supply_strap_width_um": RAW_POWER_STRAP_WIDTH,
+}
 
 
 def expected_views(name):
@@ -62,7 +78,7 @@ def expected_views(name):
         "gds": f"gds/{name}.gds",
         "lef": f"lef/{name}.lef",
         "liberty": f"lib/{name}.lib",
-        "verilog_blackbox": f"verilog/{name}.v",
+        "verilog_header": f"verilog/vh/{name}.vh",
         "verilog_behavioral": f"verilog/behavioral/{name}.sv",
         "testbench": f"verilog/behavioral/{name}_tb.sv",
     }
@@ -111,12 +127,115 @@ def verilog_ports(path, module_name):
     return ports
 
 
+def verilog_port_directions(path, module_name):
+    text = path.read_text(errors="replace")
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    text = re.sub(r"//.*", "", text)
+    match = re.search(
+        rf"\bmodule\s+{re.escape(module_name)}\s*"
+        rf"(?:#\s*\(.*?\)\s*)?\((.*?)\)\s*;",
+        text,
+        re.S,
+    )
+    if not match:
+        return None
+    declaration = re.compile(
+        r"\b(input|output|inout)\b"
+        r"(?:\s+(?:wire|reg|logic|signed))*"
+        r"\s*(\[[^]]+\])?\s*([A-Za-z_]\w*)"
+    )
+    directions = {}
+    for direction, bus, name in declaration.findall(match.group(1)):
+        for expanded_name in expand_bus(name, bus):
+            directions[expanded_name] = direction
+    return directions
+
+
 def lef_pins(text):
     return set(re.findall(r"^\s*PIN\s+(\S+)", text, re.M))
 
 
 def liberty_pins(text):
     return set(re.findall(r"^\s*pin\s*\(\s*([^\s)]+)", text, re.M))
+
+
+def liberty_pin_directions(text):
+    directions = {}
+    for match in re.finditer(
+        r"^\s*pin\s*\(\s*([^\s)]+)\s*\)\s*\{(.*?)^\s*\}",
+        text,
+        re.M | re.S,
+    ):
+        direction = re.search(r"\bdirection\s*:\s*(input|output|inout)\s*;", match.group(2))
+        if direction:
+            directions[match.group(1)] = direction.group(1)
+    return directions
+
+
+def lef_pin_details(text):
+    details = {}
+    current = None
+    current_layer = None
+    for line in text.splitlines():
+        pin = re.match(r"^\s*PIN\s+(\S+)\s*$", line)
+        if pin:
+            current = pin.group(1)
+            details[current] = {"direction": None, "shapes": []}
+            current_layer = None
+            continue
+        if current is None:
+            continue
+        direction = re.match(r"^\s*DIRECTION\s+(\S+)\s*;", line)
+        if direction:
+            details[current]["direction"] = direction.group(1).lower()
+            continue
+        layer = re.match(r"^\s*LAYER\s+(\S+)\s*;", line)
+        if layer:
+            current_layer = layer.group(1)
+            continue
+        rect = re.match(
+            r"^\s*RECT\s+([0-9.+-]+)\s+([0-9.+-]+)\s+"
+            r"([0-9.+-]+)\s+([0-9.+-]+)\s*;",
+            line,
+        )
+        if rect and current_layer:
+            details[current]["shapes"].append(
+                (current_layer, tuple(float(value) for value in rect.groups()))
+            )
+            continue
+        if re.match(rf"^\s*END\s+{re.escape(current)}\s*$", line):
+            current = None
+            current_layer = None
+    return details
+
+
+def is_on_track(position, origin, pitch, tolerance=1e-6):
+    track = round((position - origin) / pitch)
+    return abs(position - (origin + track * pitch)) <= tolerance
+
+
+def validate_perimeter_shapes(errors, view_name, layer, rectangles, scale=1.0):
+    width = WIDTH * scale
+    height = HEIGHT * scale
+    tolerance = 1e-6 if scale == 1.0 else 0
+    if layer == "met2":
+        origin = MET2_TRACK_ORIGIN * scale
+        pitch = MET2_TRACK_PITCH * scale
+        for rect in rectangles:
+            x1, y1, x2, y2 = rect
+            if not (abs(y1) <= tolerance or abs(y2 - height) <= tolerance):
+                errors.append(f"{view_name} met2 pin does not touch north/south boundary: {rect}")
+            if not is_on_track((x1 + x2) / 2, origin, pitch, tolerance):
+                errors.append(f"{view_name} met2 pin center is off the X routing grid: {rect}")
+    elif layer == "met3":
+        origin = MET3_TRACK_ORIGIN * scale
+        pitch = MET3_TRACK_PITCH * scale
+        for rect in rectangles:
+            x1, y1, x2, y2 = rect
+            if not (abs(x1) <= tolerance or abs(x2 - width) <= tolerance):
+                errors.append(f"{view_name} met3 pin does not touch west/east boundary: {rect}")
+            if not is_on_track((y1 + y2) / 2, origin, pitch, tolerance):
+                errors.append(f"{view_name} met3 pin center is off the Y routing grid: {rect}")
 
 
 def read_gds(path):
@@ -195,6 +314,13 @@ def report_pin_difference(
 
 
 errors = []
+for header_name in RELEASED_NAMES | {RAW_NAME}:
+    legacy_header = ROOT / "verilog" / f"{header_name}.v"
+    if legacy_header.exists():
+        errors.append(
+            f"legacy .v interface file must be moved to verilog/vh/: "
+            f"{legacy_header.relative_to(ROOT)}"
+        )
 manifest_path = ROOT / "ip_manifest.json"
 if not manifest_path.is_file():
     errors.append("missing required file: ip_manifest.json")
@@ -223,7 +349,7 @@ raw_entries = [
 if len(raw_entries) == 1:
     raw_entry = raw_entries[0]
     expected_raw_views = {
-        "verilog_blackbox": f"verilog/{RAW_NAME}.v",
+        "verilog_header": f"verilog/vh/{RAW_NAME}.vh",
         "verilog_behavioral": f"verilog/behavioral/{RAW_NAME}.sv",
         "testbench": f"verilog/behavioral/{RAW_NAME}_tb.sv",
     }
@@ -249,6 +375,8 @@ if len(raw_entries) == 1:
         errors.append(f"{RAW_NAME} manifest must record ten reference analog ports")
     if raw_entry.get("optional_power_ports") != len(RAW_POWER_PINS):
         errors.append(f"{RAW_NAME} manifest must record five optional power ports")
+    if raw_entry.get("physical_routing_constraints") != EXPECTED_RAW_ROUTING_CONSTRAINTS:
+        errors.append(f"{RAW_NAME} physical routing constraints are incorrect")
     if raw_entry.get("power_connections") != EXPECTED_POWER_CONNECTIONS:
         errors.append(f"{RAW_NAME} power connections do not match the reference")
     if raw_entry.get("power_voltage_v") != EXPECTED_POWER_VOLTAGE:
@@ -270,41 +398,77 @@ if len(raw_entries) == 1:
         errors.append(f"missing required file: {path.relative_to(ROOT)}")
 
     if not raw_missing:
-        raw_blackbox_ports = verilog_ports(raw_paths["verilog_blackbox"], RAW_NAME)
+        raw_header_text = raw_paths["verilog_header"].read_text(errors="replace")
+        raw_header_ports = verilog_ports(raw_paths["verilog_header"], RAW_NAME)
         raw_behavioral_ports = verilog_ports(raw_paths["verilog_behavioral"], RAW_NAME)
-        raw_blackbox_declarations = verilog_port_declarations(
-            raw_paths["verilog_blackbox"], RAW_NAME
+        raw_header_directions = verilog_port_directions(
+            raw_paths["verilog_header"], RAW_NAME
+        )
+        raw_behavioral_directions = verilog_port_directions(
+            raw_paths["verilog_behavioral"], RAW_NAME
+        )
+        raw_header_declarations = verilog_port_declarations(
+            raw_paths["verilog_header"], RAW_NAME
         )
         raw_behavioral_declarations = verilog_port_declarations(
             raw_paths["verilog_behavioral"], RAW_NAME
         )
 
-        if raw_blackbox_ports is None:
-            errors.append(f"{RAW_NAME} Verilog interface-shell module name mismatch")
+        if raw_header_ports is None:
+            errors.append(f"{RAW_NAME} Verilog header module name mismatch")
         if raw_behavioral_ports is None:
             errors.append(f"{RAW_NAME} behavioral module name mismatch")
-        if raw_blackbox_ports is not None and raw_behavioral_ports is not None:
+        if raw_header_ports is not None and raw_behavioral_ports is not None:
             report_pin_difference(
                 errors,
                 RAW_NAME,
                 "behavioral Verilog",
-                raw_blackbox_ports,
+                raw_header_ports,
                 raw_behavioral_ports,
             )
-            if len(raw_blackbox_ports) != RAW_WIRE_COUNT:
+            if len(raw_header_ports) != RAW_WIRE_COUNT:
                 errors.append(
                     f"{RAW_NAME} expected {RAW_WIRE_COUNT} signal wires, "
-                    f"found {len(raw_blackbox_ports)}"
+                    f"found {len(raw_header_ports)}"
                 )
-            if not RAW_SCAN_PINS.issubset(raw_blackbox_ports):
+            if not RAW_SCAN_PINS.issubset(raw_header_ports):
                 errors.append(f"{RAW_NAME} is missing reference scan/test pins")
-            if not RAW_ANALOG_PINS.issubset(raw_blackbox_ports):
+            if not RAW_ANALOG_PINS.issubset(raw_header_ports):
                 errors.append(f"{RAW_NAME} is missing reference analog pins")
             legacy_raw_scan = {"i_scan_si1", "i_scan_se1", "i_TM", "o_TM"}
-            if legacy_raw_scan & raw_blackbox_ports:
+            if legacy_raw_scan & raw_header_ports:
                 errors.append(f"{RAW_NAME} still exposes legacy raw scan names")
+        if (
+            raw_header_directions is not None
+            and raw_behavioral_directions is not None
+            and raw_header_directions != raw_behavioral_directions
+        ):
+            errors.append(f"{RAW_NAME} header and behavioral port directions differ")
+        for pin in sorted(RAW_ANALOG_PINS):
+            if raw_header_directions and raw_header_directions.get(pin) != "inout":
+                errors.append(f"{RAW_NAME} header analog pin {pin} must be inout")
+            if raw_behavioral_directions and raw_behavioral_directions.get(pin) != "inout":
+                errors.append(f"{RAW_NAME} behavioral analog pin {pin} must be inout")
+        if re.search(rf"\bmodule\s+{re.escape(RAW_NAME)}\s*#", raw_header_text):
+            errors.append(f"{RAW_NAME} Verilog header must not declare parameters")
+        obsolete_missing_view_comment = (
+            "This file does not imply that matching "
+            + "GDS, LEF or Liberty views exist"
+        )
+        if obsolete_missing_view_comment in raw_header_text:
+            errors.append(f"{RAW_NAME} Verilog header contains the obsolete missing-view comment")
+        power_index = raw_header_text.find("`ifdef USE_POWER_PINS")
+        clock_index = raw_header_text.find("clk_i")
+        if power_index < 0 or clock_index < 0 or power_index > clock_index:
+            errors.append(f"{RAW_NAME} power-pin section must be first in the header port list")
+        scan_order = [
+            raw_header_text.find(pin)
+            for pin in ("ScanInCC", "ScanInDL", "ScanInDR", "ScanOutCC", "TM")
+        ]
+        if any(index < 0 for index in scan_order) or scan_order != sorted(scan_order):
+            errors.append(f"{RAW_NAME} scan/test pin order is not synchronized")
         for view_name, declarations in {
-            "interface shell": raw_blackbox_declarations,
+            "Verilog header": raw_header_declarations,
             "behavioral model": raw_behavioral_declarations,
         }.items():
             if declarations is not None and len(declarations) != RAW_PORT_COUNT:
@@ -341,9 +505,11 @@ if len(raw_entries) == 1:
         for path in provisional_missing:
             errors.append(f"missing required provisional file: {path.relative_to(ROOT)}")
 
-        if not provisional_missing and raw_blackbox_ports is not None:
+        if not provisional_missing and raw_header_ports is not None:
             raw_lef_text = provisional_paths["lef"].read_text(errors="replace")
             raw_liberty_text = provisional_paths["liberty"].read_text(errors="replace")
+            raw_lef_details = lef_pin_details(raw_lef_text)
+            raw_liberty_directions = liberty_pin_directions(raw_liberty_text)
             if "PROVISIONAL" not in raw_lef_text:
                 errors.append(f"{RAW_NAME} LEF lacks its provisional warning")
             if "PROVISIONAL" not in raw_liberty_text:
@@ -379,6 +545,68 @@ if len(raw_entries) == 1:
             ):
                 errors.append(f"{RAW_NAME} provisional Liberty cell name mismatch")
 
+            if raw_header_directions is not None:
+                for pin, direction in raw_header_directions.items():
+                    if raw_lef_details.get(pin, {}).get("direction") != direction:
+                        errors.append(
+                            f"{RAW_NAME} provisional LEF direction mismatch for {pin}"
+                        )
+                    if raw_liberty_directions.get(pin) != direction:
+                        errors.append(
+                            f"{RAW_NAME} provisional Liberty direction mismatch for {pin}"
+                        )
+
+            lef_met2_rectangles = []
+            lef_met3_rectangles = []
+            for pin, detail in raw_lef_details.items():
+                if len(detail["shapes"]) != 1:
+                    errors.append(
+                        f"{RAW_NAME} provisional LEF pin {pin} must have one perimeter shape"
+                    )
+                    continue
+                layer, rect = detail["shapes"][0]
+                x1, y1, x2, y2 = rect
+                if pin in RAW_ANALOG_PINS:
+                    if layer != "met3":
+                        errors.append(
+                            f"{RAW_NAME} analog pin {pin} must use met3"
+                        )
+                    if y2 - y1 + 1e-6 < RAW_ANALOG_PIN_WIDTH:
+                        errors.append(
+                            f"{RAW_NAME} analog pin {pin} is narrower than "
+                            f"{RAW_ANALOG_PIN_WIDTH} um"
+                        )
+                if pin in RAW_POWER_PINS:
+                    if layer != "met3":
+                        errors.append(
+                            f"{RAW_NAME} supply pin {pin} must use met3"
+                        )
+                    if abs(x1) > 1e-6 or abs(x2 - WIDTH) > 1e-6:
+                        errors.append(
+                            f"{RAW_NAME} supply pin {pin} must span the macro width"
+                        )
+                    if y2 - y1 + 1e-6 < RAW_POWER_STRAP_WIDTH:
+                        errors.append(
+                            f"{RAW_NAME} supply pin {pin} is narrower than "
+                            f"{RAW_POWER_STRAP_WIDTH} um"
+                        )
+                if layer == "met2":
+                    lef_met2_rectangles.append(rect)
+                elif layer == "met3":
+                    lef_met3_rectangles.append(rect)
+                else:
+                    errors.append(
+                        f"{RAW_NAME} provisional LEF pin {pin} uses unexpected layer {layer}"
+                    )
+            validate_perimeter_shapes(
+                errors, f"{RAW_NAME} provisional LEF", "met2", lef_met2_rectangles
+            )
+            validate_perimeter_shapes(
+                errors, f"{RAW_NAME} provisional LEF", "met3", lef_met3_rectangles
+            )
+            if len(lef_met2_rectangles) + len(lef_met3_rectangles) != RAW_WIRE_COUNT:
+                errors.append(f"{RAW_NAME} provisional LEF perimeter pin count is incorrect")
+
             try:
                 raw_structures, raw_gds_pins = read_gds(provisional_paths["gds"])
             except ValueError as error:
@@ -394,13 +622,47 @@ if len(raw_entries) == 1:
             raw_boundary = (0, 0, round(WIDTH * 1000), round(HEIGHT * 1000))
             if raw_boundary not in gds_rectangles(provisional_paths["gds"], 235, 4):
                 errors.append(f"{RAW_NAME} provisional GDS boundary is incorrect")
+            gds_met2_rectangles = gds_rectangles(
+                provisional_paths["gds"], MET2_GDS_LAYER, PIN_GDS_DATATYPE
+            )
+            gds_met3_rectangles = gds_rectangles(
+                provisional_paths["gds"], MET3_GDS_LAYER, PIN_GDS_DATATYPE
+            )
+            validate_perimeter_shapes(
+                errors,
+                f"{RAW_NAME} provisional GDS",
+                "met2",
+                gds_met2_rectangles,
+                scale=1000.0,
+            )
+            validate_perimeter_shapes(
+                errors,
+                f"{RAW_NAME} provisional GDS",
+                "met3",
+                gds_met3_rectangles,
+                scale=1000.0,
+            )
+            if len(gds_met2_rectangles) + len(gds_met3_rectangles) != RAW_WIRE_COUNT:
+                errors.append(f"{RAW_NAME} provisional GDS perimeter pin count is incorrect")
+            expected_gds_met2 = {
+                tuple(round(value * 1000) for value in rect)
+                for rect in lef_met2_rectangles
+            }
+            expected_gds_met3 = {
+                tuple(round(value * 1000) for value in rect)
+                for rect in lef_met3_rectangles
+            }
+            if gds_met2_rectangles != expected_gds_met2:
+                errors.append(f"{RAW_NAME} met2 pin geometry differs between LEF and GDS")
+            if gds_met3_rectangles != expected_gds_met3:
+                errors.append(f"{RAW_NAME} met3 pin geometry differs between LEF and GDS")
             for view_name, pins in {
                 "provisional LEF": lef_pins(raw_lef_text),
                 "provisional Liberty": liberty_pins(raw_liberty_text),
                 "provisional GDS": raw_gds_pins,
             }.items():
                 report_pin_difference(
-                    errors, RAW_NAME, view_name, raw_blackbox_ports, pins
+                    errors, RAW_NAME, view_name, raw_header_ports, pins
                 )
 
 for name in sorted(RELEASED_NAMES):
@@ -431,7 +693,7 @@ for name in sorted(RELEASED_NAMES):
 
     lef_text = paths["lef"].read_text(errors="replace")
     liberty_text = paths["liberty"].read_text(errors="replace")
-    blackbox_text = paths["verilog_blackbox"].read_text(errors="replace")
+    header_text = paths["verilog_header"].read_text(errors="replace")
     behavioral_text = paths["verilog_behavioral"].read_text(errors="replace")
     testbench_text = paths["testbench"].read_text(errors="replace")
 
@@ -453,10 +715,10 @@ for name in sorted(RELEASED_NAMES):
     if not re.search(rf"^\s*cell\s*\(\s*{re.escape(name)}\s*\)", liberty_text, re.M):
         errors.append(f"{name} Liberty cell name mismatch")
 
-    blackbox_pin_set = verilog_ports(paths["verilog_blackbox"], name)
+    header_pin_set = verilog_ports(paths["verilog_header"], name)
     behavioral_pin_set = verilog_ports(paths["verilog_behavioral"], name)
-    if blackbox_pin_set is None:
-        errors.append(f"{name} Verilog black-box module name mismatch")
+    if header_pin_set is None:
+        errors.append(f"{name} Verilog header module name mismatch")
     if behavioral_pin_set is None:
         errors.append(f"{name} behavioral module name mismatch")
     if not re.search(rf"\bmodule\s+{re.escape(name)}_tb\b", testbench_text):
@@ -478,8 +740,8 @@ for name in sorted(RELEASED_NAMES):
         "Liberty": liberty_pins(liberty_text),
         "GDS": gds_pin_set,
     }
-    if blackbox_pin_set is not None:
-        exact_pin_views["Verilog black-box"] = blackbox_pin_set
+    if header_pin_set is not None:
+        exact_pin_views["Verilog header"] = header_pin_set
     for view_name, actual_pins in exact_pin_views.items():
         report_pin_difference(errors, name, view_name, reference_pins, actual_pins)
     if behavioral_pin_set is not None:
@@ -495,7 +757,7 @@ for name in sorted(RELEASED_NAMES):
     for path, text in {
         paths["lef"]: lef_text,
         paths["liberty"]: liberty_text,
-        paths["verilog_blackbox"]: blackbox_text,
+        paths["verilog_header"]: header_text,
         paths["verilog_behavioral"]: behavioral_text,
         paths["testbench"]: testbench_text,
     }.items():
@@ -528,4 +790,12 @@ print(
 print(
     f"PASS: {RAW_NAME} provisional GDS/LEF/Liberty have "
     f"{RAW_WIRE_COUNT} consistent pins and remain outside the signoff release"
+)
+print(
+    f"PASS: {RAW_NAME} north/south pins are met2 X-grid aligned and "
+    "west/east pins are met3 Y-grid aligned"
+)
+print(
+    f"PASS: {RAW_NAME} analog pins use {RAW_ANALOG_PIN_WIDTH:.2f} um met3 access "
+    f"and supplies use {RAW_POWER_STRAP_WIDTH:.2f} um full-width met3 straps"
 )

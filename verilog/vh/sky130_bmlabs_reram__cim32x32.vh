@@ -1,18 +1,23 @@
 `timescale 1ns/1ps
 `default_nettype none
 
-// Raw-signal interface shell for compilation and integration checks.
-// This file does not imply that matching GDS, LEF or Liberty views exist.
+// Raw-signal Verilog header for compilation and integration checks.
 `celldefine
-module sky130_bmlabs_reram__cim32x32 #(
-  parameter integer      READ_DELAY         = 160,
-  parameter integer      PROGRAM_DELAY      = 360,
-  parameter integer      COMPUTE_DELAY      = 450,
-  parameter [13:0]       INITIAL_CELL_LEVEL = 14'h0E23
-)(
+module sky130_bmlabs_reram__cim32x32 (
+`ifdef USE_POWER_PINS
+  // Power pins
+  inout  wire         VDDC1,
+  inout  wire         VDDC2,
+  inout  wire         VDDA1,
+  inout  wire         VDDA2,
+  inout  wire         VSS,
+`endif
+
+  // Clock and reset
   input  wire         clk_i,
   input  wire         rst_i,
 
+  // Command interface
   input  wire         i_cmd_valid,
   output wire         o_cmd_ready,
   input  wire [1:0]   i_mode,
@@ -22,6 +27,7 @@ module sky130_bmlabs_reram__cim32x32 #(
   input  wire         i_compute_last,
   input  wire         i_compute_all_columns,
 
+  // Configuration inputs
   input  wire [15:0]  i_target_set1,
   input  wire [15:0]  i_target_set2,
   input  wire [15:0]  i_target_reset1,
@@ -31,6 +37,7 @@ module sky130_bmlabs_reram__cim32x32 #(
   input  wire [6:0]   i_tdc_time_out,
   input  wire [1:0]   i_tdc_dead_time,
 
+  // Status outputs
   output wire         o_busy,
   output wire         o_command_accepted,
   output wire         o_compute_pending,
@@ -39,34 +46,30 @@ module sky130_bmlabs_reram__cim32x32 #(
   output wire         o_operation_done,
   output wire         o_program_readback_active,
 
+  // Result interface
   output wire         o_result_valid,
   input  wire         i_result_ready,
   output wire [20:0]  o_result_data,
   output wire         o_result_last,
 
+  // Scan and test pins
   input  wire         ScanInCC,
   input  wire         ScanInDL,
   input  wire         ScanInDR,
+  output wire         ScanOutCC,
   input  wire         TM,
 
-  input  wire         Iref,
-  input  wire         Vcc_read,
-  input  wire         Vcomp,
-  input  wire         Bias_comp2,
-  input  wire         Vcc_wl_read,
-  input  wire         Vcc_wl_set,
-  input  wire         Vbias,
-  input  wire         Vcc_wl_reset,
-  input  wire         Vcc_set,
-  input  wire         dc_bias,
-`ifdef USE_POWER_PINS
-  inout  wire         VDDC1,
-  inout  wire         VDDC2,
-  inout  wire         VDDA1,
-  inout  wire         VDDA2,
-  inout  wire         VSS,
-`endif
-  output wire         ScanOutCC
+  // Analog-pad pins; route on met3 with a matching-or-wider 1.30 um NDR
+  inout  wire         Iref,           // 100 uA current reference
+  inout  wire         Vcc_read,       // 0.3 V read rail
+  inout  wire         Vcomp,          // 0.6 V comparator/reference bias
+  inout  wire         Bias_comp2,     // 0.6 V comparator bias
+  inout  wire         Vcc_wl_read,    // 0.7 V wordline read rail
+  inout  wire         Vcc_wl_set,     // 1.8 V wordline set rail
+  inout  wire         Vbias,          // 1.8 V analog bias
+  inout  wire         Vcc_wl_reset,   // 2.6 V wordline reset rail
+  inout  wire         Vcc_set,        // 3.3 V array set rail
+  inout  wire         dc_bias         // externally driven; value is design-specific
 );
 endmodule
 `endcelldefine

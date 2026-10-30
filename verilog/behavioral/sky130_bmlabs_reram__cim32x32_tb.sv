@@ -82,16 +82,18 @@ module sky130_bmlabs_reram__cim32x32_tb;
   logic        TM;
   wire         ScanOutCC;
 
-  logic        Iref;
-  logic        Vcc_read;
-  logic        Vcomp;
-  logic        Bias_comp2;
-  logic        Vcc_wl_read;
-  logic        Vcc_wl_set;
-  logic        Vbias;
-  logic        Vcc_wl_reset;
-  logic        Vcc_set;
-  logic        dc_bias;
+  // The analog pins are bidirectional interface placeholders. Drive them to
+  // benign constants in this digital-only behavioral testbench.
+  tri          Iref = 1'b0;
+  tri          Vcc_read = 1'b0;
+  tri          Vcomp = 1'b0;
+  tri          Bias_comp2 = 1'b0;
+  tri          Vcc_wl_read = 1'b0;
+  tri          Vcc_wl_set = 1'b0;
+  tri          Vbias = 1'b0;
+  tri          Vcc_wl_reset = 1'b0;
+  tri          Vcc_set = 1'b0;
+  tri          dc_bias = 1'b0;
 
   integer selected_case;
   integer total_tests;
@@ -142,8 +144,8 @@ module sky130_bmlabs_reram__cim32x32_tb;
     .ScanInCC                   (ScanInCC),
     .ScanInDL                   (ScanInDL),
     .ScanInDR                   (ScanInDR),
-    .TM                         (TM),
     .ScanOutCC                  (ScanOutCC),
+    .TM                         (TM),
     .Iref                       (Iref),
     .Vcc_read                   (Vcc_read),
     .Vcomp                      (Vcomp),
@@ -192,16 +194,6 @@ module sky130_bmlabs_reram__cim32x32_tb;
       ScanInDL             = 1'b0;
       ScanInDR             = 1'b0;
       TM                   = 1'b0;
-      Iref                 = 1'b0;
-      Vcc_read             = 1'b0;
-      Vcomp                = 1'b0;
-      Bias_comp2           = 1'b0;
-      Vcc_wl_read          = 1'b0;
-      Vcc_wl_set           = 1'b0;
-      Vbias                = 1'b0;
-      Vcc_wl_reset         = 1'b0;
-      Vcc_set              = 1'b0;
-      dc_bias              = 1'b0;
     end
   endtask
 

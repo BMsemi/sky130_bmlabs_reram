@@ -25,20 +25,23 @@ consumes the IP.
 `sky130_bmlabs_reram__cim32x32wb` and
 `sky130_bmlabs_reram__nvm32x32wb` have complete, cross-checked
 GDS/LEF/Liberty/Verilog releases in this repository. The reserved raw-interface
-cell has a behavioral model, testbench and interface shell. Approximate GDS,
+cell has a behavioral model, testbench and Verilog header. Approximate GDS,
 LEF and Liberty placeholders are also provided for early floorplanning and
 file-flow testing only. They are not extracted or characterized views and must
 not be used for LVS, timing signoff, fabrication or tapeout. See
 `doc/RAW_INTERFACE.md` and `doc/IP_CATALOG.md`.
 The X1 command encoding, modeled behavior and simulation limitations are
 documented in `doc/NVM_BEHAVIORAL_MODEL.md`.
+Analog bias pins must connect to analog pads using thick NDR routes; pin widths,
+nominal values and verification requirements are in `doc/ANALOG_ROUTING.md`.
 
 ## Repository layout
 
 - `gds/`: stream layout
 - `lef/`: abstract physical view
 - `lib/`: timing/library view
-- `verilog/`: black-box and behavioral simulation views
+- `verilog/vh/`: LibreLane Verilog headers (`.vh`)
+- `verilog/behavioral/`: behavioral models and self-checking testbenches
 - `doc/`: integration, interface and power-pin notes
 - `scripts/check_views.py`: cross-view consistency validation
 - `ip_manifest.json`: machine-readable IP catalog
@@ -49,7 +52,8 @@ The released Wishbone macros use separate 1.8 V digital connections and
 separate 3.3 V analog connections. For Caravel integration, connect
 `VDDC1 -> vccd1`, `VDDC2 -> vccd2`, `VDDA1 -> vdda1`, `VDDA2 -> vdda2`, and
 the common `VSS` pin to `vssd1`. Do not short either numbered supply pair. See
-`doc/POWER_PINS.md` for the integration rules.
+`doc/POWER_PINS.md` for the supply rules and `doc/ANALOG_ROUTING.md` for the
+separate analog-bias routing requirements.
 
 ## Using from a chip project
 

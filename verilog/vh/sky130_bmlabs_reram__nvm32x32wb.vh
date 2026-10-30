@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module sky130_bmlabs_reram__nvm32x32wb (
 
 `ifdef USE_POWER_PINS

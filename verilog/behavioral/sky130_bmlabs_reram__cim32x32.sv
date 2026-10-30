@@ -16,6 +16,16 @@ module sky130_bmlabs_reram__cim32x32 #(
   parameter integer      COMPUTE_DELAY      = 450,
   parameter logic [13:0] INITIAL_CELL_LEVEL = 14'h0E23
 )(
+`ifdef USE_POWER_PINS
+  // Power pins.
+  inout  wire         VDDC1,
+  inout  wire         VDDC2,
+  inout  wire         VDDA1,
+  inout  wire         VDDA2,
+  inout  wire         VSS,
+`endif
+
+  // Clock and reset.
   input  logic        clk_i,
   input  logic        rst_i,
 
@@ -59,28 +69,21 @@ module sky130_bmlabs_reram__cim32x32 #(
   input  logic        ScanInCC,
   input  logic        ScanInDL,
   input  logic        ScanInDR,
+  output wire         ScanOutCC,
   input  logic        TM,
 
   // Reference-derived analog boundary pins.  The functional model does not
   // model their electrical behavior.
-  input  wire         Iref,
-  input  wire         Vcc_read,
-  input  wire         Vcomp,
-  input  wire         Bias_comp2,
-  input  wire         Vcc_wl_read,
-  input  wire         Vcc_wl_set,
-  input  wire         Vbias,
-  input  wire         Vcc_wl_reset,
-  input  wire         Vcc_set,
-  input  wire         dc_bias,
-`ifdef USE_POWER_PINS
-  inout  wire         VDDC1,
-  inout  wire         VDDC2,
-  inout  wire         VDDA1,
-  inout  wire         VDDA2,
-  inout  wire         VSS,
-`endif
-  output wire         ScanOutCC
+  inout  wire         Iref,
+  inout  wire         Vcc_read,
+  inout  wire         Vcomp,
+  inout  wire         Bias_comp2,
+  inout  wire         Vcc_wl_read,
+  inout  wire         Vcc_wl_set,
+  inout  wire         Vbias,
+  inout  wire         Vcc_wl_reset,
+  inout  wire         Vcc_set,
+  inout  wire         dc_bias
 );
 
   localparam logic [1:0] MODE_RESET   = 2'b00;
