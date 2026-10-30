@@ -700,7 +700,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END wb_rst_i
   PIN dc_bias
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 0 ;
     ANTENNADIFFAREA 15.052799 ;
@@ -787,7 +787,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END ScanOutCC
   PIN Iref
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 33.599998 ;
     ANTENNADIFFAREA 1.780800 ;
@@ -801,7 +801,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END Iref
   PIN Vbias
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 0 ;
     ANTENNADIFFAREA 0.222600 ;
@@ -815,7 +815,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END Vbias
   PIN Vcomp
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 215.039993 ;
     PORT
@@ -838,7 +838,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END wbs_adr_i[10]
   PIN Bias_comp2
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 2.016000 ;
     PORT
@@ -874,7 +874,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END VDDA2
   PIN Vcc_set
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 0 ;
     ANTENNADIFFAREA 268.799988 ;
@@ -892,7 +892,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END Vcc_set
   PIN Vcc_wl_reset
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 0 ;
     ANTENNADIFFAREA 13.440000 ;
@@ -910,7 +910,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END Vcc_wl_reset
   PIN Vcc_wl_set
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 0 ;
     ANTENNADIFFAREA 26.879999 ;
@@ -928,7 +928,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END Vcc_wl_set
   PIN Vcc_wl_read
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 0 ;
     ANTENNADIFFAREA 13.440000 ;
@@ -946,7 +946,7 @@ MACRO sky130_bmlabs_reram__cim32x32wb
     END
   END Vcc_wl_read
   PIN Vcc_read
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     ANTENNAGATEAREA 0 ;
     ANTENNADIFFAREA 134.399994 ;

@@ -36,16 +36,16 @@ module sky130_bmlabs_reram__nvm32x32wb (
   output        ScanOutCC,
 
   // Analog and programming pins
-  input         Iref,
-  input         Vcc_read,
-  input         Vcomp,
-  input         Bias_comp2,
-  input         Vcc_wl_read,
-  input         Vcc_wl_set,
-  input         Vbias,
-  input         Vcc_wl_reset,
-  input         Vcc_set,
-  input         dc_bias
+  inout         Iref,
+  inout         Vcc_read,
+  inout         Vcomp,
+  inout         Bias_comp2,
+  inout         Vcc_wl_read,
+  inout         Vcc_wl_set,
+  inout         Vbias,
+  inout         Vcc_wl_reset,
+  inout         Vcc_set,
+  inout         dc_bias
 );
 
 endmodule

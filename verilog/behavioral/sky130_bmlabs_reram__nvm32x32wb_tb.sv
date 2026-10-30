@@ -23,16 +23,16 @@ module sky130_bmlabs_reram__nvm32x32wb_tb;
   logic TM = 1'b0;
   wire  ScanOutCC;
 
-  logic Iref = 1'b0;
-  logic Vcc_read = 1'b0;
-  logic Vcomp = 1'b0;
-  logic Bias_comp2 = 1'b0;
-  logic Vcc_wl_read = 1'b0;
-  logic Vcc_wl_set = 1'b0;
-  logic Vbias = 1'b0;
-  logic Vcc_wl_reset = 1'b0;
-  logic Vcc_set = 1'b0;
-  logic dc_bias = 1'b0;
+  tri Iref = 1'b0;
+  tri Vcc_read = 1'b0;
+  tri Vcomp = 1'b0;
+  tri Bias_comp2 = 1'b0;
+  tri Vcc_wl_read = 1'b0;
+  tri Vcc_wl_set = 1'b0;
+  tri Vbias = 1'b0;
+  tri Vcc_wl_reset = 1'b0;
+  tri Vcc_set = 1'b0;
+  tri dc_bias = 1'b0;
 
   always #5 user_clk = ~user_clk;
   always #5 wb_clk_i = ~wb_clk_i;

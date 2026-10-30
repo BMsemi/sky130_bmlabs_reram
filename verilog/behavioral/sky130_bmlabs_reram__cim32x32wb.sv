@@ -50,16 +50,16 @@ module sky130_bmlabs_reram__cim32x32wb (
 
   // Analog-array/TDC boundary.
   input  wire [31:0] stop_bit_i,
-  input  wire        Iref,
-  input  wire        Vcc_read,
-  input  wire        Vcomp,
-  input  wire        Bias_comp2,
-  input  wire        Vcc_wl_read,
-  input  wire        Vcc_wl_set,
-  input  wire        Vbias,
-  input  wire        Vcc_wl_reset,
-  input  wire        Vcc_set,
-  input  wire        dc_bias,
+  inout  wire        Iref,
+  inout  wire        Vcc_read,
+  inout  wire        Vcomp,
+  inout  wire        Bias_comp2,
+  inout  wire        Vcc_wl_read,
+  inout  wire        Vcc_wl_set,
+  inout  wire        Vbias,
+  inout  wire        Vcc_wl_reset,
+  inout  wire        Vcc_set,
+  inout  wire        dc_bias,
 
   // PWM and controller observation outputs from top_module_wr.
   output wire [31:0] pwm_pulse_o,

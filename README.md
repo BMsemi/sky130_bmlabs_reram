@@ -79,7 +79,9 @@ required views, cross-view pin sets, LEF macro and GDS structure names. It also
 checks the raw-interface simulation views, their 167 non-power wires, five
 reference-derived supply pins and the explicit provisional markings on the
 approximate physical placeholders. The scan/test and analog boundary names are
-also checked against the released Wishbone reference. The cell remains outside
-the qualified physical release set.
+also checked against the released Wishbone reference. All three interfaces
+require analog pins to be `inout`. The raw-view checks additionally enforce the
+released X1 distributed power geometry and its li1-through-met4 obstruction
+pattern. The cell remains outside the qualified physical release set.
 
 See `CHANGELOG.md` for repository changes.

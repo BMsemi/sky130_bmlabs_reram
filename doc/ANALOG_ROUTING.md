@@ -40,11 +40,17 @@ spacing, shielding and via arrays. The chip project owns the pad assignment,
 NDR definition and route constraints because those depend on placement and the
 number of macro instances.
 
-The provisional raw-interface views also provide one separate, full-width
-1.80 um met3 strap for each of `VDDC1`, `VDDC2`, `VDDA1`, `VDDA2` and `VSS`.
-Connect these straps to the matching PDN domain described in `POWER_PINS.md`;
-do not merge the numbered supply domains. `VSS` is the common digital and
-analog ground.
+The provisional raw-interface views reuse the distributed met3 power-access
+geometry from the supplied X1 Wishbone GDS, checked into this repository as
+`sky130_bmlabs_reram__nvm32x32wb.gds`: 27 shapes for `VDDC1`, 78 for `VDDC2`,
+74 for `VDDA1`, 3 for `VDDA2` and 133 for `VSS`. Connect each network to the
+matching PDN domain described in `POWER_PINS.md`; do not merge the numbered
+supply domains. `VSS` is the common digital and analog ground.
+
+These access-shape counts alone do not prove that the power network is
+electrically sufficient. The macro owner must confirm internal connectivity
+and current capacity, and the chip integrator must run extracted IR-drop and
+electromigration analysis for the actual activity and number of instances.
 
 ## Verification
 

@@ -190,25 +190,25 @@ pg_pin(VDDC2) {
 }
 
 pin (Iref) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
 
 pin (Vbias) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
 
 pin (Vcomp) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
 
 pin (Bias_comp2) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
@@ -236,37 +236,37 @@ pg_pin(VDDA2) {
 }
 
 pin (Vcc_set) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
 
 pin (dc_bias) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
 
 pin (Vcc_wl_reset) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
 
 pin (Vcc_wl_set) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
 
 pin (Vcc_wl_read) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }
 
 pin (Vcc_read) {
-  direction : input;
+  direction : inout;
   capacitance : 0.01;
   max_transition : 0.50;
 }

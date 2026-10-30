@@ -43,12 +43,20 @@ RAW_STATUS = "provisional-integration-only-awaiting-signoff-views"
 MET2_GDS_LAYER = 69
 MET3_GDS_LAYER = 70
 PIN_GDS_DATATYPE = 20
+LABEL_GDS_TEXTTYPE = 5
 MET2_TRACK_ORIGIN = 0.23
 MET2_TRACK_PITCH = 0.46
 MET3_TRACK_ORIGIN = 0.34
 MET3_TRACK_PITCH = 0.68
 RAW_ANALOG_PIN_WIDTH = 1.30
-RAW_POWER_STRAP_WIDTH = 1.80
+RAW_POWER_SHAPE_COUNTS = {
+    "VDDC1": 27,
+    "VDDC2": 78,
+    "VDDA1": 74,
+    "VDDA2": 3,
+    "VSS": 133,
+}
+EXPECTED_OBSTRUCTION_LAYERS = ["li1", "met1", "met2", "met3", "met4"]
 
 EXPECTED_POWER_CONNECTIONS = {
     "VDDC1": "vccd1",
@@ -68,8 +76,13 @@ EXPECTED_RAW_ROUTING_CONSTRAINTS = {
     "analog_pad_connection_required": True,
     "analog_layer": "met3",
     "analog_min_width_um": RAW_ANALOG_PIN_WIDTH,
-    "supply_layer": "met3",
-    "supply_strap_width_um": RAW_POWER_STRAP_WIDTH,
+    "power_geometry_reference": NVM_NAME,
+    "power_geometry_source_view": "gds",
+    "power_access_layer": "met3",
+    "power_access_shape_counts": RAW_POWER_SHAPE_COUNTS,
+    "obstruction_reference": NVM_NAME,
+    "obstruction_source_view": "lef",
+    "obstruction_layers": EXPECTED_OBSTRUCTION_LAYERS,
 }
 
 
@@ -209,6 +222,29 @@ def lef_pin_details(text):
     return details
 
 
+def lef_obstructions(text):
+    match = re.search(r"^\s*OBS\s*$\n(.*?)^\s*END\s*$", text, re.M | re.S)
+    if not match:
+        return []
+    obstructions = []
+    current_layer = None
+    for line in match.group(1).splitlines():
+        layer = re.match(r"^\s*LAYER\s+(\S+)\s*;", line)
+        if layer:
+            current_layer = layer.group(1)
+            continue
+        rect = re.match(
+            r"^\s*RECT\s+([0-9.+-]+)\s+([0-9.+-]+)\s+"
+            r"([0-9.+-]+)\s+([0-9.+-]+)\s*;",
+            line,
+        )
+        if rect and current_layer:
+            obstructions.append(
+                (current_layer, tuple(float(value) for value in rect.groups()))
+            )
+    return obstructions
+
+
 def is_on_track(position, origin, pitch, tolerance=1e-6):
     track = round((position - origin) / pitch)
     return abs(position - (origin + track * pitch)) <= tolerance
@@ -297,6 +333,71 @@ def gds_rectangles(path, wanted_layer, wanted_datatype):
             active = False
         offset += length
     return rectangles
+
+
+def gds_labeled_rectangles(
+    path, wanted_layer, wanted_datatype, wanted_texttype
+):
+    data = path.read_bytes()
+    offset = 0
+    active = None
+    rectangles = []
+    labels = []
+    while offset < len(data):
+        length = int.from_bytes(data[offset : offset + 2], "big")
+        record_type = data[offset + 2]
+        payload = data[offset + 4 : offset + length]
+        if record_type in {8, 12}:
+            active = {
+                "type": record_type,
+                "layer": None,
+                "datatype": None,
+                "coordinates": [],
+                "text": None,
+            }
+        elif active is not None and record_type == 13:
+            active["layer"] = int.from_bytes(payload, "big", signed=True)
+        elif active is not None and record_type in {14, 22}:
+            active["datatype"] = int.from_bytes(payload, "big", signed=True)
+        elif active is not None and record_type == 16:
+            values = [
+                int.from_bytes(payload[index : index + 4], "big", signed=True)
+                for index in range(0, len(payload), 4)
+            ]
+            active["coordinates"] = list(zip(values[0::2], values[1::2]))
+        elif active is not None and record_type == 25:
+            active["text"] = payload.rstrip(b"\0").decode("ascii", errors="replace")
+        elif active is not None and record_type == 17:
+            if (
+                active["type"] == 8
+                and active["layer"] == wanted_layer
+                and active["datatype"] == wanted_datatype
+            ):
+                xs = [point[0] for point in active["coordinates"]]
+                ys = [point[1] for point in active["coordinates"]]
+                rectangles.append((min(xs), min(ys), max(xs), max(ys)))
+            elif (
+                active["type"] == 12
+                and active["layer"] == wanted_layer
+                and active["datatype"] == wanted_texttype
+            ):
+                labels.append((active["text"], active["coordinates"][0]))
+            active = None
+        offset += length
+
+    result = {}
+    for name, (x, y) in labels:
+        containing = [
+            rect
+            for rect in rectangles
+            if rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]
+        ]
+        if len(containing) != 1:
+            raise ValueError(
+                f"GDS label {name} at {(x, y)} maps to {len(containing)} shapes"
+            )
+        result.setdefault(name, []).append(containing[0])
+    return result
 
 
 def report_pin_difference(
@@ -556,56 +657,99 @@ if len(raw_entries) == 1:
                             f"{RAW_NAME} provisional Liberty direction mismatch for {pin}"
                         )
 
-            lef_met2_rectangles = []
-            lef_met3_rectangles = []
+            reference_lef_text = (ROOT / expected_views(NVM_NAME)["lef"]).read_text(
+                errors="replace"
+            )
+            reference_gds_path = ROOT / expected_views(NVM_NAME)["gds"]
+            try:
+                reference_gds_pins = gds_labeled_rectangles(
+                    reference_gds_path,
+                    MET3_GDS_LAYER,
+                    PIN_GDS_DATATYPE,
+                    LABEL_GDS_TEXTTYPE,
+                )
+            except ValueError as error:
+                errors.append(f"{NVM_NAME} GDS pin mapping failed: {error}")
+                reference_gds_pins = {}
+            reference_obstructions = lef_obstructions(reference_lef_text)
+            raw_obstructions = lef_obstructions(raw_lef_text)
+            if raw_obstructions != reference_obstructions:
+                errors.append(
+                    f"{RAW_NAME} obstruction geometry must match the released X1 reference"
+                )
+            if [layer for layer, _rect in raw_obstructions] != EXPECTED_OBSTRUCTION_LAYERS:
+                errors.append(f"{RAW_NAME} obstruction layers are incomplete")
+
+            signal_lef_met2_rectangles = []
+            signal_lef_met3_rectangles = []
+            all_lef_met2_rectangles = []
+            all_lef_met3_rectangles = []
             for pin, detail in raw_lef_details.items():
-                if len(detail["shapes"]) != 1:
+                if not detail["shapes"]:
+                    errors.append(f"{RAW_NAME} provisional LEF pin {pin} has no shapes")
+                    continue
+                if pin in RAW_POWER_PINS:
+                    reference_shapes = [
+                        (
+                            "met3",
+                            tuple(value / 1000 for value in rectangle),
+                        )
+                        for rectangle in reference_gds_pins.get(pin, [])
+                    ]
+                    if set(detail["shapes"]) != set(reference_shapes):
+                        errors.append(
+                            f"{RAW_NAME} supply pin {pin} geometry differs from "
+                            f"the released X1 reference"
+                        )
+                    if len(detail["shapes"]) != RAW_POWER_SHAPE_COUNTS[pin]:
+                        errors.append(
+                            f"{RAW_NAME} supply pin {pin} has the wrong number "
+                            f"of distributed access shapes"
+                        )
+                elif len(detail["shapes"]) != 1:
                     errors.append(
                         f"{RAW_NAME} provisional LEF pin {pin} must have one perimeter shape"
                     )
                     continue
-                layer, rect = detail["shapes"][0]
-                x1, y1, x2, y2 = rect
-                if pin in RAW_ANALOG_PINS:
-                    if layer != "met3":
+                for layer, rect in detail["shapes"]:
+                    _x1, y1, _x2, y2 = rect
+                    if pin in RAW_ANALOG_PINS:
+                        if layer != "met3":
+                            errors.append(f"{RAW_NAME} analog pin {pin} must use met3")
+                        if y2 - y1 + 1e-6 < RAW_ANALOG_PIN_WIDTH:
+                            errors.append(
+                                f"{RAW_NAME} analog pin {pin} is narrower than "
+                                f"{RAW_ANALOG_PIN_WIDTH} um"
+                            )
+                    if pin in RAW_POWER_PINS and layer != "met3":
+                        errors.append(f"{RAW_NAME} supply pin {pin} must use met3")
+                    if layer == "met2":
+                        all_lef_met2_rectangles.append(rect)
+                        if pin not in RAW_POWER_PINS:
+                            signal_lef_met2_rectangles.append(rect)
+                    elif layer == "met3":
+                        all_lef_met3_rectangles.append(rect)
+                        if pin not in RAW_POWER_PINS:
+                            signal_lef_met3_rectangles.append(rect)
+                    else:
                         errors.append(
-                            f"{RAW_NAME} analog pin {pin} must use met3"
+                            f"{RAW_NAME} provisional LEF pin {pin} uses "
+                            f"unexpected layer {layer}"
                         )
-                    if y2 - y1 + 1e-6 < RAW_ANALOG_PIN_WIDTH:
-                        errors.append(
-                            f"{RAW_NAME} analog pin {pin} is narrower than "
-                            f"{RAW_ANALOG_PIN_WIDTH} um"
-                        )
-                if pin in RAW_POWER_PINS:
-                    if layer != "met3":
-                        errors.append(
-                            f"{RAW_NAME} supply pin {pin} must use met3"
-                        )
-                    if abs(x1) > 1e-6 or abs(x2 - WIDTH) > 1e-6:
-                        errors.append(
-                            f"{RAW_NAME} supply pin {pin} must span the macro width"
-                        )
-                    if y2 - y1 + 1e-6 < RAW_POWER_STRAP_WIDTH:
-                        errors.append(
-                            f"{RAW_NAME} supply pin {pin} is narrower than "
-                            f"{RAW_POWER_STRAP_WIDTH} um"
-                        )
-                if layer == "met2":
-                    lef_met2_rectangles.append(rect)
-                elif layer == "met3":
-                    lef_met3_rectangles.append(rect)
-                else:
-                    errors.append(
-                        f"{RAW_NAME} provisional LEF pin {pin} uses unexpected layer {layer}"
-                    )
             validate_perimeter_shapes(
-                errors, f"{RAW_NAME} provisional LEF", "met2", lef_met2_rectangles
+                errors,
+                f"{RAW_NAME} provisional LEF",
+                "met2",
+                signal_lef_met2_rectangles,
             )
             validate_perimeter_shapes(
-                errors, f"{RAW_NAME} provisional LEF", "met3", lef_met3_rectangles
+                errors,
+                f"{RAW_NAME} provisional LEF",
+                "met3",
+                signal_lef_met3_rectangles,
             )
-            if len(lef_met2_rectangles) + len(lef_met3_rectangles) != RAW_WIRE_COUNT:
-                errors.append(f"{RAW_NAME} provisional LEF perimeter pin count is incorrect")
+            if len(raw_lef_details) != RAW_WIRE_COUNT:
+                errors.append(f"{RAW_NAME} provisional LEF pin count is incorrect")
 
             try:
                 raw_structures, raw_gds_pins = read_gds(provisional_paths["gds"])
@@ -628,6 +772,20 @@ if len(raw_entries) == 1:
             gds_met3_rectangles = gds_rectangles(
                 provisional_paths["gds"], MET3_GDS_LAYER, PIN_GDS_DATATYPE
             )
+            expected_gds_met2 = {
+                tuple(round(value * 1000) for value in rect)
+                for rect in all_lef_met2_rectangles
+            }
+            expected_gds_met3 = {
+                tuple(round(value * 1000) for value in rect)
+                for rect in all_lef_met3_rectangles
+            }
+            power_gds_met3 = {
+                tuple(round(value * 1000) for value in rect)
+                for pin in RAW_POWER_PINS
+                for layer, rect in raw_lef_details[pin]["shapes"]
+                if layer == "met3"
+            }
             validate_perimeter_shapes(
                 errors,
                 f"{RAW_NAME} provisional GDS",
@@ -639,19 +797,9 @@ if len(raw_entries) == 1:
                 errors,
                 f"{RAW_NAME} provisional GDS",
                 "met3",
-                gds_met3_rectangles,
+                gds_met3_rectangles - power_gds_met3,
                 scale=1000.0,
             )
-            if len(gds_met2_rectangles) + len(gds_met3_rectangles) != RAW_WIRE_COUNT:
-                errors.append(f"{RAW_NAME} provisional GDS perimeter pin count is incorrect")
-            expected_gds_met2 = {
-                tuple(round(value * 1000) for value in rect)
-                for rect in lef_met2_rectangles
-            }
-            expected_gds_met3 = {
-                tuple(round(value * 1000) for value in rect)
-                for rect in lef_met3_rectangles
-            }
             if gds_met2_rectangles != expected_gds_met2:
                 errors.append(f"{RAW_NAME} met2 pin geometry differs between LEF and GDS")
             if gds_met3_rectangles != expected_gds_met3:
@@ -717,6 +865,12 @@ for name in sorted(RELEASED_NAMES):
 
     header_pin_set = verilog_ports(paths["verilog_header"], name)
     behavioral_pin_set = verilog_ports(paths["verilog_behavioral"], name)
+    header_directions = verilog_port_directions(paths["verilog_header"], name)
+    behavioral_directions = verilog_port_directions(
+        paths["verilog_behavioral"], name
+    )
+    released_lef_details = lef_pin_details(lef_text)
+    released_liberty_directions = liberty_pin_directions(liberty_text)
     if header_pin_set is None:
         errors.append(f"{name} Verilog header module name mismatch")
     if behavioral_pin_set is None:
@@ -731,6 +885,19 @@ for name in sorted(RELEASED_NAMES):
         structures, gds_pin_set = [], set()
     if structures != [name]:
         errors.append(f"{name} GDS structure names are {structures}")
+
+    for pin in sorted(RAW_ANALOG_PINS):
+        analog_directions = {
+            "Verilog header": (header_directions or {}).get(pin),
+            "behavioral Verilog": (behavioral_directions or {}).get(pin),
+            "LEF": released_lef_details.get(pin, {}).get("direction"),
+            "Liberty": released_liberty_directions.get(pin),
+        }
+        for view_name, direction in analog_directions.items():
+            if direction != "inout":
+                errors.append(
+                    f"{name} {view_name} analog pin {pin} must be inout"
+                )
 
     reference_pins = lef_pins(lef_text)
     if len(reference_pins) != PIN_COUNT:
@@ -777,6 +944,7 @@ for name in sorted(RELEASED_NAMES):
     print(f"PASS: {name}")
     print(f"PASS: {name} boundary {WIDTH} x {HEIGHT} um")
     print(f"PASS: {name} has {PIN_COUNT} consistent physical-interface pins")
+    print(f"PASS: {name} analog pins are inout in Verilog, LEF and Liberty")
 print("PASS: separate 1.8 V vccd1/vccd2 digital domains")
 print("PASS: separate 3.3 V vdda1/vdda2 analog domains")
 print("PASS: digital and analog domains share vssd1 ground")
@@ -797,5 +965,9 @@ print(
 )
 print(
     f"PASS: {RAW_NAME} analog pins use {RAW_ANALOG_PIN_WIDTH:.2f} um met3 access "
-    f"and supplies use {RAW_POWER_STRAP_WIDTH:.2f} um full-width met3 straps"
+    "and supplies use the released X1 distributed met3 access geometry"
+)
+print(
+    f"PASS: {RAW_NAME} LEF obstructions match the released X1 reference on "
+    + ", ".join(EXPECTED_OBSTRUCTION_LAYERS)
 )

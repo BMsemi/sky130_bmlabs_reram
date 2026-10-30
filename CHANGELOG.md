@@ -2,9 +2,14 @@
 
 ## Unreleased
 
-- Replaced minimum-width raw-interface analog pins with 1.30 um-wide,
-  routing-grid-aligned met3 access and added separate full-width 1.80 um met3
-  straps for all five supply pins in the provisional LEF/GDS.
+- Changed all ten analog pins to `inout` consistently in the Verilog header,
+  behavioral model, LEF and Liberty views of both released Wishbone IPs.
+- Replaced the raw macro's one-strap-per-net power geometry with the released
+  X1 Wishbone GDS reference's 315 distributed met3 power-access shapes, and
+  copied the matching X1 LEF's li1/met1/met2/met3/met4 obstruction pattern into
+  the provisional raw LEF.
+- Retained 1.30 um-wide, routing-grid-aligned met3 access for the raw-interface
+  analog pins.
 - Documented that every analog bias pin connects to an analog pad or approved
   external source and requires a matching-or-wider NDR, including guidance for
   shared trunks when multiple macro instances are used.

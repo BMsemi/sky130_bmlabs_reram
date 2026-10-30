@@ -50,6 +50,18 @@ module sky130_bmlabs_reram__cim32x32wb_tb;
   logic scan_se1;
   logic scan_si1;
 
+  // Externally driven analog-pad connections
+  tri Iref = 1'b0;
+  tri Vcc_read = 1'b0;
+  tri Vcomp = 1'b0;
+  tri Bias_comp2 = 1'b0;
+  tri Vcc_wl_read = 1'b0;
+  tri Vcc_wl_set = 1'b0;
+  tri Vbias = 1'b0;
+  tri Vcc_wl_reset = 1'b0;
+  tri Vcc_set = 1'b0;
+  tri dc_bias = 1'b0;
+
 
   //==============================================================================================
   // Outputs from DUT
@@ -203,16 +215,16 @@ module sky130_bmlabs_reram__cim32x32wb_tb;
   sky130_bmlabs_reram__cim32x32wb uut (
     .user_clk       (l_usr_clk       ),
     .user_rst       (reset           ),
-    .Iref           (1'b0            ),
-    .Vcc_read       (1'b0            ),
-    .Vcomp          (1'b0            ),
-    .Bias_comp2     (1'b0            ),
-    .Vcc_wl_read    (1'b0            ),
-    .Vcc_wl_set     (1'b0            ),
-    .Vbias          (1'b0            ),
-    .Vcc_wl_reset   (1'b0            ),
-    .Vcc_set        (1'b0            ),
-    .dc_bias        (1'b0            ),
+    .Iref           (Iref            ),
+    .Vcc_read       (Vcc_read        ),
+    .Vcomp          (Vcomp           ),
+    .Bias_comp2     (Bias_comp2      ),
+    .Vcc_wl_read    (Vcc_wl_read     ),
+    .Vcc_wl_set     (Vcc_wl_set      ),
+    .Vbias          (Vbias           ),
+    .Vcc_wl_reset   (Vcc_wl_reset    ),
+    .Vcc_set        (Vcc_set         ),
+    .dc_bias        (dc_bias         ),
 
     .wb_clk_i        (l_usr_clk       ),
     .wb_rst_i        (reset           ),

@@ -57,3 +57,8 @@ Before tapeout, verify the sequencing, ramp, current, ripple, decoupling and
 noise limits for the 1.8 V `vccd1/vccd2` domains, the 3.3 V `vdda1/vdda2`
 domains and every additional supply or bias rail against the current
 macro-owner specification.
+
+The number or width of LEF/GDS access shapes does not by itself establish that
+a power network is sufficient. Confirm the internal power-grid connectivity
+with the macro owner and run extracted IR-drop and electromigration analysis
+using the actual top-level PDN, switching activity and macro instance count.

@@ -575,7 +575,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END wb_rst_i
   PIN dc_bias
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -647,7 +647,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END ScanOutCC
   PIN Iref
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -659,7 +659,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END Iref
   PIN Vbias
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -671,7 +671,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END Vbias
   PIN Vcomp
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -691,7 +691,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END wbs_adr_i[10]
   PIN Bias_comp2
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -723,7 +723,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END VDDA2
   PIN Vcc_set
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -739,7 +739,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END Vcc_set
   PIN Vcc_wl_reset
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -755,7 +755,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END Vcc_wl_reset
   PIN Vcc_wl_set
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -771,7 +771,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END Vcc_wl_set
   PIN Vcc_wl_read
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;
@@ -787,7 +787,7 @@ MACRO sky130_bmlabs_reram__nvm32x32wb
     END
   END Vcc_wl_read
   PIN Vcc_read
-    DIRECTION INPUT ;
+    DIRECTION INOUT ;
     USE SIGNAL ;
     PORT
       LAYER met3 ;

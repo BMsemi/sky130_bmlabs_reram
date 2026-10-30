@@ -36,18 +36,18 @@ module sky130_bmlabs_reram__cim32x32wb (
     output        ScanOutCC,      // Data scan chain output
 
     // Analog Pins
-    input         Iref,           // 100 ÂµA current reference
+    inout         Iref,           // 100 uA current reference
     
-    input         Vcc_read,       // 0.3 V read rail
-    input         Vcomp,          // 0.6 V comparator/reference bias
-    input         Bias_comp2,     // 0.6 V comparator bias
-    input         Vcc_wl_read,    // 0.7 V wordline read rail
-    input         Vcc_wl_set,     // 1.8 V wordline set rail
+    inout         Vcc_read,       // 0.3 V read rail
+    inout         Vcomp,          // 0.6 V comparator/reference bias
+    inout         Bias_comp2,     // 0.6 V comparator bias
+    inout         Vcc_wl_read,    // 0.7 V wordline read rail
+    inout         Vcc_wl_set,     // 1.8 V wordline set rail
     
-    input         Vbias,          // 1.8 V analog bias
-    input         Vcc_wl_reset,   // 2.6 V wordline reset rail
-    input         Vcc_set,        // 3.3 V array set rail
-    input         dc_bias
+    inout         Vbias,          // 1.8 V analog bias
+    inout         Vcc_wl_reset,   // 2.6 V wordline reset rail
+    inout         Vcc_set,        // 3.3 V array set rail
+    inout         dc_bias
 );
 
 endmodule
