@@ -1,10 +1,14 @@
 `timescale 1ns/1ps
 
-// Self-contained raw-signal behavioral model.
+// Self-contained dual-interface behavioral model.
 //
-// The wide decoder, PWM, TDC-start, and analog-macro control signals remain
-// inside this module.  The consumer sees a decoded command stream, static-capable
-// configuration inputs, a result stream, and a small status interface.
+// interface_sel selects the December-2026 RTL boundary:
+//   0: decoded direct/raw command and result interface
+//   1: Wishbone packet interface at address 0x3000_0004
+//
+// Change interface_sel only while both interfaces are idle and their command and
+// result queues are drained.  Both interfaces operate on the same modeled 32x32
+// array and the same internal operation engine.
 //
 // READ, SET, and RESET use one command beat.  COMPUTE uses one beat per row.
 // The adapter accumulates COMPUTE rows, PWM values, and result columns until
@@ -25,7 +29,13 @@ module sky130_bmlabs_reram__cim32x32 #(
   inout  wire         VSS,
 `endif
 
-  // Clock and reset.
+  // Interface ownership and level-shifter control.
+  input  logic        interface_sel,
+  input  logic        i_Levelsh_enable,
+  output wire         o_levelsh_enable,
+
+  // Shared clock and reset.  The December-2026 top wrapper connects its
+  // user/Wishbone clock and reset to this common behavioral boundary.
   input  logic        clk_i,
   input  logic        rst_i,
 
@@ -64,6 +74,20 @@ module sky130_bmlabs_reram__cim32x32 #(
   input  logic        i_result_ready,
   output wire [20:0]  o_result_data,
   output wire         o_result_last,
+
+  // Wishbone packet interface.  It is active only when interface_sel is 1.
+  input  logic        wbs_stb_i,
+  input  logic        wbs_cyc_i,
+  input  logic        wbs_we_i,
+  input  logic [3:0]  wbs_sel_i,
+  input  logic [31:0] wbs_dat_i,
+  input  logic [31:0] wbs_adr_i,
+  output wire [31:0]  wbs_dat_o,
+  output wire         wbs_ack_o,
+
+  // Physical TDC stop inputs.  The digital model retains deterministic timing;
+  // detailed stop-edge timing belongs to AMS/post-layout verification.
+  input  logic [31:0] stop_bit_i,
 
   // Scan/test names match the released Wishbone macro.
   input  logic        ScanInCC,
@@ -123,6 +147,39 @@ module sky130_bmlabs_reram__cim32x32 #(
   wire         core_result_last;
   wire         core_tm_status;
 
+  wire         direct_compute_pending;
+  wire         wb_compute_pending;
+  wire         wb_operation_active;
+  wire         wb_levelsh_enable;
+  wire         wb_core_start;
+  wire [1:0]   wb_core_mode;
+  wire [31:0]  wb_core_row_mask;
+  wire [31:0]  wb_core_col_mask;
+  wire [7:0]   wb_core_pwm;
+  wire [7:0]   wb_core_previous_pwm;
+  wire [7:0]   wb_core_compute_pwm [0:31];
+  wire [7:0]   selected_core_compute_pwm [0:31];
+  wire         wb_core_full_row;
+  wire [15:0]  wb_target_set1;
+  wire [15:0]  wb_target_set2;
+  wire [15:0]  wb_target_reset1;
+  wire [15:0]  wb_target_reset2;
+  wire [9:0]   wb_no_of_clk_cycles;
+  wire [9:0]   wb_counter_value;
+  wire [6:0]   wb_tdc_time_out;
+  wire [1:0]   wb_tdc_dead_time;
+  wire         wb_core_result_ready;
+
+  genvar selected_pwm_row;
+  generate
+    for (selected_pwm_row = 0; selected_pwm_row < 32;
+         selected_pwm_row = selected_pwm_row + 1) begin : g_selected_compute_pwm
+      assign selected_core_compute_pwm[selected_pwm_row] = interface_sel ?
+          wb_core_compute_pwm[selected_pwm_row] :
+          launch_compute_pwm[selected_pwm_row];
+    end
+  endgenerate
+
   // Analog-side and detailed debug signals are intentionally internal.
   wire [1:0]   core_mux_sel;
   wire [31:0]  core_sl_float;
@@ -146,9 +203,15 @@ module sky130_bmlabs_reram__cim32x32 #(
   wire         core_hold;
   wire         core_start_phase;
 
-  assign o_cmd_ready = core_ready && !launch_pending && !rst_i;
-  assign o_compute_pending = (compute_row_mask != 32'b0);
-  assign o_busy = core_busy || launch_pending || o_compute_pending;
+  assign direct_compute_pending = (compute_row_mask != 32'b0);
+  assign o_cmd_ready = !interface_sel && core_ready && !launch_pending && !rst_i;
+  assign o_compute_pending = interface_sel ? wb_compute_pending :
+                                             direct_compute_pending;
+  assign o_busy = interface_sel ? wb_operation_active :
+                                  (core_busy || launch_pending ||
+                                   direct_compute_pending);
+  assign o_levelsh_enable = interface_sel ? wb_levelsh_enable :
+                                            i_Levelsh_enable;
 
   assign o_error       = core_error;
   assign o_error_valid = core_error_valid;
@@ -157,12 +220,15 @@ module sky130_bmlabs_reram__cim32x32 #(
   assign o_program_readback_active = core_pgm_set_read_mode ||
                                      core_pgm_reset_read_mode;
 
-  assign o_result_valid = core_result_valid;
-  assign o_result_data  = core_result_data;
-  assign o_result_last  = core_result_last;
+  // The raw result stream is owned only by the direct interface.  Wishbone
+  // results are captured by the packet adapter and read through wbs_dat_o.
+  assign o_result_valid = !interface_sel && core_result_valid;
+  assign o_result_data  = o_result_valid ? core_result_data : 21'b0;
+  assign o_result_last  = o_result_valid && core_result_last;
 
-  // Match the released Wishbone behavioral boundary. ScanInDL drives the raw
-  // serial input; ScanInCC is the active-high scan enable at this boundary.
+  // Match the December-2026 wrapper: ScanInDL is serial data and ScanInDR is
+  // the active-low scan select.  ScanInCC/ScanOutCC retain their pad-level
+  // loopback behavior in this digital model.
   assign ScanOutCC = ScanInCC;
   wire unused_reference_boundary_inputs = ScanInDR ^ Iref ^ Vcc_read ^ Vcomp ^
       Bias_comp2 ^ Vcc_wl_read ^ Vcc_wl_set ^ Vbias ^ Vcc_wl_reset ^
@@ -254,6 +320,50 @@ module sky130_bmlabs_reram__cim32x32 #(
     end
   end
 
+  sky130_bmlabs_reram__cim32x32_wb_adapter u_wb_adapter (
+    .clk_i                    (clk_i),
+    .rst_i                    (rst_i),
+    .interface_sel            (interface_sel),
+    .wbs_stb_i                (wbs_stb_i),
+    .wbs_cyc_i                (wbs_cyc_i),
+    .wbs_we_i                 (wbs_we_i),
+    .wbs_sel_i                (wbs_sel_i),
+    .wbs_dat_i                (wbs_dat_i),
+    .wbs_adr_i                (wbs_adr_i),
+    .wbs_dat_o                (wbs_dat_o),
+    .wbs_ack_o                (wbs_ack_o),
+    .core_ready               (core_ready),
+    .core_busy                (core_busy),
+    .core_command_accepted    (core_command_accepted),
+    .core_error               (core_error),
+    .core_error_valid         (core_error_valid),
+    .core_operation_done      (core_read_done || core_compute_done ||
+                               core_pgm_set_done || core_pgm_reset_done),
+    .core_result_valid        (core_result_valid),
+    .core_result_data         (core_result_data),
+    .core_result_last         (core_result_last),
+    .core_result_ready        (wb_core_result_ready),
+    .core_start               (wb_core_start),
+    .core_mode                (wb_core_mode),
+    .core_row_mask            (wb_core_row_mask),
+    .core_col_mask            (wb_core_col_mask),
+    .core_pwm                 (wb_core_pwm),
+    .core_previous_pwm        (wb_core_previous_pwm),
+    .core_compute_pwm         (wb_core_compute_pwm),
+    .core_full_row            (wb_core_full_row),
+    .target_set1              (wb_target_set1),
+    .target_set2              (wb_target_set2),
+    .target_reset1            (wb_target_reset1),
+    .target_reset2            (wb_target_reset2),
+    .no_of_clk_cycles         (wb_no_of_clk_cycles),
+    .counter_value            (wb_counter_value),
+    .tdc_time_out             (wb_tdc_time_out),
+    .tdc_dead_time            (wb_tdc_dead_time),
+    .levelsh_enable           (wb_levelsh_enable),
+    .compute_pending          (wb_compute_pending),
+    .operation_active         (wb_operation_active)
+  );
+
   sky130_bmlabs_reram__cim32x32_internal_core #(
     .READ_DELAY         (READ_DELAY),
     .PROGRAM_DELAY      (PROGRAM_DELAY),
@@ -262,22 +372,24 @@ module sky130_bmlabs_reram__cim32x32 #(
   ) u_raw_core (
     .clk_i                    (clk_i),
     .rst_i                    (rst_i),
-    .i_start                  (launch_pending),
-    .i_mode                   (launch_mode),
-    .i_row_addr               (launch_row_mask),
-    .i_col_addr               (launch_col_mask),
-    .i_pwm_data               (launch_pwm),
-    .i_previous_read_pwm      (launch_previous_pwm),
-    .i_compute_pwm_by_row     (launch_compute_pwm),
-    .i_read_full_row          (launch_full_row),
-    .i_target_set1            (i_target_set1),
-    .i_target_set2            (i_target_set2),
-    .i_target_reset1          (i_target_reset1),
-    .i_target_reset2          (i_target_reset2),
-    .i_no_of_clk_cycles       (i_no_of_clk_cycles),
-    .i_counter_value          (i_counter_value),
-    .i_tdc_time_out           (i_tdc_time_out),
-    .i_tdc_dead_time          (i_tdc_dead_time),
+    .i_start                  (interface_sel ? wb_core_start : launch_pending),
+    .i_mode                   (interface_sel ? wb_core_mode : launch_mode),
+    .i_row_addr               (interface_sel ? wb_core_row_mask : launch_row_mask),
+    .i_col_addr               (interface_sel ? wb_core_col_mask : launch_col_mask),
+    .i_pwm_data               (interface_sel ? wb_core_pwm : launch_pwm),
+    .i_previous_read_pwm      (interface_sel ? wb_core_previous_pwm :
+                                              launch_previous_pwm),
+    .i_compute_pwm_by_row     (selected_core_compute_pwm),
+    .i_read_full_row          (interface_sel ? wb_core_full_row : launch_full_row),
+    .i_target_set1            (interface_sel ? wb_target_set1 : i_target_set1),
+    .i_target_set2            (interface_sel ? wb_target_set2 : i_target_set2),
+    .i_target_reset1          (interface_sel ? wb_target_reset1 : i_target_reset1),
+    .i_target_reset2          (interface_sel ? wb_target_reset2 : i_target_reset2),
+    .i_no_of_clk_cycles       (interface_sel ? wb_no_of_clk_cycles :
+                                              i_no_of_clk_cycles),
+    .i_counter_value          (interface_sel ? wb_counter_value : i_counter_value),
+    .i_tdc_time_out           (interface_sel ? wb_tdc_time_out : i_tdc_time_out),
+    .i_tdc_dead_time          (interface_sel ? wb_tdc_dead_time : i_tdc_dead_time),
     .o_ready                  (core_ready),
     .o_busy                   (core_busy),
     .o_command_accepted       (core_command_accepted),
@@ -290,18 +402,19 @@ module sky130_bmlabs_reram__cim32x32 #(
     .o_pgm_set_read_mode      (core_pgm_set_read_mode),
     .o_pgm_reset_read_mode    (core_pgm_reset_read_mode),
     .o_result_valid           (core_result_valid),
-    .i_result_ready           (i_result_ready),
+    .i_result_ready           (interface_sel ? wb_core_result_ready :
+                                              i_result_ready),
     .o_result_data            (core_result_data),
     .o_result_last            (core_result_last),
     .o_result_mode            (),
     .o_result_column          (),
     .o_result_count           (),
-    .i_stop_bit               (32'b0),
+    .i_stop_bit               (stop_bit_i),
     .o_tdc_valid              (core_tdc_valid),
     .o_tdc_count              (core_tdc_count),
     .o_tdc_start              (core_tdc_start),
     .i_scan_si1               (ScanInDL),
-    .i_scan_se1               (~ScanInCC),
+    .i_scan_se1               (ScanInDR),
     .i_TM                     (TM),
     .o_TM                     (core_tm_status),
     .o_mux_sel                (core_mux_sel),
@@ -323,6 +436,375 @@ module sky130_bmlabs_reram__cim32x32 #(
     .o_hold                   (core_hold),
     .o_start                  (core_start_phase)
   );
+
+endmodule
+
+//------------------------------------------------------------------------------
+// December-2026 Wishbone packet adapter.
+//
+// This adapter follows the externally visible behavior of Wb_slave.sv from
+// BMsemi/Neuromorphic_X1, branch shreya, TAPEOUT_DECEMBER_2026:
+//   * address 0x3000_0004, full-word accesses only;
+//   * three configuration words after reset;
+//   * command packet format {mode,row,column,error,all,last,reserved,pwm};
+//   * depth-32 command and result queues;
+//   * 0xA000_0000 for an empty Wishbone result read.
+//------------------------------------------------------------------------------
+module sky130_bmlabs_reram__cim32x32_wb_adapter (
+  input  logic        clk_i,
+  input  logic        rst_i,
+  input  logic        interface_sel,
+
+  input  logic        wbs_stb_i,
+  input  logic        wbs_cyc_i,
+  input  logic        wbs_we_i,
+  input  logic [3:0]  wbs_sel_i,
+  input  logic [31:0] wbs_dat_i,
+  input  logic [31:0] wbs_adr_i,
+  output logic [31:0] wbs_dat_o,
+  output logic        wbs_ack_o,
+
+  input  logic        core_ready,
+  input  logic        core_busy,
+  input  logic        core_command_accepted,
+  input  logic [2:0]  core_error,
+  input  logic        core_error_valid,
+  input  logic        core_operation_done,
+  input  logic        core_result_valid,
+  input  logic [20:0] core_result_data,
+  input  logic        core_result_last,
+  output wire         core_result_ready,
+
+  output logic        core_start,
+  output logic [1:0]  core_mode,
+  output logic [31:0] core_row_mask,
+  output logic [31:0] core_col_mask,
+  output logic [7:0]  core_pwm,
+  output logic [7:0]  core_previous_pwm,
+  output logic [7:0]  core_compute_pwm [0:31],
+  output logic        core_full_row,
+
+  output logic [15:0] target_set1,
+  output logic [15:0] target_set2,
+  output logic [15:0] target_reset1,
+  output logic [15:0] target_reset2,
+  output logic [9:0]  no_of_clk_cycles,
+  output logic [9:0]  counter_value,
+  output logic [6:0]  tdc_time_out,
+  output logic [1:0]  tdc_dead_time,
+  output logic        levelsh_enable,
+  output wire         compute_pending,
+  output wire         operation_active
+);
+
+  localparam logic [31:0] WB_DATA_ADDR    = 32'h3000_0004;
+  localparam logic [31:0] EMPTY_READ_WORD = 32'hA000_0000;
+  localparam logic [1:0]  MODE_RESET      = 2'b00;
+  localparam logic [1:0]  MODE_READ       = 2'b01;
+  localparam logic [1:0]  MODE_COMPUTE    = 2'b10;
+  localparam logic [1:0]  MODE_SET        = 2'b11;
+
+  logic [31:0] command_q [0:31];
+  logic [21:0] response_q [0:31];
+
+  logic [4:0] command_wr_idx;
+  logic       command_wr_wrap;
+  logic [4:0] command_rd_idx;
+  logic       command_rd_wrap;
+  logic [4:0] response_wr_idx;
+  logic       response_wr_wrap;
+  logic [4:0] response_rd_idx;
+  logic       response_rd_wrap;
+
+  logic [2:0] config_count;
+  logic [2:0] status_code;
+  logic       error_read_enable;
+  logic [4:0] compute_count;
+  logic [31:0] compute_rows;
+  logic [31:0] compute_columns;
+  logic        compute_all_columns;
+  logic        executor_active;
+
+  wire selected = interface_sel && wbs_stb_i && wbs_cyc_i &&
+                  (wbs_sel_i == 4'hF) && (wbs_adr_i == WB_DATA_ADDR);
+  wire command_empty = (command_wr_idx == command_rd_idx) &&
+                       (command_wr_wrap == command_rd_wrap);
+  wire command_full = (command_wr_idx == command_rd_idx) &&
+                      (command_wr_wrap != command_rd_wrap);
+  wire response_empty = (response_wr_idx == response_rd_idx) &&
+                        (response_wr_wrap == response_rd_wrap);
+  wire response_full = (response_wr_idx == response_rd_idx) &&
+                       (response_wr_wrap != response_rd_wrap);
+
+  assign core_result_ready = interface_sel && !response_full;
+  assign compute_pending = (compute_count != 0);
+  assign operation_active = interface_sel &&
+                            (executor_active || core_start || core_busy);
+
+  function automatic [31:0] onehot5(input logic [4:0] index);
+    begin
+      onehot5 = 32'b1 << index;
+    end
+  endfunction
+
+  task automatic advance_command_read;
+    begin
+      if (command_rd_idx == 5'd31) begin
+        command_rd_idx = 5'd0;
+        command_rd_wrap = ~command_rd_wrap;
+      end else begin
+        command_rd_idx = command_rd_idx + 5'd1;
+      end
+    end
+  endtask
+
+  task automatic clear_compute;
+    integer row;
+    begin
+      compute_count = 5'd0;
+      compute_rows = 32'b0;
+      compute_columns = 32'b0;
+      compute_all_columns = 1'b0;
+      for (row = 0; row < 32; row = row + 1)
+        core_compute_pwm[row] = 8'b0;
+    end
+  endtask
+
+  task automatic launch_core_operation;
+    integer cycles;
+    begin
+      executor_active = 1'b1;
+      cycles = 0;
+      while ((!core_ready || core_busy) && !rst_i && (cycles < 10000)) begin
+        @(negedge clk_i or posedge rst_i);
+        cycles = cycles + 1;
+      end
+
+      if (!rst_i && core_ready) begin
+        core_start = 1'b1;
+        cycles = 0;
+        while (!core_command_accepted && !rst_i && (cycles < 10000)) begin
+          @(posedge clk_i or posedge rst_i);
+          #1;
+          cycles = cycles + 1;
+        end
+        @(negedge clk_i or posedge rst_i);
+        core_start = 1'b0;
+
+        cycles = 0;
+        while ((core_busy || core_result_valid) && !rst_i &&
+               (cycles < 100000)) begin
+          @(negedge clk_i or posedge rst_i);
+          cycles = cycles + 1;
+        end
+        status_code = core_error_valid ? core_error : 3'b000;
+      end
+
+      executor_active = 1'b0;
+    end
+  endtask
+
+  task automatic apply_config(input logic [31:0] packet);
+    begin
+      case (config_count)
+        3'd0: begin
+          target_set1 = packet[15:0];
+          target_set2 = packet[31:16];
+        end
+        3'd1: begin
+          target_reset1 = packet[15:0];
+          target_reset2 = packet[31:16];
+        end
+        3'd2: begin
+          no_of_clk_cycles = packet[9:0];
+          counter_value = packet[19:10];
+          tdc_time_out = packet[26:20];
+          levelsh_enable = packet[27];
+          tdc_dead_time = packet[31:30];
+        end
+        default: begin
+        end
+      endcase
+      config_count = config_count + 3'd1;
+      status_code = 3'b000;
+    end
+  endtask
+
+  task automatic execute_noncompute(input logic [31:0] packet);
+    begin
+      clear_compute();
+      core_mode = packet[31:30];
+      core_row_mask = onehot5(packet[29:25]);
+      core_col_mask = onehot5(packet[24:20]);
+      core_pwm = packet[7:0];
+      core_full_row = 1'b0;
+      error_read_enable = packet[19];
+      if (packet[31:30] == MODE_READ)
+        core_previous_pwm = packet[7:0];
+      launch_core_operation();
+    end
+  endtask
+
+  task automatic accept_compute(input logic [31:0] packet);
+    logic [31:0] row_bit;
+    logic [31:0] col_bits;
+    logic launch_now;
+    begin
+      row_bit = onehot5(packet[29:25]);
+      col_bits = packet[18] ? 32'hFFFF_FFFF : onehot5(packet[24:20]);
+      launch_now = packet[17] || (compute_count == 5'd31);
+      error_read_enable = packet[19];
+      core_compute_pwm[packet[29:25]] = packet[7:0];
+
+      if (launch_now) begin
+        core_mode = MODE_COMPUTE;
+        core_row_mask = compute_rows | row_bit;
+        core_col_mask = compute_columns | col_bits;
+        core_pwm = 8'b0;
+        core_full_row = compute_all_columns || packet[18];
+        launch_core_operation();
+        clear_compute();
+      end else begin
+        compute_count = compute_count + 5'd1;
+        compute_rows = compute_rows | row_bit;
+        compute_columns = compute_columns | col_bits;
+        compute_all_columns = compute_all_columns || packet[18];
+      end
+    end
+  endtask
+
+  task automatic execute_packet(input logic [31:0] packet);
+    begin
+      if (config_count < 3)
+        apply_config(packet);
+      else if (packet[31:30] == MODE_COMPUTE)
+        accept_compute(packet);
+      else
+        execute_noncompute(packet);
+    end
+  endtask
+
+  // Wishbone bus-side command enqueue and result dequeue.
+  always_ff @(posedge clk_i or posedge rst_i) begin
+    if (rst_i) begin
+      wbs_ack_o <= 1'b0;
+      wbs_dat_o <= 32'b0;
+      command_wr_idx <= 5'd0;
+      command_wr_wrap <= 1'b0;
+      response_rd_idx <= 5'd0;
+      response_rd_wrap <= 1'b0;
+    end else begin
+      wbs_ack_o <= 1'b0;
+      if (!interface_sel) begin
+        wbs_dat_o <= 32'b0;
+      end else if (selected && wbs_we_i && !command_full) begin
+        command_q[command_wr_idx] <= wbs_dat_i;
+        if (command_wr_idx == 5'd31) begin
+          command_wr_idx <= 5'd0;
+          command_wr_wrap <= ~command_wr_wrap;
+        end else begin
+          command_wr_idx <= command_wr_idx + 5'd1;
+        end
+        wbs_ack_o <= 1'b1;
+      end else if (selected && !wbs_we_i) begin
+        if (error_read_enable) begin
+          wbs_dat_o <= {29'b0, status_code};
+        end else if (response_empty) begin
+          wbs_dat_o <= EMPTY_READ_WORD;
+        end else begin
+          wbs_dat_o <= {11'b0, response_q[response_rd_idx][20:0]};
+          if (response_rd_idx == 5'd31) begin
+            response_rd_idx <= 5'd0;
+            response_rd_wrap <= ~response_rd_wrap;
+          end else begin
+            response_rd_idx <= response_rd_idx + 5'd1;
+          end
+        end
+        wbs_ack_o <= 1'b1;
+      end
+    end
+  end
+
+  // Capture core results into the shared depth-32 Wishbone result queue.
+  always_ff @(posedge clk_i or posedge rst_i) begin
+    if (rst_i) begin
+      response_wr_idx <= 5'd0;
+      response_wr_wrap <= 1'b0;
+    end else if (interface_sel && core_result_valid && core_result_ready) begin
+      response_q[response_wr_idx] <= {core_result_last, core_result_data};
+      if (response_wr_idx == 5'd31) begin
+        response_wr_idx <= 5'd0;
+        response_wr_wrap <= ~response_wr_wrap;
+      end else begin
+        response_wr_idx <= response_wr_idx + 5'd1;
+      end
+    end
+  end
+
+  integer init_row;
+  initial begin
+    command_rd_idx = 5'd0;
+    command_rd_wrap = 1'b0;
+    config_count = 3'd0;
+    status_code = 3'b000;
+    error_read_enable = 1'b0;
+    executor_active = 1'b0;
+    core_start = 1'b0;
+    core_mode = MODE_RESET;
+    core_row_mask = 32'b0;
+    core_col_mask = 32'b0;
+    core_pwm = 8'b0;
+    core_previous_pwm = 8'b0;
+    core_full_row = 1'b0;
+    target_set1 = 16'hC40F;
+    target_set2 = 16'hA203;
+    target_reset1 = 16'h0D43;
+    target_reset2 = 16'h0F03;
+    no_of_clk_cycles = 10'd3;
+    counter_value = 10'd3;
+    tdc_time_out = 7'd32;
+    tdc_dead_time = 2'd1;
+    levelsh_enable = 1'b0;
+    compute_count = 5'd0;
+    compute_rows = 32'b0;
+    compute_columns = 32'b0;
+    compute_all_columns = 1'b0;
+    for (init_row = 0; init_row < 32; init_row = init_row + 1)
+      core_compute_pwm[init_row] = 8'b0;
+
+    forever begin
+      @(posedge clk_i or posedge rst_i);
+      if (rst_i) begin
+        command_rd_idx = 5'd0;
+        command_rd_wrap = 1'b0;
+        config_count = 3'd0;
+        status_code = 3'b000;
+        error_read_enable = 1'b0;
+        executor_active = 1'b0;
+        core_start = 1'b0;
+        core_mode = MODE_RESET;
+        core_row_mask = 32'b0;
+        core_col_mask = 32'b0;
+        core_pwm = 8'b0;
+        core_previous_pwm = 8'b0;
+        core_full_row = 1'b0;
+        target_set1 = 16'hC40F;
+        target_set2 = 16'hA203;
+        target_reset1 = 16'h0D43;
+        target_reset2 = 16'h0F03;
+        no_of_clk_cycles = 10'd3;
+        counter_value = 10'd3;
+        tdc_time_out = 7'd32;
+        tdc_dead_time = 2'd1;
+        levelsh_enable = 1'b0;
+        clear_compute();
+      end else if (interface_sel && !command_empty) begin
+        execute_packet(command_q[command_rd_idx]);
+        if (!rst_i)
+          advance_command_read();
+      end
+    end
+  end
 
 endmodule
 
