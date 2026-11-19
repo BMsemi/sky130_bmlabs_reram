@@ -1,7 +1,6 @@
 # PROVISIONAL - NOT FOR LVS, TIMING SIGNOFF, FABRICATION OR TAPEOUT
-# Synthetic pin placement derived from the Verilog header.
-# North/south pins: met2 X grid 0.23 + N*0.46 um.
-# West/east pins: met3 Y grid 0.34 + N*0.68 um.
+# Ordinary digital pins: south-boundary met2 X grid 0.23 + N*0.46 um.
+# Scan/test pins: preserved established met2/met3 access geometry.
 # Analog pins: 1.30 um wide met3 access for matching-or-wider NDR.
 # Supply pins: distributed met3 access copied from the released X1 GDS.
 # OBS geometry: copied from the matching released X1 LEF.
@@ -1298,15 +1297,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 207.08 0 207.38 2.91 ;
+        RECT 26.3 0 26.6 2.91 ;
     END
   END interface_sel
   PIN i_Levelsh_enable
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 217.79 1910 218.09 ;
+      LAYER met2 ;
+        RECT 32.74 0 33.04 2.91 ;
     END
   END i_Levelsh_enable
   PIN clk_i
@@ -1314,15 +1313,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 65.4 0 65.7 2.91 ;
+        RECT 39.18 0 39.48 2.91 ;
     END
   END clk_i
   PIN rst_i
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 68.87 1910 69.17 ;
+      LAYER met2 ;
+        RECT 45.62 0 45.92 2.91 ;
     END
   END rst_i
   PIN i_cmd_valid
@@ -1330,15 +1329,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 66.78 2007.23 67.08 2010.14 ;
+        RECT 52.06 0 52.36 2.91 ;
     END
   END i_cmd_valid
   PIN o_cmd_ready
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 68.87 2.91 69.17 ;
+      LAYER met2 ;
+        RECT 58.5 0 58.8 2.91 ;
     END
   END o_cmd_ready
   PIN i_mode[1]
@@ -1346,15 +1345,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 110.94 0 111.24 2.91 ;
+        RECT 64.94 0 65.24 2.91 ;
     END
   END i_mode[1]
   PIN i_mode[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 117.83 1910 118.13 ;
+      LAYER met2 ;
+        RECT 71.38 0 71.68 2.91 ;
     END
   END i_mode[0]
   PIN i_row_index[4]
@@ -1362,15 +1361,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 113.24 2007.23 113.54 2010.14 ;
+        RECT 77.82 0 78.12 2.91 ;
     END
   END i_row_index[4]
   PIN i_row_index[3]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 117.83 2.91 118.13 ;
+      LAYER met2 ;
+        RECT 84.26 0 84.56 2.91 ;
     END
   END i_row_index[3]
   PIN i_row_index[2]
@@ -1378,15 +1377,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 156.48 0 156.78 2.91 ;
+        RECT 90.7 0 91 2.91 ;
     END
   END i_row_index[2]
   PIN i_row_index[1]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 167.47 1910 167.77 ;
+      LAYER met2 ;
+        RECT 97.14 0 97.44 2.91 ;
     END
   END i_row_index[1]
   PIN i_row_index[0]
@@ -1394,15 +1393,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 160.16 2007.23 160.46 2010.14 ;
+        RECT 103.58 0 103.88 2.91 ;
     END
   END i_row_index[0]
   PIN i_col_index[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 167.47 2.91 167.77 ;
+      LAYER met2 ;
+        RECT 110.02 0 110.32 2.91 ;
     END
   END i_col_index[4]
   PIN i_col_index[3]
@@ -1410,15 +1409,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 202.48 0 202.78 2.91 ;
+        RECT 116.46 0 116.76 2.91 ;
     END
   END i_col_index[3]
   PIN i_col_index[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 217.11 1910 217.41 ;
+      LAYER met2 ;
+        RECT 122.44 0 122.74 2.91 ;
     END
   END i_col_index[2]
   PIN i_col_index[1]
@@ -1426,15 +1425,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 207.08 2007.23 207.38 2010.14 ;
+        RECT 128.88 0 129.18 2.91 ;
     END
   END i_col_index[1]
   PIN i_col_index[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 217.11 2.91 217.41 ;
+      LAYER met2 ;
+        RECT 135.32 0 135.62 2.91 ;
     END
   END i_col_index[0]
   PIN i_pwm_data[7]
@@ -1442,15 +1441,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 248.02 0 248.32 2.91 ;
+        RECT 141.76 0 142.06 2.91 ;
     END
   END i_pwm_data[7]
   PIN i_pwm_data[6]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 266.07 1910 266.37 ;
+      LAYER met2 ;
+        RECT 148.2 0 148.5 2.91 ;
     END
   END i_pwm_data[6]
   PIN i_pwm_data[5]
@@ -1458,15 +1457,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 253.54 2007.23 253.84 2010.14 ;
+        RECT 154.64 0 154.94 2.91 ;
     END
   END i_pwm_data[5]
   PIN i_pwm_data[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 266.07 2.91 266.37 ;
+      LAYER met2 ;
+        RECT 161.08 0 161.38 2.91 ;
     END
   END i_pwm_data[4]
   PIN i_pwm_data[3]
@@ -1474,15 +1473,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 293.56 0 293.86 2.91 ;
+        RECT 167.52 0 167.82 2.91 ;
     END
   END i_pwm_data[3]
   PIN i_pwm_data[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 314.35 1910 314.65 ;
+      LAYER met2 ;
+        RECT 173.96 0 174.26 2.91 ;
     END
   END i_pwm_data[2]
   PIN i_pwm_data[1]
@@ -1490,15 +1489,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 300.46 2007.23 300.76 2010.14 ;
+        RECT 180.4 0 180.7 2.91 ;
     END
   END i_pwm_data[1]
   PIN i_pwm_data[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 314.35 2.91 314.65 ;
+      LAYER met2 ;
+        RECT 186.84 0 187.14 2.91 ;
     END
   END i_pwm_data[0]
   PIN i_compute_last
@@ -1506,15 +1505,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 339.1 0 339.4 2.91 ;
+        RECT 193.28 0 193.58 2.91 ;
     END
   END i_compute_last
   PIN i_compute_all_columns
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 364.67 1910 364.97 ;
+      LAYER met2 ;
+        RECT 199.72 0 200.02 2.91 ;
     END
   END i_compute_all_columns
   PIN i_target_set1[15]
@@ -1522,15 +1521,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 346.92 2007.23 347.22 2010.14 ;
+        RECT 206.16 0 206.46 2.91 ;
     END
   END i_target_set1[15]
   PIN i_target_set1[14]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 364.67 2.91 364.97 ;
+      LAYER met2 ;
+        RECT 212.6 0 212.9 2.91 ;
     END
   END i_target_set1[14]
   PIN i_target_set1[13]
@@ -1538,15 +1537,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 384.64 0 384.94 2.91 ;
+        RECT 219.04 0 219.34 2.91 ;
     END
   END i_target_set1[13]
   PIN i_target_set1[12]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 413.63 1910 413.93 ;
+      LAYER met2 ;
+        RECT 225.48 0 225.78 2.91 ;
     END
   END i_target_set1[12]
   PIN i_target_set1[11]
@@ -1554,15 +1553,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 393.84 2007.23 394.14 2010.14 ;
+        RECT 231.92 0 232.22 2.91 ;
     END
   END i_target_set1[11]
   PIN i_target_set1[10]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 413.63 2.91 413.93 ;
+      LAYER met2 ;
+        RECT 238.36 0 238.66 2.91 ;
     END
   END i_target_set1[10]
   PIN i_target_set1[9]
@@ -1570,15 +1569,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 430.18 0 430.48 2.91 ;
+        RECT 244.8 0 245.1 2.91 ;
     END
   END i_target_set1[9]
   PIN i_target_set1[8]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 463.27 1910 463.57 ;
+      LAYER met2 ;
+        RECT 251.24 0 251.54 2.91 ;
     END
   END i_target_set1[8]
   PIN i_target_set1[7]
@@ -1586,15 +1585,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 440.76 2007.23 441.06 2010.14 ;
+        RECT 257.68 0 257.98 2.91 ;
     END
   END i_target_set1[7]
   PIN i_target_set1[6]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 463.27 2.91 463.57 ;
+      LAYER met2 ;
+        RECT 264.12 0 264.42 2.91 ;
     END
   END i_target_set1[6]
   PIN i_target_set1[5]
@@ -1602,15 +1601,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 475.72 0 476.02 2.91 ;
+        RECT 270.56 0 270.86 2.91 ;
     END
   END i_target_set1[5]
   PIN i_target_set1[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 512.23 1910 512.53 ;
+      LAYER met2 ;
+        RECT 277 0 277.3 2.91 ;
     END
   END i_target_set1[4]
   PIN i_target_set1[3]
@@ -1618,15 +1617,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 487.22 2007.23 487.52 2010.14 ;
+        RECT 283.44 0 283.74 2.91 ;
     END
   END i_target_set1[3]
   PIN i_target_set1[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 512.23 2.91 512.53 ;
+      LAYER met2 ;
+        RECT 289.88 0 290.18 2.91 ;
     END
   END i_target_set1[2]
   PIN i_target_set1[1]
@@ -1634,15 +1633,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 521.72 0 522.02 2.91 ;
+        RECT 296.32 0 296.62 2.91 ;
     END
   END i_target_set1[1]
   PIN i_target_set1[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 561.87 1910 562.17 ;
+      LAYER met2 ;
+        RECT 302.76 0 303.06 2.91 ;
     END
   END i_target_set1[0]
   PIN i_target_set2[15]
@@ -1650,15 +1649,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 534.14 2007.23 534.44 2010.14 ;
+        RECT 309.2 0 309.5 2.91 ;
     END
   END i_target_set2[15]
   PIN i_target_set2[14]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 561.87 2.91 562.17 ;
+      LAYER met2 ;
+        RECT 315.64 0 315.94 2.91 ;
     END
   END i_target_set2[14]
   PIN i_target_set2[13]
@@ -1666,15 +1665,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 567.26 0 567.56 2.91 ;
+        RECT 322.08 0 322.38 2.91 ;
     END
   END i_target_set2[13]
   PIN i_target_set2[12]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 610.83 1910 611.13 ;
+      LAYER met2 ;
+        RECT 328.52 0 328.82 2.91 ;
     END
   END i_target_set2[12]
   PIN i_target_set2[11]
@@ -1682,15 +1681,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 581.06 2007.23 581.36 2010.14 ;
+        RECT 334.5 0 334.8 2.91 ;
     END
   END i_target_set2[11]
   PIN i_target_set2[10]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 610.83 2.91 611.13 ;
+      LAYER met2 ;
+        RECT 340.94 0 341.24 2.91 ;
     END
   END i_target_set2[10]
   PIN i_target_set2[9]
@@ -1698,15 +1697,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 612.8 0 613.1 2.91 ;
+        RECT 347.38 0 347.68 2.91 ;
     END
   END i_target_set2[9]
   PIN i_target_set2[8]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 660.47 1910 660.77 ;
+      LAYER met2 ;
+        RECT 353.82 0 354.12 2.91 ;
     END
   END i_target_set2[8]
   PIN i_target_set2[7]
@@ -1714,15 +1713,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 627.52 2007.23 627.82 2010.14 ;
+        RECT 360.26 0 360.56 2.91 ;
     END
   END i_target_set2[7]
   PIN i_target_set2[6]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 660.47 2.91 660.77 ;
+      LAYER met2 ;
+        RECT 366.7 0 367 2.91 ;
     END
   END i_target_set2[6]
   PIN i_target_set2[5]
@@ -1730,15 +1729,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 658.34 0 658.64 2.91 ;
+        RECT 373.14 0 373.44 2.91 ;
     END
   END i_target_set2[5]
   PIN i_target_set2[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 709.43 1910 709.73 ;
+      LAYER met2 ;
+        RECT 379.58 0 379.88 2.91 ;
     END
   END i_target_set2[4]
   PIN i_target_set2[3]
@@ -1746,15 +1745,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 674.44 2007.23 674.74 2010.14 ;
+        RECT 386.02 0 386.32 2.91 ;
     END
   END i_target_set2[3]
   PIN i_target_set2[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 709.43 2.91 709.73 ;
+      LAYER met2 ;
+        RECT 392.46 0 392.76 2.91 ;
     END
   END i_target_set2[2]
   PIN i_target_set2[1]
@@ -1762,15 +1761,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 703.88 0 704.18 2.91 ;
+        RECT 398.9 0 399.2 2.91 ;
     END
   END i_target_set2[1]
   PIN i_target_set2[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 758.39 1910 758.69 ;
+      LAYER met2 ;
+        RECT 405.34 0 405.64 2.91 ;
     END
   END i_target_set2[0]
   PIN i_target_reset1[15]
@@ -1778,15 +1777,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 720.9 2007.23 721.2 2010.14 ;
+        RECT 411.78 0 412.08 2.91 ;
     END
   END i_target_reset1[15]
   PIN i_target_reset1[14]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 758.39 2.91 758.69 ;
+      LAYER met2 ;
+        RECT 418.22 0 418.52 2.91 ;
     END
   END i_target_reset1[14]
   PIN i_target_reset1[13]
@@ -1794,15 +1793,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 749.42 0 749.72 2.91 ;
+        RECT 424.66 0 424.96 2.91 ;
     END
   END i_target_reset1[13]
   PIN i_target_reset1[12]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 808.03 1910 808.33 ;
+      LAYER met2 ;
+        RECT 431.1 0 431.4 2.91 ;
     END
   END i_target_reset1[12]
   PIN i_target_reset1[11]
@@ -1810,15 +1809,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 767.82 2007.23 768.12 2010.14 ;
+        RECT 437.54 0 437.84 2.91 ;
     END
   END i_target_reset1[11]
   PIN i_target_reset1[10]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 808.03 2.91 808.33 ;
+      LAYER met2 ;
+        RECT 443.98 0 444.28 2.91 ;
     END
   END i_target_reset1[10]
   PIN i_target_reset1[9]
@@ -1826,15 +1825,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 795.42 0 795.72 2.91 ;
+        RECT 450.42 0 450.72 2.91 ;
     END
   END i_target_reset1[9]
   PIN i_target_reset1[8]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 856.99 1910 857.29 ;
+      LAYER met2 ;
+        RECT 456.86 0 457.16 2.91 ;
     END
   END i_target_reset1[8]
   PIN i_target_reset1[7]
@@ -1842,15 +1841,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 814.74 2007.23 815.04 2010.14 ;
+        RECT 463.3 0 463.6 2.91 ;
     END
   END i_target_reset1[7]
   PIN i_target_reset1[6]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 856.99 2.91 857.29 ;
+      LAYER met2 ;
+        RECT 469.74 0 470.04 2.91 ;
     END
   END i_target_reset1[6]
   PIN i_target_reset1[5]
@@ -1858,15 +1857,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 840.96 0 841.26 2.91 ;
+        RECT 476.18 0 476.48 2.91 ;
     END
   END i_target_reset1[5]
   PIN i_target_reset1[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 906.63 1910 906.93 ;
+      LAYER met2 ;
+        RECT 482.62 0 482.92 2.91 ;
     END
   END i_target_reset1[4]
   PIN i_target_reset1[3]
@@ -1874,15 +1873,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 861.2 2007.23 861.5 2010.14 ;
+        RECT 489.06 0 489.36 2.91 ;
     END
   END i_target_reset1[3]
   PIN i_target_reset1[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 906.63 2.91 906.93 ;
+      LAYER met2 ;
+        RECT 495.5 0 495.8 2.91 ;
     END
   END i_target_reset1[2]
   PIN i_target_reset1[1]
@@ -1890,15 +1889,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 886.5 0 886.8 2.91 ;
+        RECT 501.94 0 502.24 2.91 ;
     END
   END i_target_reset1[1]
   PIN i_target_reset1[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 955.59 1910 955.89 ;
+      LAYER met2 ;
+        RECT 508.38 0 508.68 2.91 ;
     END
   END i_target_reset1[0]
   PIN i_target_reset2[15]
@@ -1906,15 +1905,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 908.12 2007.23 908.42 2010.14 ;
+        RECT 514.82 0 515.12 2.91 ;
     END
   END i_target_reset2[15]
   PIN i_target_reset2[14]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 955.59 2.91 955.89 ;
+      LAYER met2 ;
+        RECT 521.26 0 521.56 2.91 ;
     END
   END i_target_reset2[14]
   PIN i_target_reset2[13]
@@ -1922,15 +1921,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 932.04 0 932.34 2.91 ;
+        RECT 527.7 0 528 2.91 ;
     END
   END i_target_reset2[13]
   PIN i_target_reset2[12]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1005.23 1910 1005.53 ;
+      LAYER met2 ;
+        RECT 534.14 0 534.44 2.91 ;
     END
   END i_target_reset2[12]
   PIN i_target_reset2[11]
@@ -1938,15 +1937,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 955.04 2007.23 955.34 2010.14 ;
+        RECT 540.58 0 540.88 2.91 ;
     END
   END i_target_reset2[11]
   PIN i_target_reset2[10]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1005.23 2.91 1005.53 ;
+      LAYER met2 ;
+        RECT 547.02 0 547.32 2.91 ;
     END
   END i_target_reset2[10]
   PIN i_target_reset2[9]
@@ -1954,15 +1953,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 977.58 0 977.88 2.91 ;
+        RECT 553 0 553.3 2.91 ;
     END
   END i_target_reset2[9]
   PIN i_target_reset2[8]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1054.19 1910 1054.49 ;
+      LAYER met2 ;
+        RECT 559.44 0 559.74 2.91 ;
     END
   END i_target_reset2[8]
   PIN i_target_reset2[7]
@@ -1970,15 +1969,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1001.5 2007.23 1001.8 2010.14 ;
+        RECT 565.88 0 566.18 2.91 ;
     END
   END i_target_reset2[7]
   PIN i_target_reset2[6]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1054.19 2.91 1054.49 ;
+      LAYER met2 ;
+        RECT 572.32 0 572.62 2.91 ;
     END
   END i_target_reset2[6]
   PIN i_target_reset2[5]
@@ -1986,15 +1985,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1023.12 0 1023.42 2.91 ;
+        RECT 578.76 0 579.06 2.91 ;
     END
   END i_target_reset2[5]
   PIN i_target_reset2[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1103.15 1910 1103.45 ;
+      LAYER met2 ;
+        RECT 585.2 0 585.5 2.91 ;
     END
   END i_target_reset2[4]
   PIN i_target_reset2[3]
@@ -2002,15 +2001,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1048.42 2007.23 1048.72 2010.14 ;
+        RECT 591.64 0 591.94 2.91 ;
     END
   END i_target_reset2[3]
   PIN i_target_reset2[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1103.15 2.91 1103.45 ;
+      LAYER met2 ;
+        RECT 598.08 0 598.38 2.91 ;
     END
   END i_target_reset2[2]
   PIN i_target_reset2[1]
@@ -2018,15 +2017,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1068.66 0 1068.96 2.91 ;
+        RECT 604.52 0 604.82 2.91 ;
     END
   END i_target_reset2[1]
   PIN i_target_reset2[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1152.79 1910 1153.09 ;
+      LAYER met2 ;
+        RECT 610.96 0 611.26 2.91 ;
     END
   END i_target_reset2[0]
   PIN i_no_of_clk_cycles[9]
@@ -2034,15 +2033,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1094.88 2007.23 1095.18 2010.14 ;
+        RECT 617.4 0 617.7 2.91 ;
     END
   END i_no_of_clk_cycles[9]
   PIN i_no_of_clk_cycles[8]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1152.79 2.91 1153.09 ;
+      LAYER met2 ;
+        RECT 623.84 0 624.14 2.91 ;
     END
   END i_no_of_clk_cycles[8]
   PIN i_no_of_clk_cycles[7]
@@ -2050,15 +2049,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1114.66 0 1114.96 2.91 ;
+        RECT 630.28 0 630.58 2.91 ;
     END
   END i_no_of_clk_cycles[7]
   PIN i_no_of_clk_cycles[6]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1201.75 1910 1202.05 ;
+      LAYER met2 ;
+        RECT 636.72 0 637.02 2.91 ;
     END
   END i_no_of_clk_cycles[6]
   PIN i_no_of_clk_cycles[5]
@@ -2066,15 +2065,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1141.8 2007.23 1142.1 2010.14 ;
+        RECT 643.16 0 643.46 2.91 ;
     END
   END i_no_of_clk_cycles[5]
   PIN i_no_of_clk_cycles[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1201.75 2.91 1202.05 ;
+      LAYER met2 ;
+        RECT 649.6 0 649.9 2.91 ;
     END
   END i_no_of_clk_cycles[4]
   PIN i_no_of_clk_cycles[3]
@@ -2082,15 +2081,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1160.2 0 1160.5 2.91 ;
+        RECT 656.04 0 656.34 2.91 ;
     END
   END i_no_of_clk_cycles[3]
   PIN i_no_of_clk_cycles[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1251.39 1910 1251.69 ;
+      LAYER met2 ;
+        RECT 662.48 0 662.78 2.91 ;
     END
   END i_no_of_clk_cycles[2]
   PIN i_no_of_clk_cycles[1]
@@ -2098,15 +2097,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1188.72 2007.23 1189.02 2010.14 ;
+        RECT 668.92 0 669.22 2.91 ;
     END
   END i_no_of_clk_cycles[1]
   PIN i_no_of_clk_cycles[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1251.39 2.91 1251.69 ;
+      LAYER met2 ;
+        RECT 675.36 0 675.66 2.91 ;
     END
   END i_no_of_clk_cycles[0]
   PIN i_counter_value[9]
@@ -2114,15 +2113,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1205.74 0 1206.04 2.91 ;
+        RECT 681.8 0 682.1 2.91 ;
     END
   END i_counter_value[9]
   PIN i_counter_value[8]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1300.35 1910 1300.65 ;
+      LAYER met2 ;
+        RECT 688.24 0 688.54 2.91 ;
     END
   END i_counter_value[8]
   PIN i_counter_value[7]
@@ -2130,15 +2129,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1235.18 2007.23 1235.48 2010.14 ;
+        RECT 694.68 0 694.98 2.91 ;
     END
   END i_counter_value[7]
   PIN i_counter_value[6]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1300.35 2.91 1300.65 ;
+      LAYER met2 ;
+        RECT 701.12 0 701.42 2.91 ;
     END
   END i_counter_value[6]
   PIN i_counter_value[5]
@@ -2146,15 +2145,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1251.28 0 1251.58 2.91 ;
+        RECT 707.56 0 707.86 2.91 ;
     END
   END i_counter_value[5]
   PIN i_counter_value[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1349.99 1910 1350.29 ;
+      LAYER met2 ;
+        RECT 714 0 714.3 2.91 ;
     END
   END i_counter_value[4]
   PIN i_counter_value[3]
@@ -2162,15 +2161,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1282.1 2007.23 1282.4 2010.14 ;
+        RECT 720.44 0 720.74 2.91 ;
     END
   END i_counter_value[3]
   PIN i_counter_value[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1349.99 2.91 1350.29 ;
+      LAYER met2 ;
+        RECT 726.88 0 727.18 2.91 ;
     END
   END i_counter_value[2]
   PIN i_counter_value[1]
@@ -2178,15 +2177,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1296.82 0 1297.12 2.91 ;
+        RECT 733.32 0 733.62 2.91 ;
     END
   END i_counter_value[1]
   PIN i_counter_value[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1398.95 1910 1399.25 ;
+      LAYER met2 ;
+        RECT 739.76 0 740.06 2.91 ;
     END
   END i_counter_value[0]
   PIN i_tdc_time_out[6]
@@ -2194,15 +2193,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1329.02 2007.23 1329.32 2010.14 ;
+        RECT 746.2 0 746.5 2.91 ;
     END
   END i_tdc_time_out[6]
   PIN i_tdc_time_out[5]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1398.95 2.91 1399.25 ;
+      LAYER met2 ;
+        RECT 752.64 0 752.94 2.91 ;
     END
   END i_tdc_time_out[5]
   PIN i_tdc_time_out[4]
@@ -2210,15 +2209,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1342.36 0 1342.66 2.91 ;
+        RECT 759.08 0 759.38 2.91 ;
     END
   END i_tdc_time_out[4]
   PIN i_tdc_time_out[3]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1447.91 1910 1448.21 ;
+      LAYER met2 ;
+        RECT 765.06 0 765.36 2.91 ;
     END
   END i_tdc_time_out[3]
   PIN i_tdc_time_out[2]
@@ -2226,15 +2225,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1375.48 2007.23 1375.78 2010.14 ;
+        RECT 771.5 0 771.8 2.91 ;
     END
   END i_tdc_time_out[2]
   PIN i_tdc_time_out[1]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1447.91 2.91 1448.21 ;
+      LAYER met2 ;
+        RECT 777.94 0 778.24 2.91 ;
     END
   END i_tdc_time_out[1]
   PIN i_tdc_time_out[0]
@@ -2242,15 +2241,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1388.36 0 1388.66 2.91 ;
+        RECT 784.38 0 784.68 2.91 ;
     END
   END i_tdc_time_out[0]
   PIN i_tdc_dead_time[1]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1497.55 1910 1497.85 ;
+      LAYER met2 ;
+        RECT 790.82 0 791.12 2.91 ;
     END
   END i_tdc_dead_time[1]
   PIN i_tdc_dead_time[0]
@@ -2258,15 +2257,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1422.4 2007.23 1422.7 2010.14 ;
+        RECT 797.26 0 797.56 2.91 ;
     END
   END i_tdc_dead_time[0]
   PIN o_busy
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1497.55 2.91 1497.85 ;
+      LAYER met2 ;
+        RECT 803.7 0 804 2.91 ;
     END
   END o_busy
   PIN o_command_accepted
@@ -2274,15 +2273,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1433.9 0 1434.2 2.91 ;
+        RECT 810.14 0 810.44 2.91 ;
     END
   END o_command_accepted
   PIN o_compute_pending
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1546.51 1910 1546.81 ;
+      LAYER met2 ;
+        RECT 816.58 0 816.88 2.91 ;
     END
   END o_compute_pending
   PIN o_error[2]
@@ -2290,15 +2289,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1469.32 2007.23 1469.62 2010.14 ;
+        RECT 823.02 0 823.32 2.91 ;
     END
   END o_error[2]
   PIN o_error[1]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1546.51 2.91 1546.81 ;
+      LAYER met2 ;
+        RECT 829.46 0 829.76 2.91 ;
     END
   END o_error[1]
   PIN o_error[0]
@@ -2306,15 +2305,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1479.44 0 1479.74 2.91 ;
+        RECT 835.9 0 836.2 2.91 ;
     END
   END o_error[0]
   PIN o_error_valid
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1596.15 1910 1596.45 ;
+      LAYER met2 ;
+        RECT 842.34 0 842.64 2.91 ;
     END
   END o_error_valid
   PIN o_operation_done
@@ -2322,15 +2321,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1515.78 2007.23 1516.08 2010.14 ;
+        RECT 848.78 0 849.08 2.91 ;
     END
   END o_operation_done
   PIN o_program_readback_active
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1596.15 2.91 1596.45 ;
+      LAYER met2 ;
+        RECT 855.22 0 855.52 2.91 ;
     END
   END o_program_readback_active
   PIN o_result_valid
@@ -2338,15 +2337,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1524.98 0 1525.28 2.91 ;
+        RECT 861.66 0 861.96 2.91 ;
     END
   END o_result_valid
   PIN i_result_ready
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1645.11 1910 1645.41 ;
+      LAYER met2 ;
+        RECT 868.1 0 868.4 2.91 ;
     END
   END i_result_ready
   PIN o_result_data[20]
@@ -2354,15 +2353,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1562.7 2007.23 1563 2010.14 ;
+        RECT 874.54 0 874.84 2.91 ;
     END
   END o_result_data[20]
   PIN o_result_data[19]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1645.11 2.91 1645.41 ;
+      LAYER met2 ;
+        RECT 880.98 0 881.28 2.91 ;
     END
   END o_result_data[19]
   PIN o_result_data[18]
@@ -2370,15 +2369,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1570.52 0 1570.82 2.91 ;
+        RECT 887.42 0 887.72 2.91 ;
     END
   END o_result_data[18]
   PIN o_result_data[17]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1694.75 1910 1695.05 ;
+      LAYER met2 ;
+        RECT 893.86 0 894.16 2.91 ;
     END
   END o_result_data[17]
   PIN o_result_data[16]
@@ -2386,15 +2385,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1609.16 2007.23 1609.46 2010.14 ;
+        RECT 900.3 0 900.6 2.91 ;
     END
   END o_result_data[16]
   PIN o_result_data[15]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1694.75 2.91 1695.05 ;
+      LAYER met2 ;
+        RECT 906.74 0 907.04 2.91 ;
     END
   END o_result_data[15]
   PIN o_result_data[14]
@@ -2402,15 +2401,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1616.06 0 1616.36 2.91 ;
+        RECT 913.18 0 913.48 2.91 ;
     END
   END o_result_data[14]
   PIN o_result_data[13]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1743.71 1910 1744.01 ;
+      LAYER met2 ;
+        RECT 919.62 0 919.92 2.91 ;
     END
   END o_result_data[13]
   PIN o_result_data[12]
@@ -2418,15 +2417,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1656.08 2007.23 1656.38 2010.14 ;
+        RECT 926.06 0 926.36 2.91 ;
     END
   END o_result_data[12]
   PIN o_result_data[11]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1743.71 2.91 1744.01 ;
+      LAYER met2 ;
+        RECT 932.5 0 932.8 2.91 ;
     END
   END o_result_data[11]
   PIN o_result_data[10]
@@ -2434,15 +2433,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1661.6 0 1661.9 2.91 ;
+        RECT 938.94 0 939.24 2.91 ;
     END
   END o_result_data[10]
   PIN o_result_data[9]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1792.67 1910 1792.97 ;
+      LAYER met2 ;
+        RECT 945.38 0 945.68 2.91 ;
     END
   END o_result_data[9]
   PIN o_result_data[8]
@@ -2450,15 +2449,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1703 2007.23 1703.3 2010.14 ;
+        RECT 951.82 0 952.12 2.91 ;
     END
   END o_result_data[8]
   PIN o_result_data[7]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1792.67 2.91 1792.97 ;
+      LAYER met2 ;
+        RECT 958.26 0 958.56 2.91 ;
     END
   END o_result_data[7]
   PIN o_result_data[6]
@@ -2466,15 +2465,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1707.6 0 1707.9 2.91 ;
+        RECT 964.7 0 965 2.91 ;
     END
   END o_result_data[6]
   PIN o_result_data[5]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1842.31 1910 1842.61 ;
+      LAYER met2 ;
+        RECT 971.14 0 971.44 2.91 ;
     END
   END o_result_data[5]
   PIN o_result_data[4]
@@ -2482,15 +2481,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1749.46 2007.23 1749.76 2010.14 ;
+        RECT 977.12 0 977.42 2.91 ;
     END
   END o_result_data[4]
   PIN o_result_data[3]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1842.31 2.91 1842.61 ;
+      LAYER met2 ;
+        RECT 983.56 0 983.86 2.91 ;
     END
   END o_result_data[3]
   PIN o_result_data[2]
@@ -2498,15 +2497,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1753.14 0 1753.44 2.91 ;
+        RECT 990 0 990.3 2.91 ;
     END
   END o_result_data[2]
   PIN o_result_data[1]
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1891.27 1910 1891.57 ;
+      LAYER met2 ;
+        RECT 996.44 0 996.74 2.91 ;
     END
   END o_result_data[1]
   PIN o_result_data[0]
@@ -2514,15 +2513,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1796.38 2007.23 1796.68 2010.14 ;
+        RECT 1002.88 0 1003.18 2.91 ;
     END
   END o_result_data[0]
   PIN o_result_last
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1891.27 2.91 1891.57 ;
+      LAYER met2 ;
+        RECT 1009.32 0 1009.62 2.91 ;
     END
   END o_result_last
   PIN wbs_stb_i
@@ -2530,7 +2529,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 604.52 0 604.82 2.91 ;
+        RECT 1015.76 0 1016.06 2.91 ;
     END
   END wbs_stb_i
   PIN wbs_cyc_i
@@ -2538,7 +2537,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 600.84 0 601.14 2.91 ;
+        RECT 1022.2 0 1022.5 2.91 ;
     END
   END wbs_cyc_i
   PIN wbs_we_i
@@ -2546,7 +2545,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 607.28 0 607.58 2.91 ;
+        RECT 1028.64 0 1028.94 2.91 ;
     END
   END wbs_we_i
   PIN wbs_sel_i[3]
@@ -2554,7 +2553,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 394.3 0 394.6 2.91 ;
+        RECT 1035.08 0 1035.38 2.91 ;
     END
   END wbs_sel_i[3]
   PIN wbs_sel_i[2]
@@ -2562,7 +2561,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 397.98 0 398.28 2.91 ;
+        RECT 1041.52 0 1041.82 2.91 ;
     END
   END wbs_sel_i[2]
   PIN wbs_sel_i[1]
@@ -2570,7 +2569,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 401.66 0 401.96 2.91 ;
+        RECT 1047.96 0 1048.26 2.91 ;
     END
   END wbs_sel_i[1]
   PIN wbs_sel_i[0]
@@ -2578,7 +2577,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 405.34 0 405.64 2.91 ;
+        RECT 1054.4 0 1054.7 2.91 ;
     END
   END wbs_sel_i[0]
   PIN wbs_dat_i[31]
@@ -2586,7 +2585,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1073.26 0 1073.56 2.91 ;
+        RECT 1060.84 0 1061.14 2.91 ;
     END
   END wbs_dat_i[31]
   PIN wbs_dat_i[30]
@@ -2594,7 +2593,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1066.36 0 1066.66 2.91 ;
+        RECT 1067.28 0 1067.58 2.91 ;
     END
   END wbs_dat_i[30]
   PIN wbs_dat_i[29]
@@ -2602,7 +2601,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1059 0 1059.3 2.91 ;
+        RECT 1073.72 0 1074.02 2.91 ;
     END
   END wbs_dat_i[29]
   PIN wbs_dat_i[28]
@@ -2610,7 +2609,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1052.1 0 1052.4 2.91 ;
+        RECT 1080.16 0 1080.46 2.91 ;
     END
   END wbs_dat_i[28]
   PIN wbs_dat_i[27]
@@ -2618,7 +2617,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1044.74 0 1045.04 2.91 ;
+        RECT 1086.6 0 1086.9 2.91 ;
     END
   END wbs_dat_i[27]
   PIN wbs_dat_i[26]
@@ -2626,7 +2625,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1037.38 0 1037.68 2.91 ;
+        RECT 1093.04 0 1093.34 2.91 ;
     END
   END wbs_dat_i[26]
   PIN wbs_dat_i[25]
@@ -2634,7 +2633,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1030.02 0 1030.32 2.91 ;
+        RECT 1099.48 0 1099.78 2.91 ;
     END
   END wbs_dat_i[25]
   PIN wbs_dat_i[24]
@@ -2642,7 +2641,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1024.04 0 1024.34 2.91 ;
+        RECT 1105.92 0 1106.22 2.91 ;
     END
   END wbs_dat_i[24]
   PIN wbs_dat_i[23]
@@ -2650,7 +2649,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1015.76 0 1016.06 2.91 ;
+        RECT 1112.36 0 1112.66 2.91 ;
     END
   END wbs_dat_i[23]
   PIN wbs_dat_i[22]
@@ -2658,7 +2657,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1008.86 0 1009.16 2.91 ;
+        RECT 1118.8 0 1119.1 2.91 ;
     END
   END wbs_dat_i[22]
   PIN wbs_dat_i[21]
@@ -2666,7 +2665,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1001.5 0 1001.8 2.91 ;
+        RECT 1125.24 0 1125.54 2.91 ;
     END
   END wbs_dat_i[21]
   PIN wbs_dat_i[20]
@@ -2674,7 +2673,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 994.14 0 994.44 2.91 ;
+        RECT 1131.68 0 1131.98 2.91 ;
     END
   END wbs_dat_i[20]
   PIN wbs_dat_i[19]
@@ -2682,7 +2681,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 986.78 0 987.08 2.91 ;
+        RECT 1138.12 0 1138.42 2.91 ;
     END
   END wbs_dat_i[19]
   PIN wbs_dat_i[18]
@@ -2690,7 +2689,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 979.88 0 980.18 2.91 ;
+        RECT 1144.56 0 1144.86 2.91 ;
     END
   END wbs_dat_i[18]
   PIN wbs_dat_i[17]
@@ -2698,7 +2697,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 972.52 0 972.82 2.91 ;
+        RECT 1151 0 1151.3 2.91 ;
     END
   END wbs_dat_i[17]
   PIN wbs_dat_i[16]
@@ -2706,7 +2705,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 965.62 0 965.92 2.91 ;
+        RECT 1157.44 0 1157.74 2.91 ;
     END
   END wbs_dat_i[16]
   PIN wbs_dat_i[15]
@@ -2714,7 +2713,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 958.26 0 958.56 2.91 ;
+        RECT 1163.88 0 1164.18 2.91 ;
     END
   END wbs_dat_i[15]
   PIN wbs_dat_i[14]
@@ -2722,7 +2721,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 950.9 0 951.2 2.91 ;
+        RECT 1170.32 0 1170.62 2.91 ;
     END
   END wbs_dat_i[14]
   PIN wbs_dat_i[13]
@@ -2730,7 +2729,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 943.54 0 943.84 2.91 ;
+        RECT 1176.76 0 1177.06 2.91 ;
     END
   END wbs_dat_i[13]
   PIN wbs_dat_i[12]
@@ -2738,7 +2737,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 936.64 0 936.94 2.91 ;
+        RECT 1183.2 0 1183.5 2.91 ;
     END
   END wbs_dat_i[12]
   PIN wbs_dat_i[11]
@@ -2746,7 +2745,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 929.28 0 929.58 2.91 ;
+        RECT 1189.18 0 1189.48 2.91 ;
     END
   END wbs_dat_i[11]
   PIN wbs_dat_i[10]
@@ -2754,7 +2753,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 922.38 0 922.68 2.91 ;
+        RECT 1195.62 0 1195.92 2.91 ;
     END
   END wbs_dat_i[10]
   PIN wbs_dat_i[9]
@@ -2762,7 +2761,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 915.02 0 915.32 2.91 ;
+        RECT 1202.06 0 1202.36 2.91 ;
     END
   END wbs_dat_i[9]
   PIN wbs_dat_i[8]
@@ -2770,7 +2769,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 907.66 0 907.96 2.91 ;
+        RECT 1208.5 0 1208.8 2.91 ;
     END
   END wbs_dat_i[8]
   PIN wbs_dat_i[7]
@@ -2778,7 +2777,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 900.76 0 901.06 2.91 ;
+        RECT 1214.94 0 1215.24 2.91 ;
     END
   END wbs_dat_i[7]
   PIN wbs_dat_i[6]
@@ -2786,7 +2785,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 893.4 0 893.7 2.91 ;
+        RECT 1221.38 0 1221.68 2.91 ;
     END
   END wbs_dat_i[6]
   PIN wbs_dat_i[5]
@@ -2794,7 +2793,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 887.42 0 887.72 2.91 ;
+        RECT 1227.82 0 1228.12 2.91 ;
     END
   END wbs_dat_i[5]
   PIN wbs_dat_i[4]
@@ -2802,7 +2801,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 879.14 0 879.44 2.91 ;
+        RECT 1234.26 0 1234.56 2.91 ;
     END
   END wbs_dat_i[4]
   PIN wbs_dat_i[3]
@@ -2810,7 +2809,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 871.78 0 872.08 2.91 ;
+        RECT 1240.7 0 1241 2.91 ;
     END
   END wbs_dat_i[3]
   PIN wbs_dat_i[2]
@@ -2818,7 +2817,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 864.42 0 864.72 2.91 ;
+        RECT 1247.14 0 1247.44 2.91 ;
     END
   END wbs_dat_i[2]
   PIN wbs_dat_i[1]
@@ -2826,7 +2825,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 857.52 0 857.82 2.91 ;
+        RECT 1253.58 0 1253.88 2.91 ;
     END
   END wbs_dat_i[1]
   PIN wbs_dat_i[0]
@@ -2834,7 +2833,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 850.16 0 850.46 2.91 ;
+        RECT 1260.02 0 1260.32 2.91 ;
     END
   END wbs_dat_i[0]
   PIN wbs_adr_i[31]
@@ -2842,7 +2841,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 357.96 0 358.26 2.91 ;
+        RECT 1266.46 0 1266.76 2.91 ;
     END
   END wbs_adr_i[31]
   PIN wbs_adr_i[30]
@@ -2850,7 +2849,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 354.74 0 355.04 2.91 ;
+        RECT 1272.9 0 1273.2 2.91 ;
     END
   END wbs_adr_i[30]
   PIN wbs_adr_i[29]
@@ -2858,7 +2857,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 350.6 0 350.9 2.91 ;
+        RECT 1279.34 0 1279.64 2.91 ;
     END
   END wbs_adr_i[29]
   PIN wbs_adr_i[28]
@@ -2866,7 +2865,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 347.38 0 347.68 2.91 ;
+        RECT 1285.78 0 1286.08 2.91 ;
     END
   END wbs_adr_i[28]
   PIN wbs_adr_i[27]
@@ -2874,7 +2873,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 343.7 0 344 2.91 ;
+        RECT 1292.22 0 1292.52 2.91 ;
     END
   END wbs_adr_i[27]
   PIN wbs_adr_i[26]
@@ -2882,7 +2881,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 340.02 0 340.32 2.91 ;
+        RECT 1298.66 0 1298.96 2.91 ;
     END
   END wbs_adr_i[26]
   PIN wbs_adr_i[25]
@@ -2890,7 +2889,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 336.34 0 336.64 2.91 ;
+        RECT 1305.1 0 1305.4 2.91 ;
     END
   END wbs_adr_i[25]
   PIN wbs_adr_i[24]
@@ -2898,7 +2897,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 332.66 0 332.96 2.91 ;
+        RECT 1311.54 0 1311.84 2.91 ;
     END
   END wbs_adr_i[24]
   PIN wbs_adr_i[23]
@@ -2906,7 +2905,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 329.44 0 329.74 2.91 ;
+        RECT 1317.98 0 1318.28 2.91 ;
     END
   END wbs_adr_i[23]
   PIN wbs_adr_i[22]
@@ -2914,7 +2913,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 325.76 0 326.06 2.91 ;
+        RECT 1324.42 0 1324.72 2.91 ;
     END
   END wbs_adr_i[22]
   PIN wbs_adr_i[21]
@@ -2922,7 +2921,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 322.08 0 322.38 2.91 ;
+        RECT 1330.86 0 1331.16 2.91 ;
     END
   END wbs_adr_i[21]
   PIN wbs_adr_i[20]
@@ -2930,7 +2929,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 318.4 0 318.7 2.91 ;
+        RECT 1337.3 0 1337.6 2.91 ;
     END
   END wbs_adr_i[20]
   PIN wbs_adr_i[19]
@@ -2938,7 +2937,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 314.72 0 315.02 2.91 ;
+        RECT 1343.74 0 1344.04 2.91 ;
     END
   END wbs_adr_i[19]
   PIN wbs_adr_i[18]
@@ -2946,7 +2945,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 311.5 0 311.8 2.91 ;
+        RECT 1350.18 0 1350.48 2.91 ;
     END
   END wbs_adr_i[18]
   PIN wbs_adr_i[17]
@@ -2954,7 +2953,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 307.82 0 308.12 2.91 ;
+        RECT 1356.62 0 1356.92 2.91 ;
     END
   END wbs_adr_i[17]
   PIN wbs_adr_i[16]
@@ -2962,7 +2961,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 303.68 0 303.98 2.91 ;
+        RECT 1363.06 0 1363.36 2.91 ;
     END
   END wbs_adr_i[16]
   PIN wbs_adr_i[15]
@@ -2970,7 +2969,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 300.46 0 300.76 2.91 ;
+        RECT 1369.5 0 1369.8 2.91 ;
     END
   END wbs_adr_i[15]
   PIN wbs_adr_i[14]
@@ -2978,7 +2977,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 296.78 0 297.08 2.91 ;
+        RECT 1375.94 0 1376.24 2.91 ;
     END
   END wbs_adr_i[14]
   PIN wbs_adr_i[13]
@@ -2986,7 +2985,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 294.48 0 294.78 2.91 ;
+        RECT 1382.38 0 1382.68 2.91 ;
     END
   END wbs_adr_i[13]
   PIN wbs_adr_i[12]
@@ -2994,7 +2993,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 289.42 0 289.72 2.91 ;
+        RECT 1388.82 0 1389.12 2.91 ;
     END
   END wbs_adr_i[12]
   PIN wbs_adr_i[11]
@@ -3002,7 +3001,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 286.2 0 286.5 2.91 ;
+        RECT 1395.26 0 1395.56 2.91 ;
     END
   END wbs_adr_i[11]
   PIN wbs_adr_i[10]
@@ -3010,7 +3009,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 282.52 0 282.82 2.91 ;
+        RECT 1401.24 0 1401.54 2.91 ;
     END
   END wbs_adr_i[10]
   PIN wbs_adr_i[9]
@@ -3018,7 +3017,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 278.84 0 279.14 2.91 ;
+        RECT 1407.68 0 1407.98 2.91 ;
     END
   END wbs_adr_i[9]
   PIN wbs_adr_i[8]
@@ -3026,7 +3025,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 275.16 0 275.46 2.91 ;
+        RECT 1414.12 0 1414.42 2.91 ;
     END
   END wbs_adr_i[8]
   PIN wbs_adr_i[7]
@@ -3034,7 +3033,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 271.48 0 271.78 2.91 ;
+        RECT 1420.56 0 1420.86 2.91 ;
     END
   END wbs_adr_i[7]
   PIN wbs_adr_i[6]
@@ -3042,7 +3041,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 268.26 0 268.56 2.91 ;
+        RECT 1427 0 1427.3 2.91 ;
     END
   END wbs_adr_i[6]
   PIN wbs_adr_i[5]
@@ -3050,7 +3049,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 264.58 0 264.88 2.91 ;
+        RECT 1433.44 0 1433.74 2.91 ;
     END
   END wbs_adr_i[5]
   PIN wbs_adr_i[4]
@@ -3058,7 +3057,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 260.9 0 261.2 2.91 ;
+        RECT 1439.88 0 1440.18 2.91 ;
     END
   END wbs_adr_i[4]
   PIN wbs_adr_i[3]
@@ -3066,7 +3065,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 257.22 0 257.52 2.91 ;
+        RECT 1446.32 0 1446.62 2.91 ;
     END
   END wbs_adr_i[3]
   PIN wbs_adr_i[2]
@@ -3074,7 +3073,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 253.54 0 253.84 2.91 ;
+        RECT 1452.76 0 1453.06 2.91 ;
     END
   END wbs_adr_i[2]
   PIN wbs_adr_i[1]
@@ -3082,7 +3081,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 250.32 0 250.62 2.91 ;
+        RECT 1459.2 0 1459.5 2.91 ;
     END
   END wbs_adr_i[1]
   PIN wbs_adr_i[0]
@@ -3090,7 +3089,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 246.64 0 246.94 2.91 ;
+        RECT 1465.64 0 1465.94 2.91 ;
     END
   END wbs_adr_i[0]
   PIN wbs_dat_o[31]
@@ -3098,7 +3097,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1400.78 0 1401.08 2.91 ;
+        RECT 1472.08 0 1472.38 2.91 ;
     END
   END wbs_dat_o[31]
   PIN wbs_dat_o[30]
@@ -3106,7 +3105,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1393.42 0 1393.72 2.91 ;
+        RECT 1478.52 0 1478.82 2.91 ;
     END
   END wbs_dat_o[30]
   PIN wbs_dat_o[29]
@@ -3114,7 +3113,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1386.52 0 1386.82 2.91 ;
+        RECT 1484.96 0 1485.26 2.91 ;
     END
   END wbs_dat_o[29]
   PIN wbs_dat_o[28]
@@ -3122,7 +3121,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1379.16 0 1379.46 2.91 ;
+        RECT 1491.4 0 1491.7 2.91 ;
     END
   END wbs_dat_o[28]
   PIN wbs_dat_o[27]
@@ -3130,7 +3129,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1372.26 0 1372.56 2.91 ;
+        RECT 1497.84 0 1498.14 2.91 ;
     END
   END wbs_dat_o[27]
   PIN wbs_dat_o[26]
@@ -3138,7 +3137,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1364.9 0 1365.2 2.91 ;
+        RECT 1504.28 0 1504.58 2.91 ;
     END
   END wbs_dat_o[26]
   PIN wbs_dat_o[25]
@@ -3146,7 +3145,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1357.54 0 1357.84 2.91 ;
+        RECT 1510.72 0 1511.02 2.91 ;
     END
   END wbs_dat_o[25]
   PIN wbs_dat_o[24]
@@ -3154,7 +3153,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1350.18 0 1350.48 2.91 ;
+        RECT 1517.16 0 1517.46 2.91 ;
     END
   END wbs_dat_o[24]
   PIN wbs_dat_o[23]
@@ -3162,7 +3161,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1343.28 0 1343.58 2.91 ;
+        RECT 1523.6 0 1523.9 2.91 ;
     END
   END wbs_dat_o[23]
   PIN wbs_dat_o[22]
@@ -3170,7 +3169,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1335.92 0 1336.22 2.91 ;
+        RECT 1530.04 0 1530.34 2.91 ;
     END
   END wbs_dat_o[22]
   PIN wbs_dat_o[21]
@@ -3178,7 +3177,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1328.56 0 1328.86 2.91 ;
+        RECT 1536.48 0 1536.78 2.91 ;
     END
   END wbs_dat_o[21]
   PIN wbs_dat_o[20]
@@ -3186,7 +3185,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1321.66 0 1321.96 2.91 ;
+        RECT 1542.92 0 1543.22 2.91 ;
     END
   END wbs_dat_o[20]
   PIN wbs_dat_o[19]
@@ -3194,7 +3193,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1314.3 0 1314.6 2.91 ;
+        RECT 1549.36 0 1549.66 2.91 ;
     END
   END wbs_dat_o[19]
   PIN wbs_dat_o[18]
@@ -3202,7 +3201,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1307.4 0 1307.7 2.91 ;
+        RECT 1555.8 0 1556.1 2.91 ;
     END
   END wbs_dat_o[18]
   PIN wbs_dat_o[17]
@@ -3210,7 +3209,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1300.04 0 1300.34 2.91 ;
+        RECT 1562.24 0 1562.54 2.91 ;
     END
   END wbs_dat_o[17]
   PIN wbs_dat_o[16]
@@ -3218,7 +3217,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1293.14 0 1293.44 2.91 ;
+        RECT 1568.68 0 1568.98 2.91 ;
     END
   END wbs_dat_o[16]
   PIN wbs_dat_o[15]
@@ -3226,7 +3225,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1285.32 0 1285.62 2.91 ;
+        RECT 1575.12 0 1575.42 2.91 ;
     END
   END wbs_dat_o[15]
   PIN wbs_dat_o[14]
@@ -3234,7 +3233,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1278.42 0 1278.72 2.91 ;
+        RECT 1581.56 0 1581.86 2.91 ;
     END
   END wbs_dat_o[14]
   PIN wbs_dat_o[13]
@@ -3242,7 +3241,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1271.06 0 1271.36 2.91 ;
+        RECT 1588 0 1588.3 2.91 ;
     END
   END wbs_dat_o[13]
   PIN wbs_dat_o[12]
@@ -3250,7 +3249,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1264.16 0 1264.46 2.91 ;
+        RECT 1594.44 0 1594.74 2.91 ;
     END
   END wbs_dat_o[12]
   PIN wbs_dat_o[11]
@@ -3258,7 +3257,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1256.8 0 1257.1 2.91 ;
+        RECT 1600.88 0 1601.18 2.91 ;
     END
   END wbs_dat_o[11]
   PIN wbs_dat_o[10]
@@ -3266,7 +3265,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1249.9 0 1250.2 2.91 ;
+        RECT 1607.32 0 1607.62 2.91 ;
     END
   END wbs_dat_o[10]
   PIN wbs_dat_o[9]
@@ -3274,7 +3273,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1242.08 0 1242.38 2.91 ;
+        RECT 1613.3 0 1613.6 2.91 ;
     END
   END wbs_dat_o[9]
   PIN wbs_dat_o[8]
@@ -3282,7 +3281,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1235.18 0 1235.48 2.91 ;
+        RECT 1619.74 0 1620.04 2.91 ;
     END
   END wbs_dat_o[8]
   PIN wbs_dat_o[7]
@@ -3290,7 +3289,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1227.82 0 1228.12 2.91 ;
+        RECT 1626.18 0 1626.48 2.91 ;
     END
   END wbs_dat_o[7]
   PIN wbs_dat_o[6]
@@ -3298,7 +3297,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1220.92 0 1221.22 2.91 ;
+        RECT 1632.62 0 1632.92 2.91 ;
     END
   END wbs_dat_o[6]
   PIN wbs_dat_o[5]
@@ -3306,7 +3305,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1213.56 0 1213.86 2.91 ;
+        RECT 1639.06 0 1639.36 2.91 ;
     END
   END wbs_dat_o[5]
   PIN wbs_dat_o[4]
@@ -3314,7 +3313,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1206.66 0 1206.96 2.91 ;
+        RECT 1645.5 0 1645.8 2.91 ;
     END
   END wbs_dat_o[4]
   PIN wbs_dat_o[3]
@@ -3322,7 +3321,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1199.3 0 1199.6 2.91 ;
+        RECT 1651.94 0 1652.24 2.91 ;
     END
   END wbs_dat_o[3]
   PIN wbs_dat_o[2]
@@ -3330,7 +3329,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1191.94 0 1192.24 2.91 ;
+        RECT 1658.38 0 1658.68 2.91 ;
     END
   END wbs_dat_o[2]
   PIN wbs_dat_o[1]
@@ -3338,7 +3337,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1185.04 0 1185.34 2.91 ;
+        RECT 1664.82 0 1665.12 2.91 ;
     END
   END wbs_dat_o[1]
   PIN wbs_dat_o[0]
@@ -3346,7 +3345,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1177.68 0 1177.98 2.91 ;
+        RECT 1671.26 0 1671.56 2.91 ;
     END
   END wbs_dat_o[0]
   PIN wbs_ack_o
@@ -3354,7 +3353,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 614.64 0 614.94 2.91 ;
+        RECT 1677.7 0 1678 2.91 ;
     END
   END wbs_ack_o
   PIN stop_bit_i[31]
@@ -3362,15 +3361,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 227.78 2007.23 228.08 2010.14 ;
+        RECT 1684.14 0 1684.44 2.91 ;
     END
   END stop_bit_i[31]
   PIN stop_bit_i[30]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 238.87 2.91 239.17 ;
+      LAYER met2 ;
+        RECT 1690.58 0 1690.88 2.91 ;
     END
   END stop_bit_i[30]
   PIN stop_bit_i[29]
@@ -3378,15 +3377,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 393.38 0 393.68 2.91 ;
+        RECT 1697.02 0 1697.32 2.91 ;
     END
   END stop_bit_i[29]
   PIN stop_bit_i[28]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 414.31 1910 414.61 ;
+      LAYER met2 ;
+        RECT 1703.46 0 1703.76 2.91 ;
     END
   END stop_bit_i[28]
   PIN stop_bit_i[27]
@@ -3394,15 +3393,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 435.24 2007.23 435.54 2010.14 ;
+        RECT 1709.9 0 1710.2 2.91 ;
     END
   END stop_bit_i[27]
   PIN stop_bit_i[26]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 457.83 2.91 458.13 ;
+      LAYER met2 ;
+        RECT 1716.34 0 1716.64 2.91 ;
     END
   END stop_bit_i[26]
   PIN stop_bit_i[25]
@@ -3410,15 +3409,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 581.06 0 581.36 2.91 ;
+        RECT 1722.78 0 1723.08 2.91 ;
     END
   END stop_bit_i[25]
   PIN stop_bit_i[24]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 611.51 1910 611.81 ;
+      LAYER met2 ;
+        RECT 1729.22 0 1729.52 2.91 ;
     END
   END stop_bit_i[24]
   PIN stop_bit_i[23]
@@ -3426,15 +3425,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 643.16 2007.23 643.46 2010.14 ;
+        RECT 1735.66 0 1735.96 2.91 ;
     END
   END stop_bit_i[23]
   PIN stop_bit_i[22]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 676.79 2.91 677.09 ;
+      LAYER met2 ;
+        RECT 1742.1 0 1742.4 2.91 ;
     END
   END stop_bit_i[22]
   PIN stop_bit_i[21]
@@ -3442,15 +3441,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 767.82 0 768.12 2.91 ;
+        RECT 1748.54 0 1748.84 2.91 ;
     END
   END stop_bit_i[21]
   PIN stop_bit_i[20]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 808.71 1910 809.01 ;
+      LAYER met2 ;
+        RECT 1754.98 0 1755.28 2.91 ;
     END
   END stop_bit_i[20]
   PIN stop_bit_i[19]
@@ -3458,15 +3457,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 851.08 2007.23 851.38 2010.14 ;
+        RECT 1761.42 0 1761.72 2.91 ;
     END
   END stop_bit_i[19]
   PIN stop_bit_i[18]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 895.75 2.91 896.05 ;
+      LAYER met2 ;
+        RECT 1767.86 0 1768.16 2.91 ;
     END
   END stop_bit_i[18]
   PIN stop_bit_i[17]
@@ -3474,15 +3473,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 955.04 0 955.34 2.91 ;
+        RECT 1774.3 0 1774.6 2.91 ;
     END
   END stop_bit_i[17]
   PIN stop_bit_i[16]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1005.91 1910 1006.21 ;
+      LAYER met2 ;
+        RECT 1780.74 0 1781.04 2.91 ;
     END
   END stop_bit_i[16]
   PIN stop_bit_i[15]
@@ -3490,15 +3489,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1058.54 2007.23 1058.84 2010.14 ;
+        RECT 1787.18 0 1787.48 2.91 ;
     END
   END stop_bit_i[15]
   PIN stop_bit_i[14]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1114.03 2.91 1114.33 ;
+      LAYER met2 ;
+        RECT 1793.62 0 1793.92 2.91 ;
     END
   END stop_bit_i[14]
   PIN stop_bit_i[13]
@@ -3506,15 +3505,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1141.8 0 1142.1 2.91 ;
+        RECT 1800.06 0 1800.36 2.91 ;
     END
   END stop_bit_i[13]
   PIN stop_bit_i[12]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1202.43 1910 1202.73 ;
+      LAYER met2 ;
+        RECT 1806.5 0 1806.8 2.91 ;
     END
   END stop_bit_i[12]
   PIN stop_bit_i[11]
@@ -3522,15 +3521,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1266.46 2007.23 1266.76 2010.14 ;
+        RECT 1812.94 0 1813.24 2.91 ;
     END
   END stop_bit_i[11]
   PIN stop_bit_i[10]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1332.99 2.91 1333.29 ;
+      LAYER met2 ;
+        RECT 1819.38 0 1819.68 2.91 ;
     END
   END stop_bit_i[10]
   PIN stop_bit_i[9]
@@ -3538,15 +3537,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1329.48 0 1329.78 2.91 ;
+        RECT 1825.36 0 1825.66 2.91 ;
     END
   END stop_bit_i[9]
   PIN stop_bit_i[8]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1399.63 1910 1399.93 ;
+      LAYER met2 ;
+        RECT 1831.8 0 1832.1 2.91 ;
     END
   END stop_bit_i[8]
   PIN stop_bit_i[7]
@@ -3554,15 +3553,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1474.38 2007.23 1474.68 2010.14 ;
+        RECT 1838.24 0 1838.54 2.91 ;
     END
   END stop_bit_i[7]
   PIN stop_bit_i[6]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1551.95 2.91 1552.25 ;
+      LAYER met2 ;
+        RECT 1845.14 0 1845.44 2.91 ;
     END
   END stop_bit_i[6]
   PIN stop_bit_i[5]
@@ -3570,15 +3569,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1515.78 0 1516.08 2.91 ;
+        RECT 1851.12 0 1851.42 2.91 ;
     END
   END stop_bit_i[5]
   PIN stop_bit_i[4]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1596.83 1910 1597.13 ;
+      LAYER met2 ;
+        RECT 1857.56 0 1857.86 2.91 ;
     END
   END stop_bit_i[4]
   PIN stop_bit_i[3]
@@ -3586,15 +3585,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1682.3 2007.23 1682.6 2010.14 ;
+        RECT 1864 0 1864.3 2.91 ;
     END
   END stop_bit_i[3]
   PIN stop_bit_i[2]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1770.91 2.91 1771.21 ;
+      LAYER met2 ;
+        RECT 1870.44 0 1870.74 2.91 ;
     END
   END stop_bit_i[2]
   PIN stop_bit_i[1]
@@ -3602,15 +3601,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1703 0 1703.3 2.91 ;
+        RECT 1876.88 0 1877.18 2.91 ;
     END
   END stop_bit_i[1]
   PIN stop_bit_i[0]
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1793.35 1910 1793.65 ;
+      LAYER met2 ;
+        RECT 1883.32 0 1883.62 2.91 ;
     END
   END stop_bit_i[0]
   PIN ScanInCC

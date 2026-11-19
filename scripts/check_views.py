@@ -26,6 +26,7 @@ RAW_FUNCTIONAL_WIRE_COUNT = 306
 RAW_BEHAVIORAL_PORT_COUNT = 61
 RAW_SCAN_PORT_COUNT = 5
 RAW_ANALOG_PORT_COUNT = 11
+RAW_ORDINARY_DIGITAL_WIRE_COUNT = 290
 RAW_WISHBONE_WIRE_COUNT = 104
 RAW_STOP_WIRE_COUNT = 32
 RAW_POWER_PINS = {"VDDC1", "VDDC2", "VDDA1", "VDDA2", "VSS"}
@@ -47,7 +48,6 @@ RAW_STATUS = "provisional-integration-only-awaiting-signoff-views"
 MET2_GDS_LAYER = 69
 MET3_GDS_LAYER = 70
 PIN_GDS_DATATYPE = 20
-REFERENCE_SIGNAL_GDS_DATATYPE = 16
 LABEL_GDS_TEXTTYPE = 5
 MET2_TRACK_ORIGIN = 0.23
 MET2_TRACK_PITCH = 0.46
@@ -60,6 +60,13 @@ RAW_POWER_SHAPE_COUNTS = {
     "VDDA1": 74,
     "VDDA2": 3,
     "VSS": 133,
+}
+RAW_PRESERVED_SCAN_SHAPES = {
+    "ScanInCC": ("met2", (1798.68, 0.0, 1798.98, 2.91)),
+    "ScanInDL": ("met3", (1907.09, 1940.91, 1910.0, 1941.21)),
+    "ScanInDR": ("met2", (1843.30, 2007.23, 1843.60, 2010.14)),
+    "ScanOutCC": ("met3", (0.0, 1940.91, 2.91, 1941.21)),
+    "TM": ("met2", (1844.22, 0.0, 1844.52, 2.91)),
 }
 EXPECTED_OBSTRUCTION_LAYERS = ["li1", "met1", "met2", "met3", "met4"]
 
@@ -85,10 +92,10 @@ EXPECTED_RAW_ROUTING_CONSTRAINTS = {
     "power_geometry_source_view": "gds",
     "power_access_layer": "met3",
     "power_access_shape_counts": RAW_POWER_SHAPE_COUNTS,
-    "wishbone_geometry_reference": NVM_NAME,
-    "wishbone_geometry_source_view": "gds",
-    "wishbone_wire_count": 104,
-    "preserved_existing_pin_count": 173,
+    "ordinary_digital_pin_side": "bottom",
+    "ordinary_digital_layer": "met2",
+    "ordinary_digital_wire_count": RAW_ORDINARY_DIGITAL_WIRE_COUNT,
+    "preserved_scan_pin_count": RAW_SCAN_PORT_COUNT,
     "obstruction_reference": NVM_NAME,
     "obstruction_source_view": "lef",
     "obstruction_layers": EXPECTED_OBSTRUCTION_LAYERS,
@@ -736,50 +743,6 @@ if len(raw_entries) == 1:
             except ValueError as error:
                 errors.append(f"{NVM_NAME} GDS pin mapping failed: {error}")
                 reference_gds_pins = {}
-            try:
-                reference_signal_pins = gds_labeled_rectangles(
-                    reference_gds_path,
-                    MET2_GDS_LAYER,
-                    REFERENCE_SIGNAL_GDS_DATATYPE,
-                    LABEL_GDS_TEXTTYPE,
-                )
-            except ValueError as error:
-                errors.append(f"{NVM_NAME} signal-pin mapping failed: {error}")
-                reference_signal_pins = {}
-            for pin in sorted(
-                name for name in raw_lef_details if name.startswith("wbs_")
-            ):
-                raw_layer, raw_rect = raw_lef_details[pin]["shapes"][0]
-                reference_rectangles = reference_signal_pins.get(pin, [])
-                if len(reference_rectangles) != 1:
-                    errors.append(
-                        f"{RAW_NAME} Wishbone pin {pin} lacks one X1 GDS reference"
-                    )
-                    continue
-                reference_rect = reference_rectangles[0]
-                raw_side = (
-                    "bottom"
-                    if raw_layer == "met2" and abs(raw_rect[1]) <= 1e-6
-                    else "top"
-                    if raw_layer == "met2"
-                    else "left"
-                    if abs(raw_rect[0]) <= 1e-6
-                    else "right"
-                )
-                reference_side = (
-                    "bottom"
-                    if reference_rect[1] == 0
-                    else "top"
-                    if reference_rect[3] == round(HEIGHT * 1000)
-                    else "left"
-                    if reference_rect[0] == 0
-                    else "right"
-                )
-                if raw_side != reference_side:
-                    errors.append(
-                        f"{RAW_NAME} Wishbone pin {pin} side {raw_side} differs "
-                        f"from X1 GDS reference side {reference_side}"
-                    )
             reference_obstructions = lef_obstructions(reference_lef_text)
             raw_obstructions = lef_obstructions(raw_lef_text)
             if raw_obstructions != reference_obstructions:
@@ -820,6 +783,19 @@ if len(raw_entries) == 1:
                         f"{RAW_NAME} provisional LEF pin {pin} must have one perimeter shape"
                     )
                     continue
+                if pin in RAW_SCAN_PINS:
+                    if detail["shapes"][0] != RAW_PRESERVED_SCAN_SHAPES[pin]:
+                        errors.append(
+                            f"{RAW_NAME} scan/test pin {pin} moved from its "
+                            "established geometry"
+                        )
+                elif pin not in RAW_POWER_PINS and pin not in RAW_ANALOG_PINS:
+                    layer, rect = detail["shapes"][0]
+                    if layer != "met2" or abs(rect[1]) > 1e-6:
+                        errors.append(
+                            f"{RAW_NAME} ordinary digital pin {pin} must be "
+                            "on the bottom met2 boundary"
+                        )
                 for layer, rect in detail["shapes"]:
                     _x1, y1, _x2, y2 = rect
                     if pin in RAW_ANALOG_PINS:
@@ -1071,8 +1047,8 @@ print(
     f"{RAW_WIRE_COUNT} consistent pins and remain outside the signoff release"
 )
 print(
-    f"PASS: {RAW_NAME} north/south pins are met2 X-grid aligned and "
-    "west/east pins are met3 Y-grid aligned"
+    f"PASS: {RAW_NAME} has {RAW_ORDINARY_DIGITAL_WIRE_COUNT} ordinary digital "
+    "pins on the bottom met2 boundary; scan/test pins retain their geometry"
 )
 print(
     f"PASS: {RAW_NAME} analog pins use {RAW_ANALOG_PIN_WIDTH:.2f} um met3 access "

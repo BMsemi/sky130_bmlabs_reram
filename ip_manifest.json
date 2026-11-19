@@ -99,10 +99,10 @@
           "VDDA2": 3,
           "VSS": 133
         },
-        "wishbone_geometry_reference": "sky130_bmlabs_reram__nvm32x32wb",
-        "wishbone_geometry_source_view": "gds",
-        "wishbone_wire_count": 104,
-        "preserved_existing_pin_count": 173,
+        "ordinary_digital_pin_side": "bottom",
+        "ordinary_digital_layer": "met2",
+        "ordinary_digital_wire_count": 290,
+        "preserved_scan_pin_count": 5,
         "obstruction_reference": "sky130_bmlabs_reram__nvm32x32wb",
         "obstruction_source_view": "lef",
         "obstruction_layers": [

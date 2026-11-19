@@ -5,8 +5,9 @@
 - Expanded `sky130_bmlabs_reram__cim32x32` to a 311-pin selectable-interface
   boundary matching the complete behavioral module: direct/raw signals,
   `interface_sel`, `i_Levelsh_enable`, the 104-wire Wishbone interface and
-  `stop_bit_i[31:0]`. All 173 previously exposed pin geometries are preserved;
-  Wishbone placement uses the released X1 GDS as a side/center reference.
+  `stop_bit_i[31:0]`. All 290 ordinary digital signals are now placed on met2
+  along the bottom boundary. The existing five scan/test pins, eleven analog
+  pins and distributed power-access geometry remain unchanged.
 - Added the raw-interface `VCC_SNEAK` analog inout consistently to the Verilog
   header, behavioral model, provisional GDS/LEF/Liberty views, manifest,
   documentation and validators. Its 1.30 um-wide met3 access uses the next free

@@ -2,9 +2,11 @@
 """Generate non-signoff physical placeholders for the selectable X2 macro.
 
 The generated views are intentionally marked provisional. They preserve the
-released Wishbone macro boundary but use synthetic perimeter pin placement and
-an uncharacterized Liberty shell. They are only for floorplanning and file-flow
-testing; they are not valid for LVS, timing signoff, fabrication or tapeout.
+released Wishbone macro boundary, keep the established analog, scan/test and
+power geometry, and place ordinary digital signals along the south boundary.
+The uncharacterized Liberty shell and physical views are only for floorplanning
+and file-flow testing; they are not valid for LVS, timing signoff, fabrication
+or tapeout.
 """
 
 import re
@@ -37,19 +39,7 @@ ANALOG_PIN_ORDER = (
     "VCC_SNEAK",
 )
 ANALOG_PINS = set(ANALOG_PIN_ORDER)
-DUAL_INTERFACE_PORTS = {
-    "interface_sel",
-    "i_Levelsh_enable",
-    "wbs_stb_i",
-    "wbs_cyc_i",
-    "wbs_we_i",
-    "wbs_sel_i",
-    "wbs_dat_i",
-    "wbs_adr_i",
-    "wbs_dat_o",
-    "wbs_ack_o",
-    "stop_bit_i",
-}
+SCAN_PINS = {"ScanInCC", "ScanInDL", "ScanInDR", "ScanOutCC", "TM"}
 PROVISIONAL = "PROVISIONAL - NOT FOR LVS, TIMING SIGNOFF, FABRICATION OR TAPEOUT"
 
 # SKY130/OpenLane routing tracks. North/south pins use vertical met2, so their
@@ -62,7 +52,6 @@ MET3_TRACK_PITCH = 0.68
 MET2_GDS_LAYER = 69
 MET3_GDS_LAYER = 70
 PIN_GDS_DATATYPE = 20
-REFERENCE_SIGNAL_GDS_DATATYPE = 16
 LABEL_GDS_TEXTTYPE = 5
 SIGNAL_PIN_WIDTH = 0.30
 ANALOG_PIN_WIDTH = 1.30
@@ -76,6 +65,17 @@ EXPECTED_POWER_SHAPE_COUNTS = {
     "VDDA1": 74,
     "VDDA2": 3,
     "VSS": 133,
+}
+
+# Preserve the existing scan/test access exactly while other digital pins move
+# to the south boundary. Coordinates are in micrometers and match the previous
+# generated LEF/GDS.
+PRESERVED_SCAN_SHAPES = {
+    "ScanInCC": ("met2", (1798.68, 0.0, 1798.98, 2.91)),
+    "ScanInDL": ("met3", (1907.09, 1940.91, 1910.0, 1941.21)),
+    "ScanInDR": ("met2", (1843.30, 2007.23, 1843.60, 2010.14)),
+    "ScanOutCC": ("met3", (0.0, 1940.91, 2.91, 1941.21)),
+    "TM": ("met2", (1844.22, 0.0, 1844.52, 2.91)),
 }
 
 
@@ -190,100 +190,6 @@ def reference_pin_shapes(pin_names):
     return result
 
 
-def reference_signal_locations(pin_names):
-    """Read Wishbone signal side/center hints from the released X1 GDS."""
-    data = REFERENCE_GDS.read_bytes()
-    offset = 0
-    active = None
-    shapes = {MET2_GDS_LAYER: [], MET3_GDS_LAYER: []}
-    labels = []
-    while offset < len(data):
-        length = int.from_bytes(data[offset : offset + 2], "big")
-        if length < 4 or offset + length > len(data):
-            raise RuntimeError(f"invalid reference GDS record at byte {offset}")
-        record_type = data[offset + 2]
-        payload = data[offset + 4 : offset + length]
-        if record_type in {8, 12}:  # BOUNDARY or TEXT
-            active = {
-                "type": record_type,
-                "layer": None,
-                "datatype": None,
-                "coordinates": [],
-                "text": None,
-            }
-        elif active is not None and record_type == 13:  # LAYER
-            active["layer"] = int.from_bytes(payload, "big", signed=True)
-        elif active is not None and record_type in {14, 22}:  # DATATYPE/TEXTTYPE
-            active["datatype"] = int.from_bytes(payload, "big", signed=True)
-        elif active is not None and record_type == 16:  # XY
-            values = [
-                int.from_bytes(payload[index : index + 4], "big", signed=True)
-                for index in range(0, len(payload), 4)
-            ]
-            active["coordinates"] = list(zip(values[0::2], values[1::2]))
-        elif active is not None and record_type == 25:  # STRING
-            text = payload.rstrip(b"\0").decode("ascii", errors="replace")
-            active["text"] = re.sub(r"<([0-9]+)>$", r"[\1]", text)
-        elif active is not None and record_type == 17:  # ENDEL
-            if (
-                active["type"] == 8
-                and active["layer"] in shapes
-                and active["datatype"] == REFERENCE_SIGNAL_GDS_DATATYPE
-            ):
-                xs = [point[0] for point in active["coordinates"]]
-                ys = [point[1] for point in active["coordinates"]]
-                shapes[active["layer"]].append(
-                    (min(xs), min(ys), max(xs), max(ys))
-                )
-            elif (
-                active["type"] == 12
-                and active["layer"] in shapes
-                and active["datatype"] == LABEL_GDS_TEXTTYPE
-                and active["text"] in pin_names
-            ):
-                labels.append(
-                    (
-                        active["text"],
-                        active["layer"],
-                        active["coordinates"][0],
-                    )
-                )
-            active = None
-        offset += length
-
-    result = {}
-    width_dbu = round(WIDTH * 1000)
-    height_dbu = round(HEIGHT * 1000)
-    for name, layer, (x, y) in labels:
-        containing = [
-            rect
-            for rect in shapes[layer]
-            if rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]
-        ]
-        if len(containing) != 1:
-            raise RuntimeError(
-                f"reference GDS label {name} at {(x, y)} maps to "
-                f"{len(containing)} pin shapes"
-            )
-        x1, y1, x2, y2 = containing[0]
-        if layer == MET2_GDS_LAYER and y1 == 0:
-            side = "bottom"
-            center = (x1 + x2) / 2000
-        elif layer == MET2_GDS_LAYER and y2 == height_dbu:
-            side = "top"
-            center = (x1 + x2) / 2000
-        elif layer == MET3_GDS_LAYER and x1 == 0:
-            side = "left"
-            center = (y1 + y2) / 2000
-        elif layer == MET3_GDS_LAYER and x2 == width_dbu:
-            side = "right"
-            center = (y1 + y2) / 2000
-        else:
-            raise RuntimeError(f"reference signal pin {name} is not on a boundary")
-        result[name] = {"side": side, "center": center}
-    return result
-
-
 def reference_obstructions():
     """Read routing obstructions from the matching released X1 Wishbone LEF."""
     text = REFERENCE_LEF.read_text(errors="replace")
@@ -312,7 +218,7 @@ def reference_obstructions():
     return shapes
 
 
-def pin_geometry(ports, power_shapes, reference_signals):
+def pin_geometry(ports, power_shapes):
     """Place pins deterministically on direction-correct routing tracks."""
     geometry = {}
     port_directions = dict(ports)
@@ -470,59 +376,44 @@ def pin_geometry(ports, power_shapes, reference_signals):
             "kind": "analog",
         }
 
+    # Keep all scan/test pins at their established physical locations.
+    for name, (layer, rect) in PRESERVED_SCAN_SHAPES.items():
+        if name not in port_directions:
+            raise RuntimeError(f"missing scan/test port: {name}")
+        x1, y1, x2, y2 = rect
+        if layer == "met2":
+            side = "bottom" if y1 == 0.0 else "top"
+            occupied_met2[side].append((x1, x2))
+        else:
+            side = "left" if x1 == 0.0 else "right"
+            occupied_met3[side].append((y1, y2))
+        geometry[name] = {
+            "direction": port_directions[name],
+            "shapes": [
+                {
+                    "layer": layer,
+                    "gds_layer": GDS_LAYER_BY_LEF_LAYER[layer],
+                    "rect": rect,
+                }
+            ],
+            "kind": "scan",
+        }
+
+    # Place every ordinary digital signal on a vertical met2 track at the
+    # south boundary. Analog, scan/test and power pins are deliberately
+    # excluded so their established access geometry remains unchanged.
     digital_ports = [
-        port for port in ports if port[0] not in POWER_PINS and port[0] not in ANALOG_PINS
-    ]
-    legacy_digital_ports = [
         port
-        for port in digital_ports
-        if port[0].split("[", 1)[0] not in DUAL_INTERFACE_PORTS
+        for port in ports
+        if port[0] not in POWER_PINS
+        and port[0] not in ANALOG_PINS
+        and port[0] not in SCAN_PINS
     ]
-    extra_digital_ports = [
-        port
-        for port in digital_ports
-        if port[0].split("[", 1)[0] in DUAL_INTERFACE_PORTS
-    ]
-
-    # Preserve the established raw-interface pin geometry exactly by running
-    # the original four-side placement only over the legacy pin set.
-    side_groups = [[], [], [], []]
-    for index, port in enumerate(legacy_digital_ports):
-        side_groups[index % 4].append(port)
-
-    side_names = ("bottom", "right", "top", "left")
-    for side, group in enumerate(side_groups):
-        span = (WIDTH if side in {0, 2} else HEIGHT) - 2 * margin
-        pitch = span / (len(group) + 1)
-        for index, (name, direction) in enumerate(group, 1):
-            ideal_position = margin + index * pitch
-            place_signal(name, direction, side_names[side], ideal_position)
-
-    # Place the 104 Wishbone wires near their corresponding released-X1 GDS
-    # side/center locations. If an established raw pin occupies that location,
-    # move to the nearest free routing track without moving the existing pin.
-    referenced_extra_ports = [
-        port for port in extra_digital_ports if port[0] in reference_signals
-    ]
-    for name, direction in referenced_extra_ports:
-        hint = reference_signals[name]
-        place_signal(name, direction, hint["side"], hint["center"])
-
-    # interface_sel, i_Levelsh_enable and stop_bit_i are absent from the
-    # Wishbone reference. Distribute them over the four sides using the next
-    # available direction-correct tracks.
-    unreferenced_extra_ports = [
-        port for port in extra_digital_ports if port[0] not in reference_signals
-    ]
-    extra_side_groups = [[], [], [], []]
-    for index, port in enumerate(unreferenced_extra_ports):
-        extra_side_groups[index % 4].append(port)
-    for side, group in enumerate(extra_side_groups):
-        span = (WIDTH if side in {0, 2} else HEIGHT) - 2 * margin
-        pitch = span / (len(group) + 1)
-        for index, (name, direction) in enumerate(group, 1):
-            ideal_position = margin + index * pitch
-            place_signal(name, direction, side_names[side], ideal_position)
+    span = WIDTH - 2 * margin
+    pitch = span / (len(digital_ports) + 1)
+    for index, (name, direction) in enumerate(digital_ports, 1):
+        ideal_position = margin + index * pitch
+        place_signal(name, direction, "bottom", ideal_position)
 
     missing_geometry = sorted(set(dict(ports)) - set(geometry))
     if missing_geometry:
@@ -537,9 +428,8 @@ def number(value):
 def write_lef(ports, geometry, obstructions):
     lines = [
         f"# {PROVISIONAL}",
-        "# Synthetic pin placement derived from the Verilog header.",
-        "# North/south pins: met2 X grid 0.23 + N*0.46 um.",
-        "# West/east pins: met3 Y grid 0.34 + N*0.68 um.",
+        "# Ordinary digital pins: south-boundary met2 X grid 0.23 + N*0.46 um.",
+        "# Scan/test pins: preserved established met2/met3 access geometry.",
         "# Analog pins: 1.30 um wide met3 access for matching-or-wider NDR.",
         "# Supply pins: distributed met3 access copied from the released X1 GDS.",
         "# OBS geometry: copied from the matching released X1 LEF.",
@@ -707,13 +597,8 @@ def main():
     if not POWER_PINS.issubset(names):
         raise RuntimeError("the expected reference-derived power pins are missing")
     power_shapes = reference_pin_shapes(POWER_PINS)
-    wishbone_names = {name for name in names if name.startswith("wbs_")}
-    reference_signals = reference_signal_locations(wishbone_names)
-    if set(reference_signals) != wishbone_names:
-        missing = sorted(wishbone_names - set(reference_signals))
-        raise RuntimeError(f"Wishbone reference pins are missing: {missing}")
     obstructions = reference_obstructions()
-    geometry = pin_geometry(ports, power_shapes, reference_signals)
+    geometry = pin_geometry(ports, power_shapes)
     write_lef(ports, geometry, obstructions)
     write_liberty(ports)
     write_gds(ports, geometry)
