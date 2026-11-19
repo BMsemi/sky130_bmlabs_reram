@@ -76,14 +76,14 @@
     {
       "name": "sky130_bmlabs_reram__cim32x32",
       "product": "Neuromorphic X2",
-      "interface": "raw-signals",
+      "interface": "selectable-raw-signals-or-wishbone32",
       "status": "provisional-integration-only-awaiting-signoff-views",
-      "interface_ports": 49,
-      "interface_wires": 172,
-      "functional_ports": 44,
-      "functional_wires": 167,
+      "interface_ports": 61,
+      "interface_wires": 311,
+      "functional_ports": 56,
+      "functional_wires": 306,
       "reference_scan_ports": 5,
-      "reference_analog_ports": 10,
+      "reference_analog_ports": 11,
       "optional_power_ports": 5,
       "physical_routing_constraints": {
         "analog_pad_connection_required": true,
@@ -99,6 +99,10 @@
           "VDDA2": 3,
           "VSS": 133
         },
+        "wishbone_geometry_reference": "sky130_bmlabs_reram__nvm32x32wb",
+        "wishbone_geometry_source_view": "gds",
+        "wishbone_wire_count": 104,
+        "preserved_existing_pin_count": 173,
         "obstruction_reference": "sky130_bmlabs_reram__nvm32x32wb",
         "obstruction_source_view": "lef",
         "obstruction_layers": [

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate non-signoff physical placeholders for the raw-interface X2 macro.
+"""Generate non-signoff physical placeholders for the selectable X2 macro.
 
 The generated views are intentionally marked provisional. They preserve the
 released Wishbone macro boundary but use synthetic perimeter pin placement and
@@ -21,7 +21,7 @@ REFERENCE_LEF = ROOT / "lef" / "sky130_bmlabs_reram__nvm32x32wb.lef"
 WIDTH = 1910.0
 HEIGHT = 2010.14
 POWER_PINS = {"VDDC1", "VDDC2", "VDDA1", "VDDA2", "VSS"}
-ANALOG_PINS = {
+ANALOG_PIN_ORDER = (
     "Iref",
     "Vcc_read",
     "Vcomp",
@@ -32,6 +32,23 @@ ANALOG_PINS = {
     "Vcc_wl_reset",
     "Vcc_set",
     "dc_bias",
+    # Keep the established analog-pin geometry above unchanged. VCC_SNEAK is
+    # allocated the next free wide met3 slot when it is added to the boundary.
+    "VCC_SNEAK",
+)
+ANALOG_PINS = set(ANALOG_PIN_ORDER)
+DUAL_INTERFACE_PORTS = {
+    "interface_sel",
+    "i_Levelsh_enable",
+    "wbs_stb_i",
+    "wbs_cyc_i",
+    "wbs_we_i",
+    "wbs_sel_i",
+    "wbs_dat_i",
+    "wbs_adr_i",
+    "wbs_dat_o",
+    "wbs_ack_o",
+    "stop_bit_i",
 }
 PROVISIONAL = "PROVISIONAL - NOT FOR LVS, TIMING SIGNOFF, FABRICATION OR TAPEOUT"
 
@@ -45,6 +62,7 @@ MET3_TRACK_PITCH = 0.68
 MET2_GDS_LAYER = 69
 MET3_GDS_LAYER = 70
 PIN_GDS_DATATYPE = 20
+REFERENCE_SIGNAL_GDS_DATATYPE = 16
 LABEL_GDS_TEXTTYPE = 5
 SIGNAL_PIN_WIDTH = 0.30
 ANALOG_PIN_WIDTH = 1.30
@@ -172,6 +190,100 @@ def reference_pin_shapes(pin_names):
     return result
 
 
+def reference_signal_locations(pin_names):
+    """Read Wishbone signal side/center hints from the released X1 GDS."""
+    data = REFERENCE_GDS.read_bytes()
+    offset = 0
+    active = None
+    shapes = {MET2_GDS_LAYER: [], MET3_GDS_LAYER: []}
+    labels = []
+    while offset < len(data):
+        length = int.from_bytes(data[offset : offset + 2], "big")
+        if length < 4 or offset + length > len(data):
+            raise RuntimeError(f"invalid reference GDS record at byte {offset}")
+        record_type = data[offset + 2]
+        payload = data[offset + 4 : offset + length]
+        if record_type in {8, 12}:  # BOUNDARY or TEXT
+            active = {
+                "type": record_type,
+                "layer": None,
+                "datatype": None,
+                "coordinates": [],
+                "text": None,
+            }
+        elif active is not None and record_type == 13:  # LAYER
+            active["layer"] = int.from_bytes(payload, "big", signed=True)
+        elif active is not None and record_type in {14, 22}:  # DATATYPE/TEXTTYPE
+            active["datatype"] = int.from_bytes(payload, "big", signed=True)
+        elif active is not None and record_type == 16:  # XY
+            values = [
+                int.from_bytes(payload[index : index + 4], "big", signed=True)
+                for index in range(0, len(payload), 4)
+            ]
+            active["coordinates"] = list(zip(values[0::2], values[1::2]))
+        elif active is not None and record_type == 25:  # STRING
+            text = payload.rstrip(b"\0").decode("ascii", errors="replace")
+            active["text"] = re.sub(r"<([0-9]+)>$", r"[\1]", text)
+        elif active is not None and record_type == 17:  # ENDEL
+            if (
+                active["type"] == 8
+                and active["layer"] in shapes
+                and active["datatype"] == REFERENCE_SIGNAL_GDS_DATATYPE
+            ):
+                xs = [point[0] for point in active["coordinates"]]
+                ys = [point[1] for point in active["coordinates"]]
+                shapes[active["layer"]].append(
+                    (min(xs), min(ys), max(xs), max(ys))
+                )
+            elif (
+                active["type"] == 12
+                and active["layer"] in shapes
+                and active["datatype"] == LABEL_GDS_TEXTTYPE
+                and active["text"] in pin_names
+            ):
+                labels.append(
+                    (
+                        active["text"],
+                        active["layer"],
+                        active["coordinates"][0],
+                    )
+                )
+            active = None
+        offset += length
+
+    result = {}
+    width_dbu = round(WIDTH * 1000)
+    height_dbu = round(HEIGHT * 1000)
+    for name, layer, (x, y) in labels:
+        containing = [
+            rect
+            for rect in shapes[layer]
+            if rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]
+        ]
+        if len(containing) != 1:
+            raise RuntimeError(
+                f"reference GDS label {name} at {(x, y)} maps to "
+                f"{len(containing)} pin shapes"
+            )
+        x1, y1, x2, y2 = containing[0]
+        if layer == MET2_GDS_LAYER and y1 == 0:
+            side = "bottom"
+            center = (x1 + x2) / 2000
+        elif layer == MET2_GDS_LAYER and y2 == height_dbu:
+            side = "top"
+            center = (x1 + x2) / 2000
+        elif layer == MET3_GDS_LAYER and x1 == 0:
+            side = "left"
+            center = (y1 + y2) / 2000
+        elif layer == MET3_GDS_LAYER and x2 == width_dbu:
+            side = "right"
+            center = (y1 + y2) / 2000
+        else:
+            raise RuntimeError(f"reference signal pin {name} is not on a boundary")
+        result[name] = {"side": side, "center": center}
+    return result
+
+
 def reference_obstructions():
     """Read routing obstructions from the matching released X1 Wishbone LEF."""
     text = REFERENCE_LEF.read_text(errors="replace")
@@ -200,17 +312,14 @@ def reference_obstructions():
     return shapes
 
 
-def pin_geometry(ports, power_shapes):
+def pin_geometry(ports, power_shapes, reference_signals):
     """Place pins deterministically on direction-correct routing tracks."""
     geometry = {}
     port_directions = dict(ports)
 
-    def snap_to_track(position, origin, pitch):
-        track = round((position - origin) / pitch)
-        return round(origin + track * pitch, 3)
-
     # Reuse the distributed power-access geometry from the released X1
     # Wishbone GDS instead of inventing a synthetic one-strap network.
+    occupied_met2 = {"bottom": [], "top": []}
     occupied_met3 = {"left": [], "right": []}
     for name in POWER_PINS:
         shapes = []
@@ -255,10 +364,85 @@ def pin_geometry(ports, power_shapes):
                 return center
         raise RuntimeError(f"could not place a met3 pin near Y={ideal_position}")
 
+    def available_met2_center(ideal_position, side, pin_width):
+        base_track = round((ideal_position - MET2_TRACK_ORIGIN) / MET2_TRACK_PITCH)
+        offsets = [0]
+        for offset in range(1, 600):
+            offsets.extend((offset, -offset))
+        for offset in offsets:
+            center = round(MET2_TRACK_ORIGIN + (base_track + offset) * MET2_TRACK_PITCH, 3)
+            low = center - pin_width / 2
+            high = center + pin_width / 2
+            if low < margin or high > WIDTH - margin:
+                continue
+            if all(
+                high + MET3_PIN_CLEARANCE <= used_low
+                or low - MET3_PIN_CLEARANCE >= used_high
+                for used_low, used_high in occupied_met2[side]
+            ):
+                occupied_met2[side].append((low, high))
+                return center
+        raise RuntimeError(f"could not place a met2 pin near X={ideal_position}")
+
+    def place_signal(name, direction, side, ideal_position):
+        if side in {"bottom", "top"}:
+            layer = "met2"
+            gds_layer = MET2_GDS_LAYER
+            position = available_met2_center(
+                ideal_position, side, SIGNAL_PIN_WIDTH
+            )
+            if side == "bottom":
+                rect = (
+                    position - SIGNAL_PIN_WIDTH / 2,
+                    0.0,
+                    position + SIGNAL_PIN_WIDTH / 2,
+                    PIN_DEPTH,
+                )
+            else:
+                rect = (
+                    position - SIGNAL_PIN_WIDTH / 2,
+                    HEIGHT - PIN_DEPTH,
+                    position + SIGNAL_PIN_WIDTH / 2,
+                    HEIGHT,
+                )
+        else:
+            layer = "met3"
+            gds_layer = MET3_GDS_LAYER
+            position = available_met3_center(
+                ideal_position, side, SIGNAL_PIN_WIDTH
+            )
+            if side == "left":
+                rect = (
+                    0.0,
+                    position - SIGNAL_PIN_WIDTH / 2,
+                    PIN_DEPTH,
+                    position + SIGNAL_PIN_WIDTH / 2,
+                )
+            else:
+                rect = (
+                    WIDTH - PIN_DEPTH,
+                    position - SIGNAL_PIN_WIDTH / 2,
+                    WIDTH,
+                    position + SIGNAL_PIN_WIDTH / 2,
+                )
+        geometry[name] = {
+            "direction": direction,
+            "shapes": [{"layer": layer, "gds_layer": gds_layer, "rect": rect}],
+            "kind": "signal",
+        }
+
     # All externally driven analog biases use wide, on-grid met3 access. The
     # 1.30 um width matches the widest analog access used by the released
     # Wishbone reference and is intended to meet a matching-or-wider NDR.
-    analog_ports = [(name, direction) for name, direction in ports if name in ANALOG_PINS]
+    analog_directions = {
+        name: direction for name, direction in ports if name in ANALOG_PINS
+    }
+    if set(analog_directions) != ANALOG_PINS:
+        missing = sorted(ANALOG_PINS - set(analog_directions))
+        raise RuntimeError(f"missing analog ports: {missing}")
+    analog_ports = [
+        (name, analog_directions[name]) for name in ANALOG_PIN_ORDER
+    ]
     for index, (name, direction) in enumerate(analog_ports):
         side = "left" if index % 2 == 0 else "right"
         track = 2100 + index * 60
@@ -289,68 +473,60 @@ def pin_geometry(ports, power_shapes):
     digital_ports = [
         port for port in ports if port[0] not in POWER_PINS and port[0] not in ANALOG_PINS
     ]
+    legacy_digital_ports = [
+        port
+        for port in digital_ports
+        if port[0].split("[", 1)[0] not in DUAL_INTERFACE_PORTS
+    ]
+    extra_digital_ports = [
+        port
+        for port in digital_ports
+        if port[0].split("[", 1)[0] in DUAL_INTERFACE_PORTS
+    ]
+
+    # Preserve the established raw-interface pin geometry exactly by running
+    # the original four-side placement only over the legacy pin set.
     side_groups = [[], [], [], []]
-    for index, port in enumerate(digital_ports):
+    for index, port in enumerate(legacy_digital_ports):
         side_groups[index % 4].append(port)
 
+    side_names = ("bottom", "right", "top", "left")
     for side, group in enumerate(side_groups):
         span = (WIDTH if side in {0, 2} else HEIGHT) - 2 * margin
         pitch = span / (len(group) + 1)
         for index, (name, direction) in enumerate(group, 1):
             ideal_position = margin + index * pitch
-            if side == 0:  # bottom
-                layer = "met2"
-                gds_layer = MET2_GDS_LAYER
-                position = snap_to_track(
-                    ideal_position, MET2_TRACK_ORIGIN, MET2_TRACK_PITCH
-                )
-                rect = (
-                    position - SIGNAL_PIN_WIDTH / 2,
-                    0.0,
-                    position + SIGNAL_PIN_WIDTH / 2,
-                    PIN_DEPTH,
-                )
-            elif side == 1:  # right
-                layer = "met3"
-                gds_layer = MET3_GDS_LAYER
-                position = available_met3_center(
-                    ideal_position, "right", SIGNAL_PIN_WIDTH
-                )
-                rect = (
-                    WIDTH - PIN_DEPTH,
-                    position - SIGNAL_PIN_WIDTH / 2,
-                    WIDTH,
-                    position + SIGNAL_PIN_WIDTH / 2,
-                )
-            elif side == 2:  # top
-                layer = "met2"
-                gds_layer = MET2_GDS_LAYER
-                position = snap_to_track(
-                    ideal_position, MET2_TRACK_ORIGIN, MET2_TRACK_PITCH
-                )
-                rect = (
-                    position - SIGNAL_PIN_WIDTH / 2,
-                    HEIGHT - PIN_DEPTH,
-                    position + SIGNAL_PIN_WIDTH / 2,
-                    HEIGHT,
-                )
-            else:  # left
-                layer = "met3"
-                gds_layer = MET3_GDS_LAYER
-                position = available_met3_center(
-                    ideal_position, "left", SIGNAL_PIN_WIDTH
-                )
-                rect = (
-                    0.0,
-                    position - SIGNAL_PIN_WIDTH / 2,
-                    PIN_DEPTH,
-                    position + SIGNAL_PIN_WIDTH / 2,
-                )
-            geometry[name] = {
-                "direction": direction,
-                "shapes": [{"layer": layer, "gds_layer": gds_layer, "rect": rect}],
-                "kind": "signal",
-            }
+            place_signal(name, direction, side_names[side], ideal_position)
+
+    # Place the 104 Wishbone wires near their corresponding released-X1 GDS
+    # side/center locations. If an established raw pin occupies that location,
+    # move to the nearest free routing track without moving the existing pin.
+    referenced_extra_ports = [
+        port for port in extra_digital_ports if port[0] in reference_signals
+    ]
+    for name, direction in referenced_extra_ports:
+        hint = reference_signals[name]
+        place_signal(name, direction, hint["side"], hint["center"])
+
+    # interface_sel, i_Levelsh_enable and stop_bit_i are absent from the
+    # Wishbone reference. Distribute them over the four sides using the next
+    # available direction-correct tracks.
+    unreferenced_extra_ports = [
+        port for port in extra_digital_ports if port[0] not in reference_signals
+    ]
+    extra_side_groups = [[], [], [], []]
+    for index, port in enumerate(unreferenced_extra_ports):
+        extra_side_groups[index % 4].append(port)
+    for side, group in enumerate(extra_side_groups):
+        span = (WIDTH if side in {0, 2} else HEIGHT) - 2 * margin
+        pitch = span / (len(group) + 1)
+        for index, (name, direction) in enumerate(group, 1):
+            ideal_position = margin + index * pitch
+            place_signal(name, direction, side_names[side], ideal_position)
+
+    missing_geometry = sorted(set(dict(ports)) - set(geometry))
+    if missing_geometry:
+        raise RuntimeError(f"missing generated pin geometry: {missing_geometry}")
     return geometry
 
 
@@ -526,13 +702,18 @@ def write_gds(ports, geometry):
 def main():
     ports = module_ports()
     names = [name for name, _direction in ports]
-    if len(names) != 172 or len(set(names)) != 172:
-        raise RuntimeError(f"expected 172 unique expanded pins, found {len(set(names))}")
+    if len(names) != 311 or len(set(names)) != 311:
+        raise RuntimeError(f"expected 311 unique expanded pins, found {len(set(names))}")
     if not POWER_PINS.issubset(names):
         raise RuntimeError("the expected reference-derived power pins are missing")
     power_shapes = reference_pin_shapes(POWER_PINS)
+    wishbone_names = {name for name in names if name.startswith("wbs_")}
+    reference_signals = reference_signal_locations(wishbone_names)
+    if set(reference_signals) != wishbone_names:
+        missing = sorted(wishbone_names - set(reference_signals))
+        raise RuntimeError(f"Wishbone reference pins are missing: {missing}")
     obstructions = reference_obstructions()
-    geometry = pin_geometry(ports, power_shapes)
+    geometry = pin_geometry(ports, power_shapes, reference_signals)
     write_lef(ports, geometry, obstructions)
     write_liberty(ports)
     write_gds(ports, geometry)

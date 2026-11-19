@@ -10,7 +10,7 @@ routing constraints stay in the chip project repository.
 
 | Cell | Function | Interface | Release state |
 |---|---|---|---|
-| `sky130_bmlabs_reram__cim32x32` | 32 x 32 ReRAM compute-in-memory accelerator | Raw signals plus reference analog/test pins | Provisional floorplanning views; not for signoff or tapeout |
+| `sky130_bmlabs_reram__cim32x32` | 32 x 32 ReRAM compute-in-memory accelerator | Selectable raw signals or Wishbone, plus analog/test pins | Provisional floorplanning views; not for signoff or tapeout |
 | `sky130_bmlabs_reram__cim32x32wb` | 32 x 32 ReRAM compute-in-memory accelerator | 32-bit Wishbone plus analog/test pins | Released; 1910 x 2010.14 um |
 | `sky130_bmlabs_reram__nvm32x32wb` | 32 x 32 ReRAM non-volatile memory | 32-bit Wishbone plus analog/test pins | Released; 1910 x 2010.14 um |
 
@@ -24,7 +24,7 @@ consumes the IP.
 
 `sky130_bmlabs_reram__cim32x32wb` and
 `sky130_bmlabs_reram__nvm32x32wb` have complete, cross-checked
-GDS/LEF/Liberty/Verilog releases in this repository. The reserved raw-interface
+GDS/LEF/Liberty/Verilog releases in this repository. The selectable-interface
 cell has a behavioral model, testbench and Verilog header. Approximate GDS,
 LEF and Liberty placeholders are also provided for early floorplanning and
 file-flow testing only. They are not extracted or characterized views and must
@@ -76,7 +76,7 @@ python3 scripts/check_views.py
 
 The check enforces each released cell name, fixed 1910 x 2010.14 um boundary,
 required views, cross-view pin sets, LEF macro and GDS structure names. It also
-checks the raw-interface simulation views, their 167 non-power wires, five
+checks the selectable-interface simulation views, their 306 non-power wires, five
 reference-derived supply pins and the explicit provisional markings on the
 approximate physical placeholders. The scan/test and analog boundary names are
 also checked against the released Wishbone reference. All three interfaces

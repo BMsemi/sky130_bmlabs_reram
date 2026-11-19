@@ -18,6 +18,7 @@ analog nets together.
 | `Vbias` | 1.8 V analog bias |
 | `Vcc_wl_reset` | 2.6 V wordline reset rail |
 | `Vcc_set` | 3.3 V array set rail |
+| `VCC_SNEAK` | Externally driven sneak-path analog rail; use the macro-owner-approved value |
 | `dc_bias` | Externally driven; use the macro-owner-approved value |
 
 Confirm the operating values, tolerances, sequencing and source-current limits
@@ -27,11 +28,14 @@ substitutes for `VDDC1`, `VDDC2`, `VDDA1`, `VDDA2` or `VSS`.
 ## Pin and route geometry
 
 The provisional `sky130_bmlabs_reram__cim32x32` LEF/GDS uses 1.30 um-wide,
-routing-grid-aligned met3 access shapes for all ten analog pins. The chip-level
+routing-grid-aligned met3 access shapes for all eleven analog pins, including
+`VCC_SNEAK`. The chip-level
 route from each pin to its analog pad must use an NDR with a met3 width of at
 least 1.30 um; wider routing may be used when current, IR-drop or noise analysis
 requires it. Do not allow the detailed router to neck an analog connection down
-to the default digital signal width.
+to the default digital signal width. `VCC_SNEAK` is a separate analog net; do
+not short it to `Vcc_set` unless the macro owner explicitly approves that
+connection and operating value.
 
 When several macro instances share a bias source, size the shared trunk for the
 combined load and use branches that are at least as wide as the macro pin.
@@ -40,7 +44,7 @@ spacing, shielding and via arrays. The chip project owns the pad assignment,
 NDR definition and route constraints because those depend on placement and the
 number of macro instances.
 
-The provisional raw-interface views reuse the distributed met3 power-access
+The provisional selectable-interface views reuse the distributed met3 power-access
 geometry from the supplied X1 Wishbone GDS, checked into this repository as
 `sky130_bmlabs_reram__nvm32x32wb.gds`: 27 shapes for `VDDC1`, 78 for `VDDC2`,
 74 for `VDDA1`, 3 for `VDDA2` and 133 for `VSS`. Connect each network to the
@@ -61,4 +65,4 @@ Before signoff, verify that:
 3. all routes and via arrays pass DRC and extraction;
 4. voltage drop, current capacity, coupling noise and startup sequencing meet
    the macro-owner limits; and
-5. the final extracted GDS/LEF replaces the provisional raw-interface views.
+5. the final extracted GDS/LEF replaces the provisional selectable-interface views.

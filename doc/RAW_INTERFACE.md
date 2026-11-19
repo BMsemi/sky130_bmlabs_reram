@@ -1,26 +1,30 @@
-# Raw signal interface release gate
+# Selectable raw/Wishbone interface release gate
 
 `sky130_bmlabs_reram__cim32x32` is the reserved name for the X2 macro with a
-raw signal interface. It is a reusable IP name and does not identify a
-particular consuming project.
+selectable direct/raw and Wishbone interface. Drive `interface_sel` low for the
+decoded direct stream or high for the Wishbone packet interface. It is a
+reusable IP name and does not identify a particular consuming project.
 
 The repository contains the supplied behavioral model, its testbench and a
 matching Verilog header. Its external boundary uses the same scan/test names
-and ten analog pin names as the released X2 Wishbone macro. After expanding
-buses, the cell has 167 non-power wires and five optional supply ports under
-`USE_POWER_PINS` (`VDDC1`, `VDDC2`, `VDDA1`, `VDDA2` and `VSS`), for 49 port
-declarations and 172 physical pins in total.
+and ten analog pin names as the released X2 Wishbone macro, plus the raw-macro
+`VCC_SNEAK` analog pin. The physical boundary also includes `interface_sel`,
+`i_Levelsh_enable`, the complete Wishbone bus and `stop_bit_i[31:0]`. After
+expanding buses, the cell has 306 non-power wires
+and five optional supply ports under `USE_POWER_PINS` (`VDDC1`, `VDDC2`,
+`VDDA1`, `VDDA2` and `VSS`), for 61 port declarations and 311 physical pins in
+total.
 
 The shared scan/test boundary is `ScanInCC`, `ScanInDL`, `ScanInDR`, `TM` and
 `ScanOutCC`. The shared analog boundary is `Iref`, `Vcc_read`, `Vcomp`,
-`Bias_comp2`, `Vcc_wl_read`, `Vcc_wl_set`, `Vbias`, `Vcc_wl_reset`, `Vcc_set`
-and `dc_bias`. These analog inouts are interface-only in the digital behavioral
-model; their electrical effects are not simulated.
+`Bias_comp2`, `Vcc_wl_read`, `Vcc_wl_set`, `Vbias`, `Vcc_wl_reset`, `Vcc_set`,
+`VCC_SNEAK` and `dc_bias`. These analog inouts are interface-only in the
+digital behavioral model; their electrical effects are not simulated.
 
 Signoff physical views have not been supplied. The released Wishbone macro is
 `sky130_bmlabs_reram__cim32x32wb`; its 128-pin GDS, LEF and Liberty views have a
-different interface and were not copied or relabeled as this raw-interface
-cell.
+different interface and was used only as a pin-placement reference; it was not
+copied or relabeled as this selectable-interface cell.
 
 ## Available simulation views
 
@@ -33,7 +37,7 @@ cell.
 
 Approximate GDS, LEF and Liberty files are provided to support early
 floorplanning and file-flow testing. They use the released X2 boundary of
-1910 x 2010.14 um, 167 non-power wires and the five reference-derived supply
+1910 x 2010.14 um, 306 non-power wires and the five reference-derived supply
 pins.
 
 - The GDS contains only a macro boundary and synthetic perimeter pin shapes and
@@ -41,7 +45,7 @@ pins.
 - The LEF uses the same boundary and synthetic, routing-grid-aligned perimeter
   pins. North/south pins are on vertical met2 tracks (`X = 0.23 + N*0.46 um`),
   while west/east pins are on horizontal met3 tracks
-  (`Y = 0.34 + N*0.68 um`). All ten analog pins have 1.30 um-wide met3 access
+  (`Y = 0.34 + N*0.68 um`). All eleven analog pins have 1.30 um-wide met3 access
   for matching-or-wider NDR routes to analog pads. The five supplies reuse the
   supplied X1 Wishbone GDS's distributed met3 power-access geometry rather
   than a single synthetic strap per net. The supplied GDS and the checked-in
@@ -52,6 +56,10 @@ pins.
   the macro on layers that may contain internal wiring. These shapes are not
   an electrical-sufficiency guarantee or approved signoff geometry; see
   `ANALOG_ROUTING.md` and `POWER_PINS.md` for integration requirements.
+  The 104 Wishbone wires use the released X1 GDS pin sides and centers as
+  placement hints, moving to the nearest free routing track when an established
+  direct-interface pin occupies that location. The 32 stop inputs and two
+  interface-control pins use remaining direction-correct perimeter tracks.
 - The Liberty file is an uncharacterized interface shell with no timing arcs
   and `dont_use : true`.
 
@@ -67,7 +75,7 @@ matching released X1 LEF and checked for exact agreement by the validator.
 
 ## Required work before release
 
-1. Provide the physical raw-interface implementation and its approved power-pin
+1. Provide the physical selectable-interface implementation and its approved power-pin
    specification.
 2. Generate GDS and LEF from that implementation with approved pin placement.
 3. Characterize a matching Liberty view rather than copying the Wishbone view.
@@ -78,5 +86,5 @@ matching released X1 LEF and checked for exact agreement by the validator.
 Until those checks pass, the physical placeholders are for early integration
 only. Consumers that require a qualified physical macro must use the
 `sky130_bmlabs_reram__cim32x32wb` release. The provisional files must be
-replaced, not promoted, when extracted and characterized raw-interface views
+replaced, not promoted, when extracted and characterized selectable-interface views
 become available.

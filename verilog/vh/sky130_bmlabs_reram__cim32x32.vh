@@ -13,6 +13,10 @@ module sky130_bmlabs_reram__cim32x32 (
   inout  wire         VSS,
 `endif
 
+  // Interface ownership and level-shifter control
+  input  wire         interface_sel,
+  input  wire         i_Levelsh_enable,
+
   // Clock and reset
   input  wire         clk_i,
   input  wire         rst_i,
@@ -51,6 +55,19 @@ module sky130_bmlabs_reram__cim32x32 (
   input  wire         i_result_ready,
   output wire [20:0]  o_result_data,
   output wire         o_result_last,
+
+  // Wishbone packet interface; active when interface_sel is high
+  input  wire         wbs_stb_i,
+  input  wire         wbs_cyc_i,
+  input  wire         wbs_we_i,
+  input  wire [3:0]   wbs_sel_i,
+  input  wire [31:0]  wbs_dat_i,
+  input  wire [31:0]  wbs_adr_i,
+  output wire [31:0]  wbs_dat_o,
+  output wire         wbs_ack_o,
+
+  // Physical TDC stop inputs
+  input  wire [31:0]  stop_bit_i,
 
   // Scan and test pins
   input  wire         ScanInCC,

@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- Expanded `sky130_bmlabs_reram__cim32x32` to a 311-pin selectable-interface
+  boundary matching the complete behavioral module: direct/raw signals,
+  `interface_sel`, `i_Levelsh_enable`, the 104-wire Wishbone interface and
+  `stop_bit_i[31:0]`. All 173 previously exposed pin geometries are preserved;
+  Wishbone placement uses the released X1 GDS as a side/center reference.
+- Added the raw-interface `VCC_SNEAK` analog inout consistently to the Verilog
+  header, behavioral model, provisional GDS/LEF/Liberty views, manifest,
+  documentation and validators. Its 1.30 um-wide met3 access uses the next free
+  routing-grid-aligned analog slot without moving any existing pin.
+- Clarified all four CIM command encodings and the synthesizable controller's
+  SET-readback-RESET-readback sequence.
 - Changed all ten analog pins to `inout` consistently in the Verilog header,
   behavioral model, LEF and Liberty views of both released Wishbone IPs.
 - Replaced the raw macro's one-strap-per-net power geometry with the released
@@ -32,9 +43,11 @@
   released X2 boundary, synthetic perimeter pin placement and an
   uncharacterized `dont_use` Liberty shell. These views are explicitly limited
   to floorplanning and file-flow testing and are not signoff or tapeout views.
-- Aligned the raw cell's external scan/test names and ten analog boundary pins
-  with the released X2 Wishbone reference. The resulting interface has 167
-  non-power wires plus five reference-derived power pins. Qualified physical
+- Aligned the raw cell's external scan/test names and ten shared analog boundary
+  pins with the released X2 Wishbone reference, plus the raw-only `VCC_SNEAK`
+  analog pin. The resulting interface originally had 168 non-power wires; the
+  selectable dual interface now has 306 non-power wires plus five
+  reference-derived power pins. Qualified physical
   views remain gated because the released
   Wishbone GDS/LEF/Liberty has a different 128-pin interface and must not be
   copied or relabeled.

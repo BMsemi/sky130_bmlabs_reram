@@ -19,15 +19,18 @@ LEGACY_NAME_PATTERNS = {
 WIDTH = 1910.0
 HEIGHT = 2010.14
 PIN_COUNT = 128
-RAW_PORT_COUNT = 49
-RAW_WIRE_COUNT = 172
-RAW_FUNCTIONAL_PORT_COUNT = 44
-RAW_FUNCTIONAL_WIRE_COUNT = 167
+RAW_PORT_COUNT = 61
+RAW_WIRE_COUNT = 311
+RAW_FUNCTIONAL_PORT_COUNT = 56
+RAW_FUNCTIONAL_WIRE_COUNT = 306
+RAW_BEHAVIORAL_PORT_COUNT = 61
 RAW_SCAN_PORT_COUNT = 5
-RAW_ANALOG_PORT_COUNT = 10
+RAW_ANALOG_PORT_COUNT = 11
+RAW_WISHBONE_WIRE_COUNT = 104
+RAW_STOP_WIRE_COUNT = 32
 RAW_POWER_PINS = {"VDDC1", "VDDC2", "VDDA1", "VDDA2", "VSS"}
 RAW_SCAN_PINS = {"ScanInCC", "ScanInDL", "ScanInDR", "TM", "ScanOutCC"}
-RAW_ANALOG_PINS = {
+REFERENCE_ANALOG_PINS = {
     "Iref",
     "Vcc_read",
     "Vcomp",
@@ -39,10 +42,12 @@ RAW_ANALOG_PINS = {
     "Vcc_set",
     "dc_bias",
 }
+RAW_ANALOG_PINS = REFERENCE_ANALOG_PINS | {"VCC_SNEAK"}
 RAW_STATUS = "provisional-integration-only-awaiting-signoff-views"
 MET2_GDS_LAYER = 69
 MET3_GDS_LAYER = 70
 PIN_GDS_DATATYPE = 20
+REFERENCE_SIGNAL_GDS_DATATYPE = 16
 LABEL_GDS_TEXTTYPE = 5
 MET2_TRACK_ORIGIN = 0.23
 MET2_TRACK_PITCH = 0.46
@@ -80,6 +85,10 @@ EXPECTED_RAW_ROUTING_CONSTRAINTS = {
     "power_geometry_source_view": "gds",
     "power_access_layer": "met3",
     "power_access_shape_counts": RAW_POWER_SHAPE_COUNTS,
+    "wishbone_geometry_reference": NVM_NAME,
+    "wishbone_geometry_source_view": "gds",
+    "wishbone_wire_count": 104,
+    "preserved_existing_pin_count": 173,
     "obstruction_reference": NVM_NAME,
     "obstruction_source_view": "lef",
     "obstruction_layers": EXPECTED_OBSTRUCTION_LAYERS,
@@ -274,6 +283,28 @@ def validate_perimeter_shapes(errors, view_name, layer, rectangles, scale=1.0):
                 errors.append(f"{view_name} met3 pin center is off the Y routing grid: {rect}")
 
 
+def validate_no_cross_net_pin_overlaps(errors, view_name, pin_details):
+    shapes = [
+        (pin, layer, rect)
+        for pin, detail in pin_details.items()
+        for layer, rect in detail["shapes"]
+    ]
+    for index, (pin, layer, rect) in enumerate(shapes):
+        x1, y1, x2, y2 = rect
+        for other_pin, other_layer, other_rect in shapes[index + 1 :]:
+            if pin == other_pin or layer != other_layer:
+                continue
+            ox1, oy1, ox2, oy2 = other_rect
+            if (
+                min(x2, ox2) - max(x1, ox1) > 1e-9
+                and min(y2, oy2) - max(y1, oy1) > 1e-9
+            ):
+                errors.append(
+                    f"{view_name} pin shapes overlap on {layer}: "
+                    f"{pin} {rect} and {other_pin} {other_rect}"
+                )
+
+
 def read_gds(path):
     data = path.read_bytes()
     offset = 0
@@ -366,7 +397,8 @@ def gds_labeled_rectangles(
             ]
             active["coordinates"] = list(zip(values[0::2], values[1::2]))
         elif active is not None and record_type == 25:
-            active["text"] = payload.rstrip(b"\0").decode("ascii", errors="replace")
+            text = payload.rstrip(b"\0").decode("ascii", errors="replace")
+            active["text"] = re.sub(r"<([0-9]+)>$", r"[\1]", text)
         elif active is not None and record_type == 17:
             if (
                 active["type"] == 8
@@ -473,7 +505,9 @@ if len(raw_entries) == 1:
     if raw_entry.get("reference_scan_ports") != RAW_SCAN_PORT_COUNT:
         errors.append(f"{RAW_NAME} manifest must record five reference scan ports")
     if raw_entry.get("reference_analog_ports") != RAW_ANALOG_PORT_COUNT:
-        errors.append(f"{RAW_NAME} manifest must record ten reference analog ports")
+        errors.append(
+            f"{RAW_NAME} manifest must record {RAW_ANALOG_PORT_COUNT} analog ports"
+        )
     if raw_entry.get("optional_power_ports") != len(RAW_POWER_PINS):
         errors.append(f"{RAW_NAME} manifest must record five optional power ports")
     if raw_entry.get("physical_routing_constraints") != EXPECTED_RAW_ROUTING_CONSTRAINTS:
@@ -536,15 +570,39 @@ if len(raw_entries) == 1:
                 errors.append(f"{RAW_NAME} is missing reference scan/test pins")
             if not RAW_ANALOG_PINS.issubset(raw_header_ports):
                 errors.append(f"{RAW_NAME} is missing reference analog pins")
+            raw_wishbone_pins = {
+                pin for pin in raw_header_ports if pin.startswith("wbs_")
+            }
+            raw_stop_pins = {
+                pin for pin in raw_header_ports if pin.startswith("stop_bit_i[")
+            }
+            if len(raw_wishbone_pins) != RAW_WISHBONE_WIRE_COUNT:
+                errors.append(
+                    f"{RAW_NAME} expected {RAW_WISHBONE_WIRE_COUNT} Wishbone wires, "
+                    f"found {len(raw_wishbone_pins)}"
+                )
+            if len(raw_stop_pins) != RAW_STOP_WIRE_COUNT:
+                errors.append(
+                    f"{RAW_NAME} expected {RAW_STOP_WIRE_COUNT} stop_bit_i wires, "
+                    f"found {len(raw_stop_pins)}"
+                )
+            for control_pin in ("interface_sel", "i_Levelsh_enable"):
+                if control_pin not in raw_header_ports:
+                    errors.append(f"{RAW_NAME} is missing {control_pin}")
             legacy_raw_scan = {"i_scan_si1", "i_scan_se1", "i_TM", "o_TM"}
             if legacy_raw_scan & raw_header_ports:
                 errors.append(f"{RAW_NAME} still exposes legacy raw scan names")
-        if (
-            raw_header_directions is not None
-            and raw_behavioral_directions is not None
-            and raw_header_directions != raw_behavioral_directions
-        ):
-            errors.append(f"{RAW_NAME} header and behavioral port directions differ")
+        if raw_header_directions is not None and raw_behavioral_directions is not None:
+            mismatched_directions = sorted(
+                pin
+                for pin, direction in raw_header_directions.items()
+                if raw_behavioral_directions.get(pin) != direction
+            )
+            if mismatched_directions:
+                errors.append(
+                    f"{RAW_NAME} header and behavioral directions differ for "
+                    f"{mismatched_directions}"
+                )
         for pin in sorted(RAW_ANALOG_PINS):
             if raw_header_directions and raw_header_directions.get(pin) != "inout":
                 errors.append(f"{RAW_NAME} header analog pin {pin} must be inout")
@@ -568,13 +626,17 @@ if len(raw_entries) == 1:
         ]
         if any(index < 0 for index in scan_order) or scan_order != sorted(scan_order):
             errors.append(f"{RAW_NAME} scan/test pin order is not synchronized")
-        for view_name, declarations in {
-            "Verilog header": raw_header_declarations,
-            "behavioral model": raw_behavioral_declarations,
-        }.items():
-            if declarations is not None and len(declarations) != RAW_PORT_COUNT:
+        for view_name, declarations, expected_count in (
+            ("Verilog header", raw_header_declarations, RAW_PORT_COUNT),
+            (
+                "behavioral model",
+                raw_behavioral_declarations,
+                RAW_BEHAVIORAL_PORT_COUNT,
+            ),
+        ):
+            if declarations is not None and len(declarations) != expected_count:
                 errors.append(
-                    f"{RAW_NAME} {view_name} expected {RAW_PORT_COUNT} declared "
+                    f"{RAW_NAME} {view_name} expected {expected_count} declared "
                     f"ports, found {len(declarations)}"
                 )
 
@@ -611,6 +673,9 @@ if len(raw_entries) == 1:
             raw_liberty_text = provisional_paths["liberty"].read_text(errors="replace")
             raw_lef_details = lef_pin_details(raw_lef_text)
             raw_liberty_directions = liberty_pin_directions(raw_liberty_text)
+            validate_no_cross_net_pin_overlaps(
+                errors, f"{RAW_NAME} provisional LEF", raw_lef_details
+            )
             if "PROVISIONAL" not in raw_lef_text:
                 errors.append(f"{RAW_NAME} LEF lacks its provisional warning")
             if "PROVISIONAL" not in raw_liberty_text:
@@ -671,6 +736,50 @@ if len(raw_entries) == 1:
             except ValueError as error:
                 errors.append(f"{NVM_NAME} GDS pin mapping failed: {error}")
                 reference_gds_pins = {}
+            try:
+                reference_signal_pins = gds_labeled_rectangles(
+                    reference_gds_path,
+                    MET2_GDS_LAYER,
+                    REFERENCE_SIGNAL_GDS_DATATYPE,
+                    LABEL_GDS_TEXTTYPE,
+                )
+            except ValueError as error:
+                errors.append(f"{NVM_NAME} signal-pin mapping failed: {error}")
+                reference_signal_pins = {}
+            for pin in sorted(
+                name for name in raw_lef_details if name.startswith("wbs_")
+            ):
+                raw_layer, raw_rect = raw_lef_details[pin]["shapes"][0]
+                reference_rectangles = reference_signal_pins.get(pin, [])
+                if len(reference_rectangles) != 1:
+                    errors.append(
+                        f"{RAW_NAME} Wishbone pin {pin} lacks one X1 GDS reference"
+                    )
+                    continue
+                reference_rect = reference_rectangles[0]
+                raw_side = (
+                    "bottom"
+                    if raw_layer == "met2" and abs(raw_rect[1]) <= 1e-6
+                    else "top"
+                    if raw_layer == "met2"
+                    else "left"
+                    if abs(raw_rect[0]) <= 1e-6
+                    else "right"
+                )
+                reference_side = (
+                    "bottom"
+                    if reference_rect[1] == 0
+                    else "top"
+                    if reference_rect[3] == round(HEIGHT * 1000)
+                    else "left"
+                    if reference_rect[0] == 0
+                    else "right"
+                )
+                if raw_side != reference_side:
+                    errors.append(
+                        f"{RAW_NAME} Wishbone pin {pin} side {raw_side} differs "
+                        f"from X1 GDS reference side {reference_side}"
+                    )
             reference_obstructions = lef_obstructions(reference_lef_text)
             raw_obstructions = lef_obstructions(raw_lef_text)
             if raw_obstructions != reference_obstructions:
@@ -886,7 +995,7 @@ for name in sorted(RELEASED_NAMES):
     if structures != [name]:
         errors.append(f"{name} GDS structure names are {structures}")
 
-    for pin in sorted(RAW_ANALOG_PINS):
+    for pin in sorted(REFERENCE_ANALOG_PINS):
         analog_directions = {
             "Verilog header": (header_directions or {}).get(pin),
             "behavioral Verilog": (behavioral_directions or {}).get(pin),
@@ -952,7 +1061,9 @@ print(
     f"PASS: {RAW_NAME} simulation interface has "
     f"{RAW_FUNCTIONAL_WIRE_COUNT} non-power wires including "
     f"{RAW_SCAN_PORT_COUNT} reference scan/test and "
-    f"{RAW_ANALOG_PORT_COUNT} reference analog pins, plus "
+    f"{RAW_ANALOG_PORT_COUNT} analog pins, "
+    f"{RAW_WISHBONE_WIRE_COUNT} Wishbone wires and "
+    f"{RAW_STOP_WIRE_COUNT} TDC stop wires, plus "
     f"{len(RAW_POWER_PINS)} power pins"
 )
 print(

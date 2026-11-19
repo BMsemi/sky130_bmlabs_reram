@@ -48,6 +48,16 @@ library (sky130_bmlabs_reram__cim32x32) {
     pg_pin (VSS) {
       pg_type : primary_ground;
     }
+    pin (interface_sel) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (i_Levelsh_enable) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
     pin (clk_i) {
       direction : input;
       capacitance : 0.01;
@@ -775,6 +785,653 @@ library (sky130_bmlabs_reram__cim32x32) {
       direction : output;
       max_capacitance : 0.10;
     }
+    pin (wbs_stb_i) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_cyc_i) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_we_i) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_sel_i[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_sel_i[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_sel_i[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_sel_i[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[31]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[30]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[29]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[28]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[27]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[26]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[25]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[24]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[23]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[22]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[21]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[20]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[19]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[18]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[17]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[16]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[15]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[14]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[13]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[12]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[11]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[10]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_i[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[31]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[30]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[29]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[28]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[27]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[26]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[25]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[24]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[23]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[22]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[21]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[20]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[19]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[18]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[17]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[16]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[15]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[14]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[13]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[12]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[11]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[10]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_adr_i[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (wbs_dat_o[31]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[30]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[29]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[28]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[27]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[26]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[25]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[24]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[23]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[22]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[21]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[20]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[19]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[18]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[17]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[16]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[15]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[14]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[13]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[12]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[11]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[10]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[9]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[8]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[7]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[6]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[5]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[4]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[3]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[2]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[1]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_dat_o[0]) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (wbs_ack_o) {
+      direction : output;
+      max_capacitance : 0.10;
+    }
+    pin (stop_bit_i[31]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[30]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[29]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[28]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[27]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[26]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[25]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[24]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[23]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[22]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[21]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[20]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[19]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[18]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[17]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[16]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[15]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[14]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[13]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[12]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[11]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[10]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[9]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[8]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[7]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[6]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[5]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[4]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[3]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[2]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[1]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
+    pin (stop_bit_i[0]) {
+      direction : input;
+      capacitance : 0.01;
+      max_transition : 0.50;
+    }
     pin (ScanInCC) {
       direction : input;
       capacitance : 0.01;
@@ -824,6 +1481,9 @@ library (sky130_bmlabs_reram__cim32x32) {
       direction : inout;
     }
     pin (Vcc_set) {
+      direction : inout;
+    }
+    pin (VCC_SNEAK) {
       direction : inout;
     }
     pin (dc_bias) {
