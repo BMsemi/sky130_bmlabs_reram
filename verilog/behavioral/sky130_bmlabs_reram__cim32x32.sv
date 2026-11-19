@@ -32,7 +32,6 @@ module sky130_bmlabs_reram__cim32x32 #(
   // Interface ownership and level-shifter control.
   input  logic        interface_sel,
   input  logic        i_Levelsh_enable,
-  output wire         o_levelsh_enable,
 
   // Shared clock and reset.  The December-2026 top wrapper connects its
   // user/Wishbone clock and reset to this common behavioral boundary.
@@ -107,12 +106,15 @@ module sky130_bmlabs_reram__cim32x32 #(
   inout  wire         Vbias,
   inout  wire         Vcc_wl_reset,
   inout  wire         Vcc_set,
+  inout  wire         VCC_SNEAK,
   inout  wire         dc_bias
 );
 
+  // CIM command-mode encoding used by both direct and Wishbone interfaces.
   localparam logic [1:0] MODE_RESET   = 2'b00;
   localparam logic [1:0] MODE_READ    = 2'b01;
   localparam logic [1:0] MODE_COMPUTE = 2'b10;
+  localparam logic [1:0] MODE_SET     = 2'b11;
 
   integer row;
 
@@ -210,9 +212,6 @@ module sky130_bmlabs_reram__cim32x32 #(
   assign o_busy = interface_sel ? wb_operation_active :
                                   (core_busy || launch_pending ||
                                    direct_compute_pending);
-  assign o_levelsh_enable = interface_sel ? wb_levelsh_enable :
-                                            i_Levelsh_enable;
-
   assign o_error       = core_error;
   assign o_error_valid = core_error_valid;
   assign o_operation_done = core_read_done || core_compute_done ||
@@ -232,7 +231,7 @@ module sky130_bmlabs_reram__cim32x32 #(
   assign ScanOutCC = ScanInCC;
   wire unused_reference_boundary_inputs = ScanInDR ^ Iref ^ Vcc_read ^ Vcomp ^
       Bias_comp2 ^ Vcc_wl_read ^ Vcc_wl_set ^ Vbias ^ Vcc_wl_reset ^
-      Vcc_set ^ dc_bias ^ core_tm_status;
+      Vcc_set ^ VCC_SNEAK ^ dc_bias ^ core_tm_status;
 
   always_ff @(posedge clk_i) begin
     if (rst_i) begin
@@ -499,6 +498,7 @@ module sky130_bmlabs_reram__cim32x32_wb_adapter (
 
   localparam logic [31:0] WB_DATA_ADDR    = 32'h3000_0004;
   localparam logic [31:0] EMPTY_READ_WORD = 32'hA000_0000;
+  // CIM command-mode encoding carried in command packet bits [31:30].
   localparam logic [1:0]  MODE_RESET      = 2'b00;
   localparam logic [1:0]  MODE_READ       = 2'b01;
   localparam logic [1:0]  MODE_COMPUTE    = 2'b10;
@@ -947,6 +947,7 @@ module sky130_bmlabs_reram__cim32x32_internal_core #(
   output logic        o_start
 );
 
+  // CIM command-mode encoding used by the shared operation engine.
   localparam logic [1:0] MODE_RESET   = 2'b00;
   localparam logic [1:0] MODE_READ    = 2'b01;
   localparam logic [1:0] MODE_COMPUTE = 2'b10;
@@ -1593,7 +1594,10 @@ module sky130_bmlabs_reram__cim32x32_internal_core #(
           o_pwm_dac_outp[row] = command_pwm;
       end
 
-      case (functional_mode)
+      // SET/RESET switch into an automatic READ phase before returning their
+      // result. Reflect that phase on the physical mux/isolation controls.
+      case ((o_pgm_set_read_mode || o_pgm_reset_read_mode) ?
+            MODE_READ : functional_mode)
         MODE_READ,
         MODE_COMPUTE: begin
           o_mux_sel   = 2'b11;

@@ -114,7 +114,6 @@ module sky130_bmlabs_reram__cim32x32_tb;
   ) dut (
     .interface_sel              (1'b0),
     .i_Levelsh_enable           (1'b1),
-    .o_levelsh_enable           (),
     .clk_i                      (clk_i),
     .rst_i                      (rst_i),
     .i_cmd_valid                (i_cmd_valid),
@@ -167,6 +166,7 @@ module sky130_bmlabs_reram__cim32x32_tb;
     .Vbias                      (Vbias),
     .Vcc_wl_reset               (Vcc_wl_reset),
     .Vcc_set                    (Vcc_set),
+    .VCC_SNEAK                  (),
     .dc_bias                    (dc_bias)
   );
 

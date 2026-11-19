@@ -69,6 +69,7 @@ module sky130_bmlabs_reram__cim32x32 (
   inout  wire         Vbias,          // 1.8 V analog bias
   inout  wire         Vcc_wl_reset,   // 2.6 V wordline reset rail
   inout  wire         Vcc_set,        // 3.3 V array set rail
+  inout  wire         VCC_SNEAK,      // external analog sneak-path supply/bias
   inout  wire         dc_bias         // externally driven; value is design-specific
 );
 endmodule

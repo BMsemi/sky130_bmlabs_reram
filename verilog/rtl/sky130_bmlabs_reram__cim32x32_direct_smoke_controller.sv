@@ -88,8 +88,13 @@ module sky130_bmlabs_reram__cim32x32_direct_smoke_controller #(
   output logic [2:0]  result_count_o
 );
 
-  localparam logic [1:0] MODE_RESET = 2'b00;
-  localparam logic [1:0] MODE_SET   = 2'b11;
+  // CIM command-mode encoding. This controller transmits MODE_SET followed by
+  // MODE_RESET. It does not transmit MODE_READ: each programming command
+  // automatically returns its readback on the result channel.
+  localparam logic [1:0] MODE_RESET   = 2'b00;
+  localparam logic [1:0] MODE_READ    = 2'b01;
+  localparam logic [1:0] MODE_COMPUTE = 2'b10;
+  localparam logic [1:0] MODE_SET     = 2'b11;
 
   localparam integer TIMEOUT_WIDTH =
       (TIMEOUT_CYCLES < 2) ? 1 : $clog2(TIMEOUT_CYCLES);

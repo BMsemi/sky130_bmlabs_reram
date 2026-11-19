@@ -40,7 +40,6 @@ module sky130_bmlabs_reram__cim32x32_direct_smoke_controller_tb;
   wire [20:0] reset_auto_result_o;
   wire [2:0] accepted_count_o;
   wire [2:0] result_count_o;
-
   sky130_bmlabs_reram__cim32x32_direct_smoke_controller #(
     .TIMEOUT_CYCLES(2000)
   ) controller (
@@ -54,7 +53,6 @@ module sky130_bmlabs_reram__cim32x32_direct_smoke_controller_tb;
   ) cim (
     .interface_sel(interface_sel),
     .i_Levelsh_enable(cim_i_Levelsh_enable),
-    .o_levelsh_enable(),
     .clk_i(clk_i),
     .rst_i(rst_i),
     .i_cmd_valid(cim_i_cmd_valid),
@@ -107,6 +105,7 @@ module sky130_bmlabs_reram__cim32x32_direct_smoke_controller_tb;
     .Vbias(),
     .Vcc_wl_reset(),
     .Vcc_set(),
+    .VCC_SNEAK(),
     .dc_bias()
   );
 

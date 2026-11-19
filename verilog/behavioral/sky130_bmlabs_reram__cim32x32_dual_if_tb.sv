@@ -15,7 +15,6 @@ module sky130_bmlabs_reram__cim32x32_dual_if_tb;
 
   logic interface_sel = 1'b0;
   logic i_Levelsh_enable = 1'b0;
-  wire  o_levelsh_enable;
 
   logic       i_cmd_valid = 1'b0;
   wire        o_cmd_ready;
@@ -73,7 +72,6 @@ module sky130_bmlabs_reram__cim32x32_dual_if_tb;
   ) dut (
     .interface_sel(interface_sel),
     .i_Levelsh_enable(i_Levelsh_enable),
-    .o_levelsh_enable(o_levelsh_enable),
     .clk_i(clk_i),
     .rst_i(rst_i),
     .i_cmd_valid(i_cmd_valid),
@@ -126,6 +124,7 @@ module sky130_bmlabs_reram__cim32x32_dual_if_tb;
     .Vbias(),
     .Vcc_wl_reset(),
     .Vcc_set(),
+    .VCC_SNEAK(),
     .dc_bias()
   );
 
@@ -273,8 +272,6 @@ module sky130_bmlabs_reram__cim32x32_dual_if_tb;
 
     check(o_cmd_ready && !wbs_ack_o,
           "direct mode owns the raw command boundary");
-    check(o_levelsh_enable == i_Levelsh_enable,
-          "direct mode passes through i_Levelsh_enable");
 
     raw_command(MODE_SET, 5'd2, 5'd3, 8'd5, raw_set_result);
     check(raw_set_result[20:19] == MODE_SET &&
@@ -291,9 +288,6 @@ module sky130_bmlabs_reram__cim32x32_dual_if_tb;
     wb_cfg3 = {2'd2, 2'b00, 1'b1, 7'd63, 10'd2, 10'd1};
     wb_write(wb_cfg3);
     repeat (10) @(negedge clk_i);
-    check(o_levelsh_enable == 1'b1,
-          "Wishbone configuration controls level-shifter enable");
-
     wb_write(packet(MODE_READ, 5'd2, 5'd3, 1'b0, 1'b0, 8'd0));
     wb_wait_result(wb_result);
     check(wb_result[20:19] == MODE_READ && wb_result[18:14] == 5'd3,
