@@ -2,12 +2,18 @@
 
 ## Unreleased
 
+- Replaced the ten shared raw-X2 analog pin placeholders with the exact met3
+  access rectangles from the released `Neuromorphic_X1_wb.gds` reference
+  (stored locally as `sky130_bmlabs_reram__nvm32x32wb.gds`). The X2-only
+  `VCC_SNEAK` pin retains its provisional met3 access.
+- Moved all five scan/test pins to the bottom met2 boundary while preserving
+  the existing 290 ordinary digital-pin rectangles.
 - Expanded `sky130_bmlabs_reram__cim32x32` to a 311-pin selectable-interface
   boundary matching the complete behavioral module: direct/raw signals,
   `interface_sel`, `i_Levelsh_enable`, the 104-wire Wishbone interface and
   `stop_bit_i[31:0]`. All 290 ordinary digital signals are now placed on met2
-  along the bottom boundary. The existing five scan/test pins, eleven analog
-  pins and distributed power-access geometry remain unchanged.
+  along the bottom boundary. The distributed power-access geometry remains
+  unchanged.
 - Added the raw-interface `VCC_SNEAK` analog inout consistently to the Verilog
   header, behavioral model, provisional GDS/LEF/Liberty views, manifest,
   documentation and validators. Its 1.30 um-wide met3 access uses the next free
@@ -20,8 +26,8 @@
   X1 Wishbone GDS reference's 315 distributed met3 power-access shapes, and
   copied the matching X1 LEF's li1/met1/met2/met3/met4 obstruction pattern into
   the provisional raw LEF.
-- Retained 1.30 um-wide, routing-grid-aligned met3 access for the raw-interface
-  analog pins.
+- Retained 1.30 um-wide met3 access for the raw-only `VCC_SNEAK` pin; the ten
+  shared analog pins now use their released X1 reference rectangles.
 - Documented that every analog bias pin connects to an analog pad or approved
   external source and requires a matching-or-wider NDR, including guidance for
   shared trunks when multiple macro instances are used.
@@ -31,9 +37,8 @@
   first, section comments, aligned scan-pin ordering and bidirectional analog
   pins; removed header-only behavioral parameters and the obsolete missing-view
   comment.
-- Regenerated the provisional raw-interface LEF and GDS so north/south pins use
-  met2 and west/east pins use met3, with pin centers snapped to the SKY130
-  routing grids.
+- Regenerated the provisional raw-interface LEF and GDS so all ordinary digital
+  and scan/test pins use bottom-boundary met2 tracks snapped to the SKY130 grid.
 - Removed the behavioral-only `TM_o` output from
   `sky130_bmlabs_reram__cim32x32wb`; it is absent from the released physical
   and Verilog-header interfaces. The common scan/test interface retains `TM` and
@@ -41,7 +46,8 @@
 - Added the supplied `sky130_bmlabs_reram__cim32x32` raw-interface behavioral
   model, self-checking testbench and matching integration shell.
 - Added reproducible provisional GDS, LEF and Liberty placeholders using the
-  released X2 boundary, synthetic perimeter pin placement and an
+  released X2 boundary, synthetic digital pin placement, reference-derived
+  analog and power access, and an
   uncharacterized `dont_use` Liberty shell. These views are explicitly limited
   to floorplanning and file-flow testing and are not signoff or tapeout views.
 - Aligned the raw cell's external scan/test names and ten shared analog boundary

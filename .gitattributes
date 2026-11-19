@@ -1,0 +1,4 @@
+* text=auto eol=lf
+
+# Physical layout streams are binary and must never be line-ending normalized.
+*.gds binary

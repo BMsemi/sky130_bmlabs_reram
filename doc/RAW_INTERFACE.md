@@ -23,8 +23,9 @@ digital behavioral model; their electrical effects are not simulated.
 
 Signoff physical views have not been supplied. The released Wishbone macro is
 `sky130_bmlabs_reram__cim32x32wb`; its 128-pin GDS, LEF and Liberty views have a
-different interface and was used only as a pin-placement reference; it was not
-copied or relabeled as this selectable-interface cell.
+different interface and was not copied or relabeled as this selectable-interface
+cell. The ten shared analog access geometries instead come from the released X1
+`Neuromorphic_X1_wb.gds` reference.
 
 ## Available simulation views
 
@@ -40,26 +41,27 @@ floorplanning and file-flow testing. They use the released X2 boundary of
 1910 x 2010.14 um, 306 non-power wires and the five reference-derived supply
 pins.
 
-- The GDS contains only a macro boundary and synthetic perimeter pin shapes and
-  labels. It does not contain the real internal device or routing geometry.
-- The LEF uses the same boundary and synthetic, routing-grid-aligned perimeter
-  pins. North/south pins are on vertical met2 tracks (`X = 0.23 + N*0.46 um`),
-  while west/east pins are on horizontal met3 tracks
-  (`Y = 0.34 + N*0.68 um`). All eleven analog pins have 1.30 um-wide met3 access
-  for matching-or-wider NDR routes to analog pads. The five supplies reuse the
-  supplied X1 Wishbone GDS's distributed met3 power-access geometry rather
-  than a single synthetic strap per net. The supplied GDS and the checked-in
-  `sky130_bmlabs_reram__nvm32x32wb.gds` have identical records except for the
-  renamed top structure. The matching released X1 LEF provides the reference
+- The GDS contains the macro boundary, synthetic bottom signal access, copied
+  X1 analog and power access, and labels. It does not contain the real internal
+  device or routing geometry.
+- The LEF places all 290 ordinary digital signals and all five scan/test signals
+  on vertical met2 tracks along the bottom boundary
+  (`X = 0.23 + N*0.46 um`). The ten shared analog pins use the exact met3
+  rectangles from the supplied `Neuromorphic_X1_wb.gds`; pins with multiple
+  access rectangles preserve every reference shape. `VCC_SNEAK` has a separate
+  provisional 1.30 um-wide met3 access because it is absent from the X1
+  reference. The five supplies reuse that X1 GDS's distributed met3
+  power-access geometry rather than a single synthetic strap per net. The
+  source GDS and the checked-in `sky130_bmlabs_reram__nvm32x32wb.gds` have
+  identical pin geometry; only the top structure is renamed. The matching
+  released X1 LEF provides the reference
   obstruction pattern: full-macro obstructions on li1 through met3 and the
   internal met4 obstruction. This prevents the detailed router from crossing
   the macro on layers that may contain internal wiring. These shapes are not
   an electrical-sufficiency guarantee or approved signoff geometry; see
   `ANALOG_ROUTING.md` and `POWER_PINS.md` for integration requirements.
-  The 104 Wishbone wires use the released X1 GDS pin sides and centers as
-  placement hints, moving to the nearest free routing track when an established
-  direct-interface pin occupies that location. The 32 stop inputs and two
-  interface-control pins use remaining direction-correct perimeter tracks.
+  The three scan/test pins that were previously on other sides are moved to
+  free bottom tracks without moving the existing 290 ordinary digital pins.
 - The Liberty file is an uncharacterized interface shell with no timing arcs
   and `dont_use : true`.
 
@@ -69,9 +71,10 @@ signoff, fabrication or tapeout. Regenerate them deterministically with
 
 The supplied X1 GDS is an abstract pin view: it has met2/met3 pin shapes,
 labels and boundaries but no internal li1/met1/met4 routing geometry. It can
-therefore provide the distributed power-pin shapes, but it cannot by itself
-generate the required internal routing obstructions. Those are copied from the
-matching released X1 LEF and checked for exact agreement by the validator.
+therefore provide the shared analog and distributed power-pin shapes, but it
+cannot by itself generate the required internal routing obstructions. Those
+are copied from the matching released X1 LEF and checked for exact agreement by
+the validator.
 
 ## Required work before release
 

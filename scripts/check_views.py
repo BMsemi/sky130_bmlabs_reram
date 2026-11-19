@@ -53,7 +53,7 @@ MET2_TRACK_ORIGIN = 0.23
 MET2_TRACK_PITCH = 0.46
 MET3_TRACK_ORIGIN = 0.34
 MET3_TRACK_PITCH = 0.68
-RAW_ANALOG_PIN_WIDTH = 1.30
+RAW_ONLY_ANALOG_MIN_WIDTH = 1.30
 RAW_POWER_SHAPE_COUNTS = {
     "VDDC1": 27,
     "VDDC2": 78,
@@ -61,12 +61,17 @@ RAW_POWER_SHAPE_COUNTS = {
     "VDDA2": 3,
     "VSS": 133,
 }
-RAW_PRESERVED_SCAN_SHAPES = {
-    "ScanInCC": ("met2", (1798.68, 0.0, 1798.98, 2.91)),
-    "ScanInDL": ("met3", (1907.09, 1940.91, 1910.0, 1941.21)),
-    "ScanInDR": ("met2", (1843.30, 2007.23, 1843.60, 2010.14)),
-    "ScanOutCC": ("met3", (0.0, 1940.91, 2.91, 1941.21)),
-    "TM": ("met2", (1844.22, 0.0, 1844.52, 2.91)),
+RAW_ANALOG_SHAPE_COUNTS = {
+    "Bias_comp2": 1,
+    "Iref": 2,
+    "Vbias": 2,
+    "Vcc_read": 3,
+    "Vcc_set": 3,
+    "Vcc_wl_read": 3,
+    "Vcc_wl_reset": 3,
+    "Vcc_wl_set": 3,
+    "Vcomp": 2,
+    "dc_bias": 1,
 }
 EXPECTED_OBSTRUCTION_LAYERS = ["li1", "met1", "met2", "met3", "met4"]
 
@@ -87,7 +92,12 @@ EXPECTED_POWER_VOLTAGE = {
 EXPECTED_RAW_ROUTING_CONSTRAINTS = {
     "analog_pad_connection_required": True,
     "analog_layer": "met3",
-    "analog_min_width_um": RAW_ANALOG_PIN_WIDTH,
+    "analog_geometry_reference": NVM_NAME,
+    "analog_geometry_source_view": "gds",
+    "analog_reference_pin_count": len(REFERENCE_ANALOG_PINS),
+    "analog_access_shape_counts": RAW_ANALOG_SHAPE_COUNTS,
+    "raw_only_analog_pin": "VCC_SNEAK",
+    "raw_only_analog_min_width_um": RAW_ONLY_ANALOG_MIN_WIDTH,
     "power_geometry_reference": NVM_NAME,
     "power_geometry_source_view": "gds",
     "power_access_layer": "met3",
@@ -95,7 +105,9 @@ EXPECTED_RAW_ROUTING_CONSTRAINTS = {
     "ordinary_digital_pin_side": "bottom",
     "ordinary_digital_layer": "met2",
     "ordinary_digital_wire_count": RAW_ORDINARY_DIGITAL_WIRE_COUNT,
-    "preserved_scan_pin_count": RAW_SCAN_PORT_COUNT,
+    "scan_pin_side": "bottom",
+    "scan_layer": "met2",
+    "scan_wire_count": RAW_SCAN_PORT_COUNT,
     "obstruction_reference": NVM_NAME,
     "obstruction_source_view": "lef",
     "obstruction_layers": EXPECTED_OBSTRUCTION_LAYERS,
@@ -760,7 +772,7 @@ if len(raw_entries) == 1:
                 if not detail["shapes"]:
                     errors.append(f"{RAW_NAME} provisional LEF pin {pin} has no shapes")
                     continue
-                if pin in RAW_POWER_PINS:
+                if pin in RAW_POWER_PINS or pin in REFERENCE_ANALOG_PINS:
                     reference_shapes = [
                         (
                             "met3",
@@ -770,13 +782,18 @@ if len(raw_entries) == 1:
                     ]
                     if set(detail["shapes"]) != set(reference_shapes):
                         errors.append(
-                            f"{RAW_NAME} supply pin {pin} geometry differs from "
+                            f"{RAW_NAME} reference-derived pin {pin} geometry differs from "
                             f"the released X1 reference"
                         )
-                    if len(detail["shapes"]) != RAW_POWER_SHAPE_COUNTS[pin]:
+                    expected_shape_count = (
+                        RAW_POWER_SHAPE_COUNTS[pin]
+                        if pin in RAW_POWER_PINS
+                        else RAW_ANALOG_SHAPE_COUNTS[pin]
+                    )
+                    if len(detail["shapes"]) != expected_shape_count:
                         errors.append(
-                            f"{RAW_NAME} supply pin {pin} has the wrong number "
-                            f"of distributed access shapes"
+                            f"{RAW_NAME} reference-derived pin {pin} has the wrong "
+                            "number of access shapes"
                         )
                 elif len(detail["shapes"]) != 1:
                     errors.append(
@@ -784,10 +801,11 @@ if len(raw_entries) == 1:
                     )
                     continue
                 if pin in RAW_SCAN_PINS:
-                    if detail["shapes"][0] != RAW_PRESERVED_SCAN_SHAPES[pin]:
+                    layer, rect = detail["shapes"][0]
+                    if layer != "met2" or abs(rect[1]) > 1e-6:
                         errors.append(
-                            f"{RAW_NAME} scan/test pin {pin} moved from its "
-                            "established geometry"
+                            f"{RAW_NAME} scan/test pin {pin} must be on the "
+                            "bottom met2 boundary"
                         )
                 elif pin not in RAW_POWER_PINS and pin not in RAW_ANALOG_PINS:
                     layer, rect = detail["shapes"][0]
@@ -801,10 +819,13 @@ if len(raw_entries) == 1:
                     if pin in RAW_ANALOG_PINS:
                         if layer != "met3":
                             errors.append(f"{RAW_NAME} analog pin {pin} must use met3")
-                        if y2 - y1 + 1e-6 < RAW_ANALOG_PIN_WIDTH:
+                        if (
+                            pin == "VCC_SNEAK"
+                            and y2 - y1 + 1e-6 < RAW_ONLY_ANALOG_MIN_WIDTH
+                        ):
                             errors.append(
-                                f"{RAW_NAME} analog pin {pin} is narrower than "
-                                f"{RAW_ANALOG_PIN_WIDTH} um"
+                                f"{RAW_NAME} raw-only analog pin {pin} is narrower "
+                                f"than {RAW_ONLY_ANALOG_MIN_WIDTH} um"
                             )
                     if pin in RAW_POWER_PINS and layer != "met3":
                         errors.append(f"{RAW_NAME} supply pin {pin} must use met3")
@@ -814,7 +835,10 @@ if len(raw_entries) == 1:
                             signal_lef_met2_rectangles.append(rect)
                     elif layer == "met3":
                         all_lef_met3_rectangles.append(rect)
-                        if pin not in RAW_POWER_PINS:
+                        if (
+                            pin not in RAW_POWER_PINS
+                            and pin not in REFERENCE_ANALOG_PINS
+                        ):
                             signal_lef_met3_rectangles.append(rect)
                     else:
                         errors.append(
@@ -871,6 +895,12 @@ if len(raw_entries) == 1:
                 for layer, rect in raw_lef_details[pin]["shapes"]
                 if layer == "met3"
             }
+            reference_analog_gds_met3 = {
+                tuple(round(value * 1000) for value in rect)
+                for pin in REFERENCE_ANALOG_PINS
+                for layer, rect in raw_lef_details[pin]["shapes"]
+                if layer == "met3"
+            }
             validate_perimeter_shapes(
                 errors,
                 f"{RAW_NAME} provisional GDS",
@@ -882,7 +912,9 @@ if len(raw_entries) == 1:
                 errors,
                 f"{RAW_NAME} provisional GDS",
                 "met3",
-                gds_met3_rectangles - power_gds_met3,
+                gds_met3_rectangles
+                - power_gds_met3
+                - reference_analog_gds_met3,
                 scale=1000.0,
             )
             if gds_met2_rectangles != expected_gds_met2:
@@ -1048,11 +1080,11 @@ print(
 )
 print(
     f"PASS: {RAW_NAME} has {RAW_ORDINARY_DIGITAL_WIRE_COUNT} ordinary digital "
-    "pins on the bottom met2 boundary; scan/test pins retain their geometry"
+    f"pins and {RAW_SCAN_PORT_COUNT} scan/test pins on the bottom met2 boundary"
 )
 print(
-    f"PASS: {RAW_NAME} analog pins use {RAW_ANALOG_PIN_WIDTH:.2f} um met3 access "
-    "and supplies use the released X1 distributed met3 access geometry"
+    f"PASS: {RAW_NAME} shared analog pins and distributed supplies use the "
+    "released X1 met3 access geometry"
 )
 print(
     f"PASS: {RAW_NAME} LEF obstructions match the released X1 reference on "

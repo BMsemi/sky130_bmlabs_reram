@@ -1,7 +1,8 @@
 # PROVISIONAL - NOT FOR LVS, TIMING SIGNOFF, FABRICATION OR TAPEOUT
 # Ordinary digital pins: south-boundary met2 X grid 0.23 + N*0.46 um.
-# Scan/test pins: preserved established met2/met3 access geometry.
-# Analog pins: 1.30 um wide met3 access for matching-or-wider NDR.
+# Scan/test pins: south-boundary met2 access.
+# Shared analog pins: exact met3 access copied from Neuromorphic_X1_wb.gds.
+# VCC_SNEAK: retained provisional X2-only met3 access.
 # Supply pins: distributed met3 access copied from the released X1 GDS.
 # OBS geometry: copied from the matching released X1 LEF.
 VERSION 5.7 ;
@@ -3624,8 +3625,8 @@ MACRO sky130_bmlabs_reram__cim32x32
     DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 1907.09 1940.91 1910 1941.21 ;
+      LAYER met2 ;
+        RECT 487.22 0 487.52 2.91 ;
     END
   END ScanInDL
   PIN ScanInDR
@@ -3633,15 +3634,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met2 ;
-        RECT 1843.3 2007.23 1843.6 2010.14 ;
+        RECT 955.04 0 955.34 2.91 ;
     END
   END ScanInDR
   PIN ScanOutCC
     DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER met3 ;
-        RECT 0 1940.91 2.91 1941.21 ;
+      LAYER met2 ;
+        RECT 1422.4 0 1422.7 2.91 ;
     END
   END ScanOutCC
   PIN TM
@@ -3657,7 +3658,11 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 0 1427.69 20 1428.99 ;
+        RECT 430.06 1471.96 744.26 1473.26 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 430.06 1473.96 744.26 1475.26 ;
     END
   END Iref
   PIN Vcc_read
@@ -3665,7 +3670,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 1890 1468.49 1910 1469.79 ;
+        RECT 929.635 1693.22 1692.84 1694.22 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 929.635 1691.22 1692.84 1692.22 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 929.635 1689.22 1692.84 1690.22 ;
     END
   END Vcc_read
   PIN Vcomp
@@ -3673,7 +3686,11 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 0 1509.29 20 1510.59 ;
+        RECT 430.06 1452.31 744.26 1453.44 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 430.06 1432.88 744.26 1434.01 ;
     END
   END Vcomp
   PIN Bias_comp2
@@ -3681,7 +3698,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 1890 1550.09 1910 1551.39 ;
+        RECT 430.06 1380.01 744.26 1381.14 ;
     END
   END Bias_comp2
   PIN Vcc_wl_read
@@ -3689,7 +3706,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 0 1590.89 20 1592.19 ;
+        RECT 216.895 1693.08 416.89 1694.08 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 216.895 1691.08 416.89 1692.08 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 216.895 1689.08 416.89 1690.08 ;
     END
   END Vcc_wl_read
   PIN Vcc_wl_set
@@ -3697,7 +3722,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 1890 1631.69 1910 1632.99 ;
+        RECT 216.895 1701.08 416.89 1702.08 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 216.895 1699.08 416.89 1700.08 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 216.895 1697.08 416.89 1698.08 ;
     END
   END Vcc_wl_set
   PIN Vbias
@@ -3705,7 +3738,11 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 0 1672.49 20 1673.79 ;
+        RECT 430.06 1479.98 744.26 1481.11 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 430.06 1478.35 744.26 1479.48 ;
     END
   END Vbias
   PIN Vcc_wl_reset
@@ -3713,7 +3750,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 1890 1713.29 1910 1714.59 ;
+        RECT 216.895 1709.22 416.89 1710.22 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 216.895 1707.22 416.89 1708.22 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 216.895 1705.22 416.89 1706.22 ;
     END
   END Vcc_wl_reset
   PIN Vcc_set
@@ -3721,7 +3766,15 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 0 1754.09 20 1755.39 ;
+        RECT 929.635 1701.22 1692.84 1702.22 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 929.635 1699.22 1692.84 1700.22 ;
+    END
+    PORT
+      LAYER met3 ;
+        RECT 929.635 1697.22 1692.84 1698.22 ;
     END
   END Vcc_set
   PIN VCC_SNEAK
@@ -3737,7 +3790,7 @@ MACRO sky130_bmlabs_reram__cim32x32
     USE SIGNAL ;
     PORT
       LAYER met3 ;
-        RECT 1890 1794.89 1910 1796.19 ;
+        RECT 430.06 1405.725 744.26 1406.855 ;
     END
   END dc_bias
   OBS

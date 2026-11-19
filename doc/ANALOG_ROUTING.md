@@ -27,15 +27,18 @@ substitutes for `VDDC1`, `VDDC2`, `VDDA1`, `VDDA2` or `VSS`.
 
 ## Pin and route geometry
 
-The provisional `sky130_bmlabs_reram__cim32x32` LEF/GDS uses 1.30 um-wide,
-routing-grid-aligned met3 access shapes for all eleven analog pins, including
-`VCC_SNEAK`. The chip-level
-route from each pin to its analog pad must use an NDR with a met3 width of at
-least 1.30 um; wider routing may be used when current, IR-drop or noise analysis
-requires it. Do not allow the detailed router to neck an analog connection down
-to the default digital signal width. `VCC_SNEAK` is a separate analog net; do
-not short it to `Vcc_set` unless the macro owner explicitly approves that
-connection and operating value.
+For the ten shared analog pins, the provisional
+`sky130_bmlabs_reram__cim32x32` LEF/GDS copies the exact met3 access rectangles
+from the released `Neuromorphic_X1_wb.gds` reference, checked into this
+repository as `sky130_bmlabs_reram__nvm32x32wb.gds`. Pins with more than one
+reference rectangle retain every access shape. The X2-only `VCC_SNEAK` pin is
+absent from that reference and retains its provisional 1.30 um-wide met3
+access. The chip-level route from each pin to its analog pad must use an NDR at
+least as wide as the selected macro access; wider routing may be used when
+current, IR-drop or noise analysis requires it. Do not allow the detailed
+router to neck an analog connection down to the default digital signal width.
+`VCC_SNEAK` is a separate analog net; do not short it to `Vcc_set` unless the
+macro owner explicitly approves that connection and operating value.
 
 When several macro instances share a bias source, size the shared trunk for the
 combined load and use branches that are at least as wide as the macro pin.
