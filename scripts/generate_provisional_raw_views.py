@@ -82,7 +82,7 @@ RAW_ONLY_ANALOG_SHAPES = {
 
 # Two scan pins are already on the bottom and retain their exact rectangles.
 # The remaining scan pins are allocated to free bottom tracks after ordinary
-# digital placement, so the existing 290 digital-pin rectangles do not move.
+# digital placement.
 PRESERVED_BOTTOM_SCAN_SHAPES = {
     "ScanInCC": ("met2", (1798.68, 0.0, 1798.98, 2.91)),
     "TM": ("met2", (1844.22, 0.0, 1844.52, 2.91)),
@@ -545,8 +545,8 @@ def write_gds(ports, geometry):
 def main():
     ports = module_ports()
     names = [name for name, _direction in ports]
-    if len(names) != 311 or len(set(names)) != 311:
-        raise RuntimeError(f"expected 311 unique expanded pins, found {len(set(names))}")
+    if len(names) != 279 or len(set(names)) != 279:
+        raise RuntimeError(f"expected 279 unique expanded pins, found {len(set(names))}")
     if not POWER_PINS.issubset(names):
         raise RuntimeError("the expected reference-derived power pins are missing")
     power_shapes = reference_pin_shapes(POWER_PINS, EXPECTED_POWER_SHAPE_COUNTS)

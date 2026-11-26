@@ -9,11 +9,20 @@ The repository contains the supplied behavioral model, its testbench and a
 matching Verilog header. Its external boundary uses the same scan/test names
 and ten analog pin names as the released X2 Wishbone macro, plus the raw-macro
 `VCC_SNEAK` analog pin. The physical boundary also includes `interface_sel`,
-`i_Levelsh_enable`, the complete Wishbone bus and `stop_bit_i[31:0]`. After
-expanding buses, the cell has 306 non-power wires
+`i_Levelsh_enable` and the complete Wishbone bus. The analog/TDC stop bus is
+internal to the macro and is not customer-visible. After expanding buses, the
+cell has 274 non-power wires
 and five optional supply ports under `USE_POWER_PINS` (`VDDC1`, `VDDC2`,
-`VDDA1`, `VDDA2` and `VSS`), for 61 port declarations and 311 physical pins in
+`VDDA1`, `VDDA2` and `VSS`), for 60 port declarations and 279 physical pins in
 total.
+
+The behavioral model includes a digital surrogate for the internal analog stop
+response used by the RTL testbenches. While the internal ramp is active, the
+selected bitline stop mask is asserted after 240 ns and is cleared immediately
+when the ramp ends or reset is asserted. The stop event is therefore generated
+inside the model; customers do not drive a `stop_bit_i` port. Result values are
+still derived from the deterministic modeled ReRAM state. Comparator-level and
+stop-edge accuracy requires AMS or extracted post-layout verification.
 
 The shared scan/test boundary is `ScanInCC`, `ScanInDL`, `ScanInDR`, `TM` and
 `ScanOutCC`. The shared analog boundary is `Iref`, `Vcc_read`, `Vcomp`,
@@ -38,13 +47,13 @@ cell. The ten shared analog access geometries instead come from the released X1
 
 Approximate GDS, LEF and Liberty files are provided to support early
 floorplanning and file-flow testing. They use the released X2 boundary of
-1910 x 2010.14 um, 306 non-power wires and the five reference-derived supply
+1910 x 2010.14 um, 274 non-power wires and the five reference-derived supply
 pins.
 
 - The GDS contains the macro boundary, synthetic bottom signal access, copied
   X1 analog and power access, and labels. It does not contain the real internal
   device or routing geometry.
-- The LEF places all 290 ordinary digital signals and all five scan/test signals
+- The LEF places all 258 ordinary digital signals and all five scan/test signals
   on vertical met2 tracks along the bottom boundary
   (`X = 0.23 + N*0.46 um`). The ten shared analog pins use the exact met3
   rectangles from the supplied `Neuromorphic_X1_wb.gds`; pins with multiple
@@ -61,7 +70,7 @@ pins.
   an electrical-sufficiency guarantee or approved signoff geometry; see
   `ANALOG_ROUTING.md` and `POWER_PINS.md` for integration requirements.
   The three scan/test pins that were previously on other sides are moved to
-  free bottom tracks without moving the existing 290 ordinary digital pins.
+  free bottom tracks after the 258 ordinary digital pins.
 - The Liberty file is an uncharacterized interface shell with no timing arcs
   and `dont_use : true`.
 

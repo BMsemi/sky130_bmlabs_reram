@@ -55,7 +55,6 @@ module sky130_bmlabs_reram__cim32x32_dual_if_tb;
   wire [31:0]  wbs_dat_o;
   wire         wbs_ack_o;
 
-  logic [31:0] stop_bit_i = 32'b0;
   logic ScanInCC = 1'b0;
   logic ScanInDL = 1'b0;
   logic ScanInDR = 1'b0;
@@ -109,7 +108,6 @@ module sky130_bmlabs_reram__cim32x32_dual_if_tb;
     .wbs_adr_i(wbs_adr_i),
     .wbs_dat_o(wbs_dat_o),
     .wbs_ack_o(wbs_ack_o),
-    .stop_bit_i(stop_bit_i),
     .ScanInCC(ScanInCC),
     .ScanInDL(ScanInDL),
     .ScanInDR(ScanInDR),

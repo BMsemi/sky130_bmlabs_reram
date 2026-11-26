@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Removed the customer-visible `stop_bit_i[31:0]` bus from the selectable X2
+  interface. The behavioral model now generates the analog/TDC stop response
+  internally by applying the selected bitline mask 240 ns after ramp assertion.
+  Regenerated the provisional GDS/LEF/Liberty views and synchronized the header,
+  testbenches, manifest, documentation and validators to the 279-pin boundary.
 - Replaced the ten shared raw-X2 analog pin placeholders with the exact met3
   access rectangles from the released `Neuromorphic_X1_wb.gds` reference
   (stored locally as `sky130_bmlabs_reram__nvm32x32wb.gds`). The X2-only

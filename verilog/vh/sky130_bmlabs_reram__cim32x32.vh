@@ -66,9 +66,6 @@ module sky130_bmlabs_reram__cim32x32 (
   output wire [31:0]  wbs_dat_o,
   output wire         wbs_ack_o,
 
-  // Physical TDC stop inputs
-  input  wire [31:0]  stop_bit_i,
-
   // Scan and test pins
   input  wire         ScanInCC,
   input  wire         ScanInDL,

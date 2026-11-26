@@ -90,7 +90,6 @@ module sky130_bmlabs_reram__cim32x32_direct_smoke_controller_tb;
     .wbs_adr_i(32'b0),
     .wbs_dat_o(),
     .wbs_ack_o(),
-    .stop_bit_i(32'b0),
     .ScanInCC(1'b0),
     .ScanInDL(1'b0),
     .ScanInDR(1'b0),

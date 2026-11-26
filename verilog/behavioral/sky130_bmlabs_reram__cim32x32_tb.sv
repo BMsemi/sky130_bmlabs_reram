@@ -151,7 +151,6 @@ module sky130_bmlabs_reram__cim32x32_tb;
     .wbs_adr_i                  (32'b0),
     .wbs_dat_o                  (),
     .wbs_ack_o                  (),
-    .stop_bit_i                 (32'b0),
     .ScanInCC                   (ScanInCC),
     .ScanInDL                   (ScanInDL),
     .ScanInDR                   (ScanInDR),
@@ -386,14 +385,27 @@ module sky130_bmlabs_reram__cim32x32_tb;
   task automatic testcase_2_single_read;
     string test_name;
     integer failure_mark;
+    integer stop_wait_cycles;
     begin
       test_name = "2. Single READ command and exact result";
       begin_test(test_name, failure_mark);
       apply_reset();
       send_command(MODE_READ, 5'd2, 5'd3, 8'd10, 1'b0, 1'b0);
+      stop_wait_cycles = 0;
+      while ((dut.internal_stop_bit !== 32'h0000_0008) &&
+             (stop_wait_cycles < 10)) begin
+        @(negedge clk_i);
+        stop_wait_cycles = stop_wait_cycles + 1;
+      end
+      check_condition(dut.internal_stop_bit === 32'h0000_0008,
+                      $sformatf("internal analog surrogate stops selected column 3 (actual=%08h ramp=%b bl_addr=%08h)",
+                                dut.internal_stop_bit, dut.core_ramp,
+                                dut.core_bl_addr));
       expect_result(MODE_READ, 5'd3, INITIAL_CELL_LEVEL + 14'd10,
                     1'b1, 1'b0);
       wait_for_idle();
+      check_condition(dut.internal_stop_bit === 32'b0,
+                      "internal analog stop mask clears when ramp ends");
       end_test(test_name, failure_mark);
     end
   endtask

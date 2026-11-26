@@ -18,6 +18,7 @@ module sky130_bmlabs_reram__cim32x32 #(
   parameter integer      READ_DELAY         = 160,
   parameter integer      PROGRAM_DELAY      = 360,
   parameter integer      COMPUTE_DELAY      = 450,
+  parameter integer      ANALOG_STOP_DELAY  = 240,
   parameter logic [13:0] INITIAL_CELL_LEVEL = 14'h0E23
 )(
 `ifdef USE_POWER_PINS
@@ -83,10 +84,6 @@ module sky130_bmlabs_reram__cim32x32 #(
   input  logic [31:0] wbs_adr_i,
   output wire [31:0]  wbs_dat_o,
   output wire         wbs_ack_o,
-
-  // Physical TDC stop inputs.  The digital model retains deterministic timing;
-  // detailed stop-edge timing belongs to AMS/post-layout verification.
-  input  logic [31:0] stop_bit_i,
 
   // Scan/test names match the released Wishbone macro.
   input  logic        ScanInCC,
@@ -204,6 +201,15 @@ module sky130_bmlabs_reram__cim32x32 #(
   wire         core_v_count;
   wire         core_hold;
   wire         core_start_phase;
+
+  // Customer-visible hardware does not expose the TDC stop bus.  In silicon,
+  // the stop events are driven by the internal analog comparator/TDC path.
+  // This delayed continuous assignment reproduces the RTL-testbench surrogate:
+  // while ramp is active, assert the selected bitline stops after 240 ns and
+  // clear them immediately when ramp or reset becomes inactive.
+  wire [31:0]  internal_stop_bit;
+  assign #(ANALOG_STOP_DELAY, 0) internal_stop_bit =
+      (!rst_i && core_ramp) ? core_bl_addr : 32'b0;
 
   assign direct_compute_pending = (compute_row_mask != 32'b0);
   assign o_cmd_ready = !interface_sel && core_ready && !launch_pending && !rst_i;
@@ -408,7 +414,7 @@ module sky130_bmlabs_reram__cim32x32 #(
     .o_result_mode            (),
     .o_result_column          (),
     .o_result_count           (),
-    .i_stop_bit               (stop_bit_i),
+    .i_stop_bit               (internal_stop_bit),
     .o_tdc_valid              (core_tdc_valid),
     .o_tdc_count              (core_tdc_count),
     .o_tdc_start              (core_tdc_start),
@@ -1629,9 +1635,10 @@ module sky130_bmlabs_reram__cim32x32_internal_core #(
     end
   end
 
-  // i_stop_bit is intentionally present at the raw physical boundary.  The
-  // deterministic behavioral TDC does not derive delay from stop-edge timing;
-  // that timing belongs to AMS or extracted post-layout verification.
+  // i_stop_bit is supplied by the enclosing model's internal analog-response
+  // surrogate. The deterministic result value still comes from the modeled
+  // ReRAM state; detailed comparator and stop-edge timing belongs to AMS or
+  // extracted post-layout verification.
 
 endmodule
 

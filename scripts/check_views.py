@@ -19,16 +19,15 @@ LEGACY_NAME_PATTERNS = {
 WIDTH = 1910.0
 HEIGHT = 2010.14
 PIN_COUNT = 128
-RAW_PORT_COUNT = 61
-RAW_WIRE_COUNT = 311
-RAW_FUNCTIONAL_PORT_COUNT = 56
-RAW_FUNCTIONAL_WIRE_COUNT = 306
-RAW_BEHAVIORAL_PORT_COUNT = 61
+RAW_PORT_COUNT = 60
+RAW_WIRE_COUNT = 279
+RAW_FUNCTIONAL_PORT_COUNT = 55
+RAW_FUNCTIONAL_WIRE_COUNT = 274
+RAW_BEHAVIORAL_PORT_COUNT = 60
 RAW_SCAN_PORT_COUNT = 5
 RAW_ANALOG_PORT_COUNT = 11
-RAW_ORDINARY_DIGITAL_WIRE_COUNT = 290
+RAW_ORDINARY_DIGITAL_WIRE_COUNT = 258
 RAW_WISHBONE_WIRE_COUNT = 104
-RAW_STOP_WIRE_COUNT = 32
 RAW_POWER_PINS = {"VDDC1", "VDDC2", "VDDA1", "VDDA2", "VSS"}
 RAW_SCAN_PINS = {"ScanInCC", "ScanInDL", "ScanInDR", "TM", "ScanOutCC"}
 REFERENCE_ANALOG_PINS = {
@@ -600,10 +599,9 @@ if len(raw_entries) == 1:
                     f"{RAW_NAME} expected {RAW_WISHBONE_WIRE_COUNT} Wishbone wires, "
                     f"found {len(raw_wishbone_pins)}"
                 )
-            if len(raw_stop_pins) != RAW_STOP_WIRE_COUNT:
+            if raw_stop_pins:
                 errors.append(
-                    f"{RAW_NAME} expected {RAW_STOP_WIRE_COUNT} stop_bit_i wires, "
-                    f"found {len(raw_stop_pins)}"
+                    f"{RAW_NAME} must not expose customer-visible stop_bit_i wires"
                 )
             for control_pin in ("interface_sel", "i_Levelsh_enable"):
                 if control_pin not in raw_header_ports:
@@ -1070,8 +1068,8 @@ print(
     f"{RAW_FUNCTIONAL_WIRE_COUNT} non-power wires including "
     f"{RAW_SCAN_PORT_COUNT} reference scan/test and "
     f"{RAW_ANALOG_PORT_COUNT} analog pins, "
-    f"{RAW_WISHBONE_WIRE_COUNT} Wishbone wires and "
-    f"{RAW_STOP_WIRE_COUNT} TDC stop wires, plus "
+    f"{RAW_WISHBONE_WIRE_COUNT} Wishbone wires and an internal TDC-stop "
+    "surrogate, plus "
     f"{len(RAW_POWER_PINS)} power pins"
 )
 print(

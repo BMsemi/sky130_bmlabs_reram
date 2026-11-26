@@ -76,13 +76,13 @@ python3 scripts/check_views.py
 
 The check enforces each released cell name, fixed 1910 x 2010.14 um boundary,
 required views, cross-view pin sets, LEF macro and GDS structure names. It also
-checks the selectable-interface simulation views, their 306 non-power wires, five
+checks the selectable-interface simulation views, their 274 non-power wires, five
 reference-derived supply pins and the explicit provisional markings on the
 approximate physical placeholders. The scan/test and analog boundary names are
 also checked against the released Wishbone reference. All three interfaces
 require analog pins to be `inout`. The raw-view checks additionally enforce the
 released X1 distributed power geometry, the released X1 met3 geometry for the
-ten shared analog pins, its li1-through-met4 obstruction pattern, and all 290
+ten shared analog pins, its li1-through-met4 obstruction pattern, and all 258
 ordinary digital plus five scan/test pins on the bottom met2 boundary. The
 raw-only `VCC_SNEAK` access remains provisional, and the cell remains outside
 the qualified physical release set.
